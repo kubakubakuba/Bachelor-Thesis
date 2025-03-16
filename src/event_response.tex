@@ -4,11 +4,11 @@
 
 \section{Equipment}
 
-The event based camera used in this work is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of 
-$1280 \times 720$ pixels, with maximum frame rate equivalent of 10k fps and a dynamic range of 120 dB.
+The event-based camera used in this work is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of
+$1280 \times 720$ pixels, with a maximum frame rate equivalent of 10k FPS and a dynamic range of 120 dB.
 A fish eye lens with an inbuilt UV filter was used during the measurements to target the specific wavelength of the LEDs
 that are used on the UAVs. The UAV used for measurements was a unit from the MRS UVDAR system, with UV \ac{LED} light sources, mounted at each arm of the UAV, which are used for localization and communication purposes.
-Both can be seen on \reffig{fig:uavcam}.
+Both can be seen in \reffig{fig:uavcam}.
 
 \begin{figure}[H]
 	\centering
@@ -26,27 +26,27 @@ Both can be seen on \reffig{fig:uavcam}.
 	\label{fig:uavcam}
 \end{figure}
 
-The data from the camera has been obtained using the Metavision Studio software, which records the data in the \texttt{.raw} format.
-Data is then later processed using various functions from the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}},
-which has either C++ or Python API. In this work, the Python API has been used.
+The camera data has been obtained using the Metavision Studio software, which records the data in \texttt{.raw} format.
+The data is then processed later using various functions from the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}},
+which has C++ or Python API. In this work, the Python API has been used.
 
 \section{Data collection}
 
-The data has been collected on several occasions by measuring a stationary UAV at various distances and rotations from the camera.
+The data have been collected on several occasions by measuring a stationary UAV at various distances and rotations from the camera.
 Each UAV is equipped with 8 UV LEDs, with 2 LEDs on each arm of the UAV. Each of the LEDs can be individually controlled
 and can be set to various sequences of blinking, and a common modulation frequency can be set for all LEDs.
 
 \subsection{Initial measurements}
 
-The initial measurements were done by securing the event camera on a tripod and placing the UAV at distances ranging from
-$0.5$ to $2.5$ meters. The LEDs were set to blink at a frequency in range from $1$ Hz to $30$ kHz. No \ac{ROI} was set
-and the whole visible area has been recorded during the testing.
+The initial measurements were made by securing the event camera on a tripod and placing the UAV at distances ranging from
+$0.5$ to $2.5$ meters. The LEDs were set to blink at a frequency in the range of $1$ to $30$ kHz. No \ac{ROI} was set
+and the whole visible area was recorded during the testing.
 
-This first experiment proved to be rather inefficient, as the LEDs need to be isolated from each other's influence, which
-was not done properly at this time. This problem is solvable in the post processing, by filtering out the events
-by using a ROI filter (it is possible to filter the events by finding bounding boxes
+This first experiment proved to be rather inefficient as the LEDs need to be isolated from each other's influence, which
+was not done properly at this time. This problem is solvable in the post-processing, by filtering out the events
+by using an ROI filter (it is possible to filter the events by finding bounding boxes
 that encapsulate light sources, but on a more complex scene this approach becomes relatively hard).
-The other issue turned out to be the reflections of surrounding objects (as seen on \reffig{fig:meas1}), which caused
+The other issue turned out to be the reflections of surrounding objects (as seen in \reffig{fig:meas1}), which caused
 another source of unwanted events in the recording, which may in turn confuse some blob detection methods.
 
 \begin{figure}[H]
@@ -68,13 +68,13 @@ another source of unwanted events in the recording, which may in turn confuse so
 
 \subsection{Distance - frequency influence}
 
-In the following measurements, we consider only one source of light as the whole ending of the arm of the UAV (with 2 UV LEDs). Other arm light sources were turned off during the measurements.
+In the following measurements, we consider only one source of light as the whole end of the arm of the UAV (with 2 UV LEDs). Other arm light sources were turned off during the measurements.
 Measurements were done on areas isolated by ROI filter directly in Metavision Studio, events were collected only on one select area around the light source, with the
 rest of the events being discarded.
 This time, the position of the UAV was fixed relative to the camera on a blank background. The camera was placed on a tripod
-and moved by increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements done
+and moved in increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements made
 at $4$ and $5$ meters.
-Frequency range of the LED modulation was set in a range from $10$ Hz to $30$ kHz, with blinking sequence set to \texttt{0, 1}.
+The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ kHz, with the blinking sequence set to \texttt{0, 1}.
 
 \subsection{Rotation angle influence}
 
@@ -85,8 +85,10 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 
 \subsection{RSSR Data collection}
 
+\Large{TODO: Rewrite this section}
+
 Another dataset was collected for the application of \ac{RSSR} \cite{sooyongrssr}, which we analyze more in \refchap{chap:rssr}.
-The data includes calibration data, that is necessary for the optical system parameter estimation. This calibration is done by
+The data includes calibration data, which is necessary for the optical system parameter estimation. This calibration is done by
 recording a video using a calibration lattice of LEDs with known spacing, and observing the pattern distortion in the
 resulting video.
 The UAV was placed at increasing distances and various angles relative to the event camera, with the LEDs blinking at frequencies different from
@@ -119,28 +121,26 @@ Precomputed average number of events with the standard deviation is stored in \t
 The distance frequency dataset has recordings of the UAV placed at 0 and 45 degrees relative to the event camera. This ensures data is captured from either
 one LED source pointed directly at the event camera, or 2 LED sources pointed at the event camera at an angle. At each distance a new subdirectory was
 created, with its name being the distance in meters and the content being the recordings of various frequencies in sequence, ordered by the recording timetamp.
-With the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
+In the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
 are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{0, 1}).} and distances being
 \begin{lstlisting}
 frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
 distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
 \end{lstlisting}
-We can load the dataset stored in raw files into a matrix representing the distances and frequencies, then load a select amount of events from each file.
-The data is then resampled into a 1D array by summing polarities over a select bin width
+We can load the dataset stored in raw files into a matrix representing the distances and frequencies, then load a select number of events from each file.
+The data is then resampled into a 1D array by summing polarities over a selected bin width
 \footnote{The bin width should be adjusted appropriately, as the farther the event camera is from the source, the fewer events are generated.}.
 Peaks in this signal are then analyzed by SciPy's \texttt{findpeaks} function,
-and the average amount of events with the standard deviation is calculated for each frequency and distance.
+and the average number of events with the standard deviation is calculated for each frequency and distance.
 
-We can see the influence of distance and frequency on the average number of events on
-\reffig{fig:dist} and \reffig{fig:freqs} respectively. The data shows a decreasing trend of the average number of events
-with the increase of distance or frequency. The drop related to the distance can be explained by the perceived intensity
-decrease of the light source with an increasing distance. With an increasing frequency, the camera is not able to capture
+We can see the influence of distance and frequency on the average number of events in \reffig{fig:dist} and \reffig{fig:freqs}, respectively. The data show a decreasing trend of the average number of events
+with the increase of distance or frequency. The drop related to the distance can be explained by the perceived decrease in the intensity of the light source with increasing distance. With an increasing frequency, the camera cannot capture
 all the changes that are generated by the light source. On very high frequencies and distances, the camera is not able
 to detect any real events at all, as there is more noise generated by the camera itself at this point. This can be observed
-at \reffig{fig:dist_2} with the frequency of $30$ kHz at $3$ meters.
+at \reffig{fig:dist_2} with a frequency of $30$ kHz at $3$ meters.
 
 If we now select one frequency and try to fit it with a curve,
-we can see that the data can be approximated with a rational or exponential function as shown on \reffig{fig:fit1}.
+we can see that the data can be approximated with a rational or exponential function, as shown in \reffig{fig:fit1}.
 The best fit without being too complex is the inverse square law, which can be expressed as
 \begin{equation}
 	\text{intensity} \propto \frac{1}{\text{distance}^2}
@@ -188,7 +188,7 @@ The inverse square law provides a relatively good approximation of the data.
 
 \subsection{Rotation angle influence}
 From the manufacturers datasheet for the UV LEDs\footnote{The datasheet of ProLight PM2B-1LLE 1W UV Power LED can be obtained from \url{https://www.tme.eu/Document/9dfb498784ffdd07892a42f4f17c6f37/PM2B-1LLE-DTE.pdf}}
-used in the UVDAR system, we can learn that the LEDs have a lambertian radiation pattern,
+used in the UVDAR system, we can learn that the LEDs have a Lambertian radiation pattern,
 which can be seen on \reffig{fig:lambertian}.
 \begin {figure}[H]
 	\centering
@@ -233,9 +233,9 @@ on \reffig{fig:angles}.
   }
 	\label{fig:angles}
 \end{figure}
-The data shows a rough approximation of the theoretical distribution on \reffig{fig:lambert_combined},
+The data show a rough approximation of the theoretical distribution on \reffig{fig:lambert_combined},
 but with a drop of intensity at the middle of the distribution. This could be caused
-by the fact that the LEDs, when close to the camera, can be perceived as multiple light sources,
+by the fact that LEDs, when close to the camera, can be perceived as multiple light sources,
 but when moved further away, they merge into one source as shown on \reffig{fig:leds}.
 
 \begin{figure}[H]
@@ -255,7 +255,7 @@ but when moved further away, they merge into one source as shown on \reffig{fig:
 	\label{fig:leds}
 \end{figure}
 What we can also observe from \reffig{fig:leds} are the star-like shapes of the LEDs, which are supposed to be circular.
-Those shapes are caused by light diffraction (and are named diffraction spikes), which is in turn caused by the aperture
+Those shapes are caused by light diffraction (and are named diffraction spikes), which are, in turn, caused by the aperture
 blades in the lens of the camera. The number
 of star spikes depend on the number of blades, the set aperture and the light source intensity then causes stars of different
 levels of profoundness.\cite{lendermann2018computational} We can observe this by comparing how profound the star shapes are on different
