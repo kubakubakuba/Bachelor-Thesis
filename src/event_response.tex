@@ -110,11 +110,13 @@ for the estimation of the UAV position using RSSR.
 
 \section{Event response data processing}
 
-The event-camera response data has ben analyzed using Python in a Jupyter notebook
+The event-based camera response data was analyzed using Python in a Jupyter notebook
 \footnote{Source code is available at: \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator/blob/main/main.ipynb}},
 with libraries from Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}.
+
+\LARGE{TODO: MAYBE REMOVE THIS}
 The notebook is divided into sections that represent several datasets that were recorded during the measurements.
-Precomputed average number of events with the standard deviation is stored in \texttt{.npz} files in the \texttt{./data} directory to speed up the visualization process.
+The precomputed average number of events with standard deviation is stored in the \texttt{. npz} files in the \texttt{./data} directory to speed up the visualization process.
 
 \subsection{Distance - frequency influence}
 
@@ -197,7 +199,7 @@ which can be seen on \reffig{fig:lambertian}.
 	\label{fig:lambertian}
 \end{figure}
 
-This means that the intensity of the light emmited from the LED decreases with the cosine
+This means that the intensity of the light emitted from the LED decreases with the cosine
 of the angle between the normal of the LED and the direction of the light \refeq{eq:lambertian}.
 \begin{equation}
 	I(\theta) = I_0\cos(\theta)
