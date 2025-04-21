@@ -2,6 +2,8 @@
 
 \chapter{Camera calibration\label{chap:calib}}
 
+\section{Method used}
+
 For the correct representation of distances and angles in the received data from the camera, a camera calibration needs to be performed.
 The lens used to obtain the data is a 2.5mm f / 1.6 fisheye lens, with a FOV of more than 90 degrees, which can be seen in \reffig{fig:fisheye_lens}.
 \begin{figure}[H]
@@ -59,9 +61,10 @@ After this, the regular calibration script from py-OCamCalib can be used. The la
   \label{fig:calibration_pattern_labeled}
 \end{figure}
 
-After the calibration, we are able to map the 3D world coordinates to the 2D image plane. For this, the calibration method needs to obtain the extrinsic
-and intrinsic parameters of the camera, where the extrinsic parameters are the rotation and translation of the camera with respect to the world frame and can be expressed
-by equation \ref{eq:extrinsic}.
+\section{Principles of the calibration}
+
+After the calibration is performed, we are able to map the 3D world coordinates to the 2D image plane. For this, the calibration method needs to obtain the extrinsic
+and intrinsic parameters of the camera, where the extrinsic parameters are the rotation and translation of the camera with respect to the world frame and can be expressed by equation \ref{eq:extrinsic},
 \begin{equation}
 	\begin{bmatrix}
 		X_{camera} \\
@@ -98,7 +101,7 @@ the image plane to their respective 3D coordinates.
 	\label{fig:ellipse}
   \end{figure}
 
-The intrinsic parameters of the camera specify the image format itself (influenced by the focal length, sensor size, and optical center). As there are many mapping
+The intrinsic parameters of the camera specify the image format itself, which is influenced by the focal length, sensor size, and optical center. As there are many mapping
 functions that can be used while modeling the lens (their precision is limited by the manufacturing process), Scaramuzza et al. \cite{scaramuzzacalibration} proposed
 fitting a polynomial to find the optimal model for lens calibration. The mapping functions are shown in \reffig{fig:mapping_functions}.
 \begin{figure}[H]
@@ -169,7 +172,7 @@ where matrix A accounts for lens-sensor misalignment, and the vector $\textbf{O}
 
 The camera calibration was performed on a series of images, where the calibration lattice was placed as various angles and distances from the camera.
 For ideal calibration results, the lattice should be placed in all visible parts of the image, as the distortion of the fish eye is more pronounced at the edges
-of the visible area. The calibration was performed on a polynomial of degree 4, more would lead to overfitting and is not necessary.
+of the visible area. The calibration was performed on a polynomial of degree 4, more would lead to overfitting and is also not necessary.
 The calibration results can be seen in \reffig{fig:calib_r}.
 
 \begin{figure}[H]

@@ -2,27 +2,38 @@
 
 \chapter{Introduction\label{chap:introduction}}
 
-Event-based cameras, in contrast to traditional frame-based cameras, do not capture still frames but rather
-provide an asynchronous and independent stream of intensity changes on individual pixels.
-Each pixel memorizes the last intensity value and sends an event when the intensity changes above a certain threshold.
+Vision systems play a fundamental role in robotics, autonomous systems, and computational imaging. Traditional frame-based (sometimes called global shutter) cameras capture the scene as a sequence of still image frames at fixed intervals with fixed settings, providing a synchronous representation of the visual world. 
+In terms of ease of use and the simplicity of the post-processing of data obtained from such cameras, they are wildly applicable across many fields.
+A single frame obtained from a frame-based camera may be described by the following equation \refeq{eq:frame} \cite{scheerlinck2018event}
+\begin{equation}
+Y_j(\boldsymbol{p}) := \frac{1}{\epsilon} \int_{t_j - \epsilon}^{t_j} Y(\boldsymbol{p}, \tau) \mathrm{d} \tau, \quad j \in 1, 2, 3 ...
+\label{eq:frame}
+\end{equation}
+where $Y(\boldsymbol{p}, t)$ denotes the irradiation intensity of a camera pixel at a specific time $t$, $t_j$ is the time-stamp of the image capture and $\epsilon$ is the exposure time.
+As we can see, each frame is represented by a temporal average of irradiance over the exposure time $\epsilon$. Although this model simplifies image formation, it introduces artifacts such as motion blur, particularly when fast-moving objects are captured with an exposure time mismatched to their dynamics.
 
-Event cameras circumvent many common issues found in traditional frame-based cameras, such as motion blur caused
-by fast-moving objects. They offer significant advantages, including high dynamic range, low latency,
+\ac{DVS} (or event-based cameras), are vision sensors that draw their inspiration from nature bio-receptors, where each pixel reacts
+to the change of illumination in the scene. Each pixel individually recognizes the log intensity and compares it to the previously
+recorded value. When a predefined threshold is crossed, this value is reset to the current one and a new event is generated. This event can be expressed as $e = \begin{bmatrix} x & y & \sigma & t \end{bmatrix}$, where $\begin{bmatrix} x & y \end{bmatrix}$
+is the camera pixel coordinate, $\sigma$ is the polarity of change (where $\sigma = \pm 1$ for increasing or decreasing change, respectively) and $t$ is the timestamp of the event. \cite{gallego22event} \cite{scheerlinck2018event} We can model the single event as a Dirac-delta function $\delta(t)$ and can define an event stream
+$e_i(\boldsymbol{p}, t)$ at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq} \cite{scheerlinck2018event}
+\begin{equation}
+e_i(\boldsymbol{p}, t) := \sigma_i^{\boldsymbol{p}} c \, \delta(t - t_i^{\boldsymbol{p}}), \ i \in 1, 2, 3 ...
+\label{eq:event_eq}
+\end{equation}
+where $\sigma_i^{\boldsymbol{p}}$ is the polarity and $t_i^{\boldsymbol{p}}$ is the time-stamp of the $i$-th event at a pixel.
+The magnitude $c$ is the contrast threshold, a preset constant (similar to exposure time in frame-based cameras), which defines a change in light intensity that is encoded by a singular event, at each pixel. Event-based cameras thus circumvent many common issues found in traditional frame-based cameras, such as the motion blur mentioned before. They offer significant advantages, including high dynamic range, low latency,
 and energy efficiency.
 This makes them perfect for the application of agile robotics,
-where the fast response time is crucial (especially in UAV swarming situations). With their sub-millisecond response time,
+where the fast response time is crucial (especially in UAV swarming situations). With their submillisecond response time,
 event cameras can provide a significant advantage over traditional cameras in these applications.
 However, they also come with some drawbacks, such as the need for a different approach to
-data processing and the higher cost of the camera units themselves. \cite{gallego22event}
-
-
-The event data stream is represented by tuples of $\begin{bmatrix} x & y & p & t \end{bmatrix}$, $\begin{bmatrix} x & y \end{bmatrix}$ are the pixel coordinates, $t$ is the time of
-intensity change, and $p$ is the polarity of the change, the increase or decrease of light intensity. Images can be
-reconstructed from the event stream by integrating the events over time, doing so makes the usage of normal vision
-algorithms possible, but it also goes against the main advantage of the event cameras which is the low latency.
+data processing (images can be reconstructed from the event stream by simply integrating the events over time,
+making the usage of normal vision algorithms possible, but it also goes against the main advantage of event cameras)
+and the higher cost of the camera units themselves. \cite{gallego22event}
 
 \section{Related works}
-
+TODO: WRITE THIS
 This section should contain related state-of-the-art works and their relation to the author's work.
 
 \section{Contributions}
