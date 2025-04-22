@@ -2,35 +2,23 @@
 
 \chapter{Introduction\label{chap:introduction}}
 
-Vision systems play a fundamental role in robotics, autonomous systems, and computational imaging. Traditional frame-based (sometimes called global shutter) cameras capture the scene as a sequence of still image frames at fixed intervals with fixed settings, providing a synchronous representation of the visual world. 
-In terms of ease of use and the simplicity of the post-processing of data obtained from such cameras, they are wildly applicable across many fields.
-A single frame obtained from a frame-based camera may be described by the following equation \refeq{eq:frame} \cite{scheerlinck2018event}
-\begin{equation}
-Y_j(\boldsymbol{p}) := \frac{1}{\epsilon} \int_{t_j - \epsilon}^{t_j} Y(\boldsymbol{p}, \tau) \mathrm{d} \tau, \quad j \in 1, 2, 3 ...
-\label{eq:frame}
-\end{equation}
-where $Y(\boldsymbol{p}, t)$ denotes the irradiation intensity of a camera pixel at a specific time $t$, $t_j$ is the time-stamp of the image capture and $\epsilon$ is the exposure time.
-As we can see, each frame is represented by a temporal average of irradiance over the exposure time $\epsilon$. Although this model simplifies image formation, it introduces artifacts such as motion blur, particularly when fast-moving objects are captured with an exposure time mismatched to their dynamics.
+The rapid advancement of \ac{UAV} swarms has intensified the demand for robust and scalable relative pose estimation methods.
+Traditional solutions relying on \ac{GNSS} suffer from limitations in indoor environments, signal occlusion, and interference that arises from
+multi-agent communication.
+\ac{VLP} systems, which leverage modulated \ac{LED} signals and optical sensors, offer a promising alternative due to their immunity to radio
+frequency interference and high precision.
 
-\ac{DVS} (or event-based cameras), are vision sensors that draw their inspiration from nature bio-receptors, where each pixel reacts
-to the change of illumination in the scene. Each pixel individually recognizes the log intensity and compares it to the previously
-recorded value. When a predefined threshold is crossed, this value is reset to the current one and a new event is generated. This event can be expressed as $e = \begin{bmatrix} x & y & \sigma & t \end{bmatrix}$, where $\begin{bmatrix} x & y \end{bmatrix}$
-is the camera pixel coordinate, $\sigma$ is the polarity of change (where $\sigma = \pm 1$ for increasing or decreasing change, respectively) and $t$ is the timestamp of the event. \cite{gallego22event} \cite{scheerlinck2018event} We can model the single event as a Dirac-delta function $\delta(t)$ and can define an event stream
-$e_i(\boldsymbol{p}, t)$ at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq} \cite{scheerlinck2018event}
-\begin{equation}
-e_i(\boldsymbol{p}, t) := \sigma_i^{\boldsymbol{p}} c \, \delta(t - t_i^{\boldsymbol{p}}), \ i \in 1, 2, 3 ...
-\label{eq:event_eq}
-\end{equation}
-where $\sigma_i^{\boldsymbol{p}}$ is the polarity and $t_i^{\boldsymbol{p}}$ is the time-stamp of the $i$-th event at a pixel.
-The magnitude $c$ is the contrast threshold, a preset constant (similar to exposure time in frame-based cameras), which defines a change in light intensity that is encoded by a singular event, at each pixel. Event-based cameras thus circumvent many common issues found in traditional frame-based cameras, such as the motion blur mentioned before. They offer significant advantages, including high dynamic range, low latency,
-and energy efficiency.
-This makes them perfect for the application of agile robotics,
-where the fast response time is crucial (especially in UAV swarming situations). With their submillisecond response time,
-event cameras can provide a significant advantage over traditional cameras in these applications.
-However, they also come with some drawbacks, such as the need for a different approach to
-data processing (images can be reconstructed from the event stream by simply integrating the events over time,
-making the usage of normal vision algorithms possible, but it also goes against the main advantage of event cameras)
-and the higher cost of the camera units themselves. \cite{gallego22event}
+However, conventional frame-based cameras used in \ac{VLP} systems struggle with motion blur, latency,
+and dynamic range constraints. For example, under bright illumination, \ac{LED}s may not produce a sufficiently detectable signal,
+which may lead to localization failure. In contrast, event-based cameras overcome these limitations by asynchronously detecting pixel-level
+brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency. These attributes make them ideal for
+capturing high-frequency LED signals, even in challenging lighting conditions or during aggressive \ac{UAV} maneuvers in agile swarming applications.
+
+In this thesis, we present a method for estimating the pose of a \ac{UAV} equipped with \ac{UV} \ac{LED} light sources as in the UVDAR system. \cite{walteruvdar}
+These \ac{LED}s are modulated at select frequencies, which aids in their identification and also helps with their prevalence
+on the scene observed by the camera. After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
+algorithm is used to estimate the location of the \ac{UAV} in the 3D space. This estimation is then compared with the ground truth positions obtained
+from the \ac{GNSS}.
 
 \section{Related works}
 TODO: WRITE THIS

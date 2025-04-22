@@ -2,12 +2,45 @@
 
 \chapter{Response of an event-based camera\label{chap:response}}
 
-\section{Equipment}
+\section{Event-based cameras compared to frame-based cameras}
 
-The event-based camera used in this work is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of
-$1280 \times 720$ pixels, with a maximum frame rate equivalent of 10k FPS and a dynamic range of 120 dB.
+Traditional frame-based (sometimes called global shutter) cameras capture the scene as a sequence of still image frames at fixed intervals with fixed settings, providing a synchronous representation of the visual world. 
+In terms of ease of use and the simplicity of the post-processing of data obtained from such cameras, they are wildly applicable across many fields.
+A single frame obtained from a frame-based camera may be described by the following equation \refeq{eq:frame} \cite{scheerlinck2018event}
+\begin{equation}
+Y_j(\boldsymbol{p}) := \frac{1}{\epsilon} \int_{t_j - \epsilon}^{t_j} Y(\boldsymbol{p}, \tau) \mathrm{d} \tau, \quad j \in 1, 2, 3 ...
+\label{eq:frame}
+\end{equation}
+where $Y(\boldsymbol{p}, t)$ denotes the irradiation intensity of a camera pixel at a specific time $t$, $t_j$ is the time-stamp of the image capture and $\epsilon$ is the exposure time.
+As we can see, each frame is represented by a temporal average of irradiance over the exposure time $\epsilon$. Although this model simplifies image formation, it introduces artifacts such as motion blur, particularly when fast-moving objects are captured with an exposure time mismatched to their dynamics.
+
+\ac{DVS} (or event-based cameras), are vision sensors that draw their inspiration from nature bio-receptors, where each pixel reacts
+to the change of illumination in the scene. Each pixel individually recognizes the log intensity and compares it to the previously
+recorded value. When a predefined threshold is crossed, this value is reset to the current one and a new event is generated. This event can be expressed as $e = \begin{bmatrix} x & y & \sigma & t \end{bmatrix}$, where $\begin{bmatrix} x & y \end{bmatrix}$
+is the camera pixel coordinate, $\sigma$ is the polarity of change (where $\sigma = \pm 1$ for increasing or decreasing change, respectively) and $t$ is the timestamp of the event. \cite{gallego22event} \cite{scheerlinck2018event} We can model the single event as a Dirac-delta function $\delta(t)$ and can define an event stream
+$e_i(\boldsymbol{p}, t)$ at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq} \cite{scheerlinck2018event}
+\begin{equation}
+e_i(\boldsymbol{p}, t) := \sigma_i^{\boldsymbol{p}} c \, \delta(t - t_i^{\boldsymbol{p}}), \ i \in 1, 2, 3 ...
+\label{eq:event_eq}
+\end{equation}
+where $\sigma_i^{\boldsymbol{p}}$ is the polarity and $t_i^{\boldsymbol{p}}$ is the time-stamp of the $i$-th event at a pixel.
+The magnitude $c$ is the contrast threshold, a preset constant (similar to exposure time in frame-based cameras), which defines a change in light intensity that is encoded by a singular event, at each pixel. Event-based cameras thus circumvent many common issues found in traditional frame-based cameras, such as the motion blur mentioned before. They offer significant advantages, including high dynamic range, low latency,
+and energy efficiency.
+This makes them perfect for the application of agile robotics,
+where the fast response time is crucial (especially in UAV swarming situations). With their submillisecond response time,
+event cameras can provide a significant advantage over traditional cameras in these applications.
+However, they also come with some drawbacks, such as the need for a different approach to
+data processing (images can be reconstructed from the event stream by simply integrating the events over time,
+making the usage of normal vision algorithms possible, but it also goes against the main advantage of event cameras)
+and the higher cost of the camera units themselves. \cite{gallego22event}
+
+\section{Equipment used}
+
+The event-based camera used in this thesis is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of
+$1280 \times 720$ pixels, with a maximum frame rate equivalent of 10k \ac{FPS} and a dynamic range of 120 dB.
 A fish eye lens with an inbuilt UV filter was used during the measurements to target the specific wavelength of the LEDs
-that are used on the UAVs. The UAV used for measurements was a unit from the MRS UVDAR system, with UV \ac{LED} light sources, mounted at each arm of the UAV, which are used for localization and communication purposes.
+that are used on the \ac{UAV}s. The \ac{UAV} used for measurements was a unit from the \ac{MRS} UVDAR system, with \ac{UV} \ac{LED} light sources,
+mounted at each arm of the \ac{UAV}, which are used for localization and communication purposes.
 Both can be seen in \reffig{fig:uavcam}.
 
 \begin{figure}[H]
@@ -26,6 +59,7 @@ Both can be seen in \reffig{fig:uavcam}.
 	\label{fig:uavcam}
 \end{figure}
 
+TODO: REMOVE THIS (MAYBE)
 The camera data has been obtained using the Metavision Studio software, which records the data in \texttt{.raw} format.
 The data is then processed later using various functions from the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}},
 which has C++ or Python API. In this work, the Python API has been used.
