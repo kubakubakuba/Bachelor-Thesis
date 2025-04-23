@@ -36,9 +36,8 @@ and the higher cost of the camera units themselves. \cite{gallego22event}
 
 \section{Equipment used}
 
-The event-based camera used in this thesis is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of
-$1280 \times 720$ pixels, with a maximum frame rate equivalent of 10k \ac{FPS} and a dynamic range of 120 dB.
-A fish eye lens with an inbuilt UV filter was used during the measurements to target the specific wavelength of the LEDs
+The event-based camera used in this thesis is the Prophesee EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, featuring a resolution of $1280 \times 720$ pixels, with a maximum frame rate equivalent of $10.000 \text{FPS}$ and a 120 dB dynamic range.
+A fish eye lens with an integrated UV filter was used during the measurements to target the specific wavelength of the LEDs
 that are used on the \ac{UAV}s. The \ac{UAV} used for measurements was a unit from the \ac{MRS} UVDAR system, with \ac{UV} \ac{LED} light sources,
 mounted at each arm of the \ac{UAV}, which are used for localization and communication purposes.
 Both can be seen in \reffig{fig:uavcam}.
@@ -58,11 +57,6 @@ Both can be seen in \reffig{fig:uavcam}.
   }
 	\label{fig:uavcam}
 \end{figure}
-
-TODO: REMOVE THIS (MAYBE)
-The camera data has been obtained using the Metavision Studio software, which records the data in \texttt{.raw} format.
-The data is then processed later using various functions from the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}},
-which has C++ or Python API. In this work, the Python API has been used.
 
 \section{Data collection}
 
@@ -155,16 +149,20 @@ The precomputed average number of events with standard deviation is stored in th
 
 \subsection{Distance - frequency influence}
 
-The distance frequency dataset has recordings of the UAV placed at 0 and 45 degrees relative to the event camera. This ensures data is captured from either
-one LED source pointed directly at the event camera, or 2 LED sources pointed at the event camera at an angle. At each distance a new subdirectory was
-created, with its name being the distance in meters and the content being the recordings of various frequencies in sequence, ordered by the recording timetamp.
-In the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
-are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{0, 1}).} and distances being
-\begin{lstlisting}
-frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
-distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
-\end{lstlisting}
-We can load the dataset stored in raw files into a matrix representing the distances and frequencies, then load a select number of events from each file.
+The distance frequency dataset has recordings of the UAV placed in front of the camera at distances $\mathcal{D}$ and with one LED being modulated
+at frequencies $\mathcal{F}$ \footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
+are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{[0, 1]}).}. To minimize interference, only one LED was active during each recording, enabling isolated characterization of the diode’s response. The tested ranges were:
+\[
+\mathcal{F} = \{10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000\} \, \text{Hz},
+\]
+\[
+\mathcal{D} = \{1.0 + 0.2k \mid k \in \{0, \dots, 10\}\} \cup \{4.0, 5.0\} \, \text{m}.
+\]
+%\begin{lstlisting}
+%frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
+%distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
+%\end{lstlisting}
+We can load the dataset into a matrix representing the distances and frequencies, then load a select number of events from each recording.
 The data is then resampled into a 1D array by summing polarities over a selected bin width
 \footnote{The bin width should be adjusted appropriately, as the farther the event camera is from the source, the fewer events are generated.}.
 Peaks in this signal are then analyzed by SciPy's \texttt{findpeaks} function,
