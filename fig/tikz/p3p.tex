@@ -1,0 +1,91 @@
+\documentclass[tikz,border=3mm]{standalone}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{3d,calc}
+
+\begin{document}
+
+\definecolor{cvutblue}{cmyk}{1, 0.43, 0, 0}
+
+\def\cameraX{1.5} % X position of camera system
+\def\cameraY{-3} % Y position of camera system
+\def\Ox{-1.5} % Camera center x-coordinate (relative to camera system)
+\def\Oy{-0.4} % Camera center y-coordinate (relative to camera system)
+\def\frontscale{2.5} % Scale for front triangle
+\def\backscale{0.6} % Scale for back triangle
+\def\imgscale{1.0} % Scale for image plane points
+
+\def\ax{-3.95} % X coordinate of point 1
+\def\ay{0.5} % Y coordinate of point 1
+
+\def\bx{-2.25} % X coordinate of point 2
+\def\by{1.4} % Y coordinate of point 2
+
+\def\cx{-2.5} % X coordinate of point 3
+\def\cy{0.5} % Y coordinate of point 3
+
+\def\thresholdA{1.245}
+\def\thresholdB{1.26}
+\def\thresholdC{2.13}
+
+\tdplotsetmaincoords{60}{120}
+\tdplotsetrotatedcoords{60}{90}{0}
+
+\begin{tikzpicture}[scale=1.5]
+
+	% image plane
+	\begin{scope}[tdplot_rotated_coords, shift={(\cameraX,\cameraY)}, scale=\imgscale]
+		\draw[black, fill=gray!20, opacity=0.7] (-0.5,-0.5,0) -- (1.5,-0.5,0) -- (1.5,2.5,0) -- (-0.5,2.5,0) -- cycle;
+	\end{scope}
+
+	% Camera center and points
+	\begin{scope}[shift={(\cameraX,\cameraY)}, scale=\imgscale]
+		\fill[cvutblue] (\Ox,\Oy) circle (2pt) node[below right]{$O$}; %center point
+		
+		% image points
+		\fill[black] (\ax,\ay) circle (1.5pt) node[below]{$p_1$};
+		\fill[black] (\bx,\by) circle (1.5pt) node[left]{$p_2$};
+		\fill[black] (\cx,\cy) circle (1.5pt) node[below left]{$p_3$};
+		
+		% projection lines
+		\draw[thick, black] (\Ox,\Oy) -- (\ax,\ay);
+		\draw[thick, black, dashed] (\ax, \ay) -- ($(\Ox,\Oy)+\thresholdA*($(\ax, \ay)-(\Ox,\Oy)$)$);
+		\draw[thick, black] ($(\Ox,\Oy)+\thresholdA*($(\ax, \ay)-(\Ox,\Oy)$)$) -- ($(\Ox,\Oy)+\frontscale*($(\ax, \ay)-(\Ox,\Oy)$)$);
+		\fill[cvutblue!100!cvutblue] ($(\Ox,\Oy)+\frontscale*($(\ax, \ay)-(\Ox,\Oy)$)$) circle (1.5pt) node[anchor=north east]{$P_1$};
+
+		\draw[thick, black] (\Ox,\Oy) -- (\bx,\by);
+		\draw[thick, black, dashed] (\bx,\by) -- ($(\Ox,\Oy)+\thresholdB*($(\bx,\by)-(\Ox,\Oy)$)$);
+		\draw[thick, black] ($(\Ox,\Oy)+\thresholdB*($(\bx,\by)-(\Ox,\Oy)$)$) -- ($(\Ox,\Oy)+\frontscale*($(\bx,\by)-(\Ox,\Oy)$)$);
+		\fill[cvutblue!100!cvutblue] ($(\Ox,\Oy)+\frontscale*($(\bx,\by)-(\Ox,\Oy)$)$) circle (1.5pt) node[anchor=south west]{$P_2$};
+
+		\draw[thick, black] (\Ox,\Oy) -- (\cx,\cy);
+		\draw[thick, black, dashed] (\cx,\cy) -- ($(\Ox,\Oy)+\thresholdC*($(\cx,\cy)-(\Ox,\Oy)$)$);
+		\draw[thick, black] ($(\Ox,\Oy)+\thresholdC*($(\cx,\cy)-(\Ox,\Oy)$)$) -- ($(\Ox,\Oy)+\frontscale*($(\cx,\cy)-(\Ox,\Oy)$)$);
+		\fill[cvutblue!100!cvutblue] ($(\Ox,\Oy)+\frontscale*($(\cx,\cy)-(\Ox,\Oy)$)$) circle (1.5pt) node[anchor=north east]{$P_3$};
+	\end{scope}
+
+	\begin{scope}[shift={(\cameraX,\cameraY)}, scale=\imgscale]
+		\draw[thick, fill=cvutblue!20, opacity=0.5] 
+			($(\Ox,\Oy)+\frontscale*($(\ax,\ay)-(\Ox,\Oy)$)$) -- 
+			($(\Ox,\Oy)+\frontscale*($(\bx,\by)-(\Ox,\Oy)$)$) -- 
+			($(\Ox,\Oy)+\frontscale*($(\cx,\cy)-(\Ox,\Oy)$)$) -- cycle;
+	\end{scope}
+
+	% triangle connecting the points on the image plane
+	% \begin{scope}[shift={(\cameraX,\cameraY)}, scale=\imgscale]
+	% 	\draw[black] (\ax,\ay) -- (\bx,\by) -- (\cx,\cy) -- cycle;
+	% \end{scope}
+
+	% another triangle in front of image plane
+	% \begin{scope}[shift={(\cameraX,\cameraY)}, scale=\imgscale]
+	%     \draw[thick, fill=blue!20, opacity=0.5] 
+	%         ($(\Ox,\Oy)+\backscale*($(-3.75,0.5)-(\Ox,\Oy)$)$) -- 
+	%         ($(\Ox,\Oy)+\backscale*($(-3.0,1.2)-(\Ox,\Oy)$)$) -- 
+	%         ($(\Ox,\Oy)+\backscale*($(-2.5,0.5)-(\Ox,\Oy)$)$) -- cycle;
+	%     \fill[red] ($(\Ox,\Oy)+\backscale*($(-3.75,0.5)-(\Ox,\Oy)$)$) circle (1.2pt);
+	%     \fill[red] ($(\Ox,\Oy)+\backscale*($(-3.0,1.2)-(\Ox,\Oy)$)$) circle (1.2pt);
+	%     \fill[red] ($(\Ox,\Oy)+\backscale*($(-2.5,0.5)-(\Ox,\Oy)$)$) circle (1.2pt);
+	% \end{scope}
+
+\end{tikzpicture}
+
+\end{document}
