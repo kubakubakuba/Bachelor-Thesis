@@ -16,11 +16,19 @@ time on a global shutter camera, which can then give an under- or over-exposed f
 It also does not generalize the problem of estimating the position of an arbitrary UAV marked with LED lights and a camera with previously unspecified
 settings. For a more robust way of estimating the pose of the UAV from the camera, we can leverage the following methods.
 
-\section{VLP}
-TODO: WRITE THIS
-
 \section{RSSR}
-TODO: WRITE THIS
+
+The \ac{RSSR} method provides an approach to estimate the position of an object by measuring the relative ratio of received optical powers from \ac{LED}
+markers. This is done by making each of the \ac{LED} markers radiate in their assigned time slot, measuring their optical powers at the time of the
+radiation. Jung et al. (2014) \cite{sooyongrssr} demonstrated the \ac{RSSR} method using a configuration where four LED lamps were mounted on the ceiling
+with a detector mounted on top of a moving object, parallel to the ceiling.
+They have arrived at the equation \refeq{eq:rssr} which could be used to describe the power ratio $RSSR_{1,2}$
+\begin{equation}
+RSSR_{1,2} = \frac{P_{R1}}{P_{R2}} = \left( \frac{d_2}{d_1} \right)^{n+3}
+\label{eq:rssr}
+\end{equation}
+where $P_{R1}$ and $P_{R2}$ are the received powers of the \ac{LED}s, $d_1$ and $d_2$ are the distances to the \ac{LED}s, and $n$ is the mode number of the radiation lobe (for a Lambertian model $n = 1$).
 
 \section{Perspective-n-Point}
-TODO: WRITE THIS
+The \ac{PnP} problem estimates the position of an object given a set of $n$ 3D points on a physical structure and their corresponding 2D images in an
+image.
