@@ -5,7 +5,7 @@
 \section{Method used}
 
 For the correct representation of distances and angles in the received data from the camera, a camera calibration needs to be performed.
-The lens used to obtain the data is a 2.5mm f / 1.6 fisheye lens, with a FOV of more than 90 degrees, which can be seen in \reffig{fig:fisheye_lens}.
+The lens used to obtain the data is a 2.5mm f / 1.6 fisheye lens, with a \ac{FOV} of more than 90 degrees, which can be seen in \reffig{fig:fisheye_lens}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{./fig/photos/lens.jpeg}
@@ -37,12 +37,12 @@ The calibration lattice can be seen in \reffig{fig:lattice}.
   }
 	\label{fig:lattice}
 \end{figure}
-The downside of using an LED lattice instead of a chessboard pattern is that at a very high FOV, the distortion of the fish eye lens sometimes does not allow
+The downside of using an LED lattice instead of a chessboard pattern is that at a very high \ac{FOV}, the distortion of the fish eye lens sometimes does not allow
 reliable detection of the exact blob centers (or which events correspond to which LED), as can be seen at \reffig{fig:calibration_pattern_distorted}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{./fig/photos/lattice_280.png}
-  \caption{Calibration pattern with 5x7 lattice of UV LEDs, taken with a lens with FOV of 280 degrees.}
+  \caption{Calibration pattern with 5x7 lattice of UV LEDs, taken with a lens with \ac{FOV} of 280 degrees.}
   \label{fig:calibration_pattern_distorted}
 \end{figure}
 

@@ -1,0 +1,34 @@
+%!TEX root = ../main.tex
+
+\chapter{Experiment\label{chap:experiment}}
+
+The experiment was performed with two X500 \ac{UAV}s, each of them equipped with a Prophesee EVK4 event-based camera, one with a 2.5mm f/1.6
+fish eye lens with an \ac{FOV} of 93.5 degrees and the second one with Entaniya 1.07mm f/2.8 fish eye lens with an \ac{FOV} of 280 degrees.
+Each UAV is also equipped with a basler camera with a fish eye lens, to provide normal video signal that is recorded alongside the event stream
+from the event-based camera.
+Both cameras are connected to the onboard Intel NUC computer running the ROS system, on which all the processing is done during the flight. Both 
+\ac{UAV}s are also equipped with a \ac{RTK} module, which is used to localize the \ac{UAV}, and is used as ground truth data for the pose estimation.
+The measurements were collected during the \ac{MRS} Camp in Temešvár in August 2025, the \ac{UAV}s can be seen on \reffig{fig:uav33_37}.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[UAV33] {
+	  \includegraphics[width=0.4\textwidth]{./fig/photos/uav33.jpg}
+	  \label{fig:uav33}
+	}
+	\subfloat[UAV37] {
+	  \includegraphics[width=0.4\textwidth]{./fig/photos/uav37.jpg}
+	  \label{fig:uav37}
+	}
+	\caption{
+		Two X500 UAVs, UAV33 on \reffig{fig:uav33} and UAV37 on \reffig{fig:uav37}.
+  }
+	\label{fig:uav33_37}
+\end{figure}
+Two pilots were manually flying with the \ac{UAV}s, periodically changing the distance and incidence angle between the ....
+
+TODO: SHOW MEASURED DATA FROM RQT
+
+TODO: SHOW GNSS/ESTIMATION DIFFERENCES
+
+TODO: SHOW THE RVIZ/RQTPLOT VISUALIZATION PIPELINE

@@ -62,14 +62,18 @@ In our implementation, we compute the average of the estimated pose and distance
 estimated distance is simply the distance from the camera to the geometrical center of the \ac{UAV}.
 
 \section{ROS implementation}
-For the ease of deployement on real hardware, a distance estimator ROS node was implemented. The functionality can be summarized with the flowchart on
+To facilitate the deployment on real hardware, a ROS distance estimator node was implemented
+\footnote{The source code of the distance estimator ROS node is available at \url{https://github.com/kubakubakuba/ros-event-distance}}.
+The functionality can be summarized with the flow chart 
+in
 \reffig{fig:rosflow}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{./fig/tikz/rosflow.pdf}
 	\caption{ROS distance estimation pipeline}
 	\label{fig:rosflow}
 \end{figure}
-
-
+On the input, a filtered event stream is present, with filtering based on the known blinking frequencies of the \ac{LED} markers.
+On these events, an image is integrated and a blob detection is run on top of it. The resulting blobs are marked as the \ac{LED} positions and passed 
+on to the distance estimator, which uses a P3P (or PnP if all markers are visible) to estimate the pose of the \ac{UAV}. The distance estimator 
+publishes the estimated pose as a quaternion, but also an estimated distance as a floating-point number.
