@@ -30,5 +30,32 @@ RSSR_{1,2} = \frac{P_{R1}}{P_{R2}} = \left( \frac{d_2}{d_1} \right)^{n+3}
 where $P_{R1}$ and $P_{R2}$ are the received powers of the \ac{LED}s, $d_1$ and $d_2$ are the distances to the \ac{LED}s, and $n$ is the mode number of the radiation lobe (for a Lambertian model $n = 1$).
 
 \section{Perspective-n-Point}
-The \ac{PnP} problem estimates the position of an object given a set of $n$ 3D points on a physical structure and their corresponding 2D images in an
-image.
+The \ac{PnP} problem addresses the estimation of the position of an object relative to the camera, having six degrees of freedom
+\begin{itemize}
+\item{Rotation - roll, pitch and yaw}
+\item{Translation - 3D vector representing the position of the object relative to the camera}
+\end{itemize}
+This estimation is performed given a set of $n$ known 3D points $\{\mathbf{P}_i\}_{i=1}^n$ on the object and their corresponding 2D projections $\{\mathbf{p}_i\}_{i=1}^n$ in the image plane.
+In our application, the UAV has four \ac{LED}-marked arms, where each of them can be distingushed by the camera as a point light source.
+However, due to physical limits, only three \ac{LED}s will be visible at a single point in time, the fourth one behind obstructed by the physical structure of the \ac{UAV} when viewed from the front.
+For a case of only 3 image points, the problem becomes the minimal solvable case, called \ac{P3P}, which 
+can be formulated as a set of 3D points $\textbf{P}_i \in \mathbb{R}^{3}, i \in \{1, 2, 3\}$ in the world coordinate system, with their corresponding normalized image points
+$\textbf{p}_i \in \mathbb{R}^{3}$, $|\textbf{p}_i|=1, i \in \{1, 2, 3\}$. These sets of points are related by a rigid transformation \cite{Ding_2023_CVPR}
+\begin{equation}
+d_i \textbf{p}_i = \textbf{R} \textbf{P}_i + \textbf{t}
+\label{eq:p3p}
+\end{equation}
+where $d_i \in \mathbb{R}^+$.
+Given the rigid transformation relationship shown in \refeq{eq:p3p}, the \ac{P3P} problem reduces to solving for the rotation matrix 
+$\mathbf{R} \in \text{SO}(3)$, translation vector $\mathbf{t} \in \mathbb{R}^3$, and depths $d_i > 0$. 
+By exploiting geometric constraints between the 3D points and their 2D projections, the problem can be
+reformulated algebraically and solved using various techniques. In our approach, we use the method proposed by Kneip et al. \cite{kneip}, which
+directly finds the rotation and translation with a novel parameterization of the model.
+The visualization of the \ac{P3P} problem is shown on \reffig{fig:p3p}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{./fig/tikz/p3p.pdf}
+	\caption{P3P problem visualization}
+	\label{fig:p3p}
+\end{figure}
+In our implementation, we compute the average of the estimated pose and distance, thus simplifying the problem of identifying the correct solution. If all four LEDs on the UAV are detected, a general PnP solution is calculated using the \ac{RANSAC} method.
