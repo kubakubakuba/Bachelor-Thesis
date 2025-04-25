@@ -58,4 +58,12 @@ The visualization of the \ac{P3P} problem is shown on \reffig{fig:p3p}.
 	\caption{P3P problem visualization}
 	\label{fig:p3p}
 \end{figure}
-In our implementation, we compute the average of the estimated pose and distance, thus simplifying the problem of identifying the correct solution. If all four LEDs on the UAV are detected, a general PnP solution is calculated using the \ac{RANSAC} method.
+In our implementation, we compute the average of the estimated pose and distance, thus simplifying the problem of identifying the correct solution. If all four \ac{LED}s on the \ac{UAV} are detected, a general \ac{PnP} solution is calculated using the \ac{RANSAC} method. This yields only one solution, so the
+estimated distance is simply the distance from the camera to the geometrical center of the \ac{UAV}.
+
+\section{ROS implementation}
+For the ease of deployement on real hardware, a distance estimator ROS node was implemented.
+
+TODO: write more
+
+
