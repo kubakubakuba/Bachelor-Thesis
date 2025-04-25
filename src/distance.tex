@@ -62,8 +62,14 @@ In our implementation, we compute the average of the estimated pose and distance
 estimated distance is simply the distance from the camera to the geometrical center of the \ac{UAV}.
 
 \section{ROS implementation}
-For the ease of deployement on real hardware, a distance estimator ROS node was implemented.
+For the ease of deployement on real hardware, a distance estimator ROS node was implemented. The functionality can be summarized with the flowchart on
+\reffig{fig:rosflow}.
 
-TODO: write more
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{./fig/tikz/rosflow.pdf}
+	\caption{ROS distance estimation pipeline}
+	\label{fig:rosflow}
+\end{figure}
 
 
