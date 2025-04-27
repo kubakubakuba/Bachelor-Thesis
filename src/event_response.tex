@@ -111,30 +111,30 @@ verify the emitting characteristics of the light sources - if they can or cannot
 The UAV was rotated by increments of $45$ degrees relative to the event camera, at distances of $0.5$, $1$ and $2$ meters,
 with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was set to \texttt{0, 1}.
 
-\subsection{RSSR Data collection}
+%\subsection{RSSR Data collection}
 
-TODO: Rewrite this section
+%TODO: Rewrite this section
 
-Another dataset was collected for the application of \ac{RSSR} \cite{sooyongrssr}, which we analyze more in \refchap{chap:rssr}.
-The data includes calibration data, which is necessary for the optical system parameter estimation. This calibration is done by
-recording a video using a calibration lattice of LEDs with known spacing, and observing the pattern distortion in the
-resulting video.
-The UAV was placed at increasing distances and various angles relative to the event camera, with the LEDs blinking at frequencies different from
-each other. 
-The blinking sequences were set to the following values:
-\begin{lstlisting}
-	led_1 = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-	led_2 = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]
-	led_3 = [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]
-	led_4 = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
-\end{lstlisting}
-with a common modulation frequency of $250$ Hz.
-This allows for the measurement of the ratio
+%Another dataset was collected for the application of \ac{RSSR} \cite{sooyongrssr}, which we analyze more in \refchap{chap:rssr}.
+%The data includes calibration data, which is necessary for the optical system parameter estimation. This calibration is done by
+%recording a video using a calibration lattice of LEDs with known spacing, and observing the pattern distortion in the
+%resulting video.
+%The UAV was placed at increasing distances and various angles relative to the event camera, with the LEDs blinking at frequencies different from
+%each other. 
+%The blinking sequences were set to the following values:
+%\begin{lstlisting}
+%	led_1 = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+%	led_2 = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]
+%	led_3 = [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]
+%	led_4 = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+%\end{lstlisting}
+%with a common modulation frequency of $250$ Hz.
+%This allows for the measurement of the ratio
 %explain why to use the ratio, not the absolute value
-\footnote{Using the absolute value of the LED power is not suitable, as it also depends of the camera settings, surrounding
-environment and other factors. Finding such ratio (or property) that stays constant is crucial for correct distance estimation.}
-between the responses for each of the LEDs, which is necessary
-for the estimation of the UAV position using RSSR.
+%\footnote{Using the absolute value of the LED power is not suitable, as it also depends of the camera settings, surrounding
+%environment and other factors. Finding such ratio (or property) that stays constant is crucial for correct distance estimation.}
+%between the responses for each of the LEDs, which is necessary
+%for the estimation of the UAV position using RSSR.
 
 \section{Event response data processing}
 

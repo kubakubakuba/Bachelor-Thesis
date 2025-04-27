@@ -61,6 +61,24 @@ The visualization of the \ac{P3P} problem is shown on \reffig{fig:p3p}.
 In our implementation, we compute the average of the estimated pose and distance, thus simplifying the problem of identifying the correct solution. If all four \ac{LED}s on the \ac{UAV} are detected, a general \ac{PnP} solution is calculated using the \ac{RANSAC} method. This yields only one solution, so the
 estimated distance is simply the distance from the camera to the geometrical center of the \ac{UAV}.
 
+\section{Stationary experiment}
+An experiment with a stationary \ac{UAV} and event-based camera was conducted prior to the experiment with flying \ac{UAV}s to ensure functionality.
+A \ac{UAV} was placed at the floor several meters from the camera and rotated around to obstruct one \ac{LED} in some measurements to test out \ac{P3P}. The LED blinking frequencies were set to $\mathcal{F} = \{125, 250, 500, 1000\}$ Hz, and a blob detector was used to detect the centers of the visible blobs. The individual \ac{LED}s were identified by their visible brightness that was influenced by their blinking frequency and by the known physical structure of the \ac{UAV}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{./fig/photos/pnpmeas.png}
+	\caption{PnP stationary experiment}
+	\label{fig:pnpuav}
+\end{figure}
+Then a \ac{PnP} (\ac{P3P}) estimation was performed with a calibrated camera. The results can be seen on \reffig{fig:pnpres}, with several recordings 
+present for each distance.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./fig/tikz/pnp_results.pdf}
+	\caption{PnP estimation results}
+	\label{fig:pnpres}
+\end{figure}
+
 \section{ROS implementation}
 To facilitate the deployment on real hardware, a ROS distance estimator node was implemented
 \footnote{The source code of the distance estimator ROS node is available at \url{https://github.com/kubakubakuba/ros-event-distance}}.
@@ -76,5 +94,3 @@ in
 On the input, a filtered event stream is present, with filtering based on the known blinking frequencies of the \ac{LED} markers.
 On these events, an image is integrated and a blob detection is run on top of it. The resulting blobs are marked as the \ac{LED} positions and passed 
 on to the distance estimator, which uses a \ac{P3P} (or \ac{PnP} if all markers are visible) to estimate the pose of the \ac{UAV}. The distance estimator publishes the estimated pose as a quaternion, but also an estimated distance as a floating-point number.
-
-\section{Results}
