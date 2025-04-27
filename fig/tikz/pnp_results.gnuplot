@@ -13,7 +13,7 @@ set grid y
 #set title "PnP Distance Estimation vs Ground Truth"
 set xlabel "Recording"
 set ylabel "Distance (m)"
-set xtics rotate by -45
+#set xtics rotate by -45
 
 # Plot with black error bars and semi-transparent bars
 plot "pnp_results.csv" using 0:4:5:xtic(2) with yerrorbars lc rgb "black" pt 7 ps 0 notitle, \
