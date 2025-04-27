@@ -17,5 +17,5 @@ set ylabel "Distance (m)"
 
 # Plot with black error bars and semi-transparent bars
 plot "pnp_results.csv" using 0:4:5:xtic(2) with yerrorbars lc rgb "black" pt 7 ps 0 notitle, \
-     "pnp_results.csv" using 0:4 with boxes lc rgb "#0091FF" fs transparent solid 0.5 title "Mean Estimated Distance", \
+     "pnp_results.csv" using 0:4 with boxes lc rgb "#0091FF" fs transparent solid 0.5 title "Estimated Distance", \
      "pnp_results.csv" using 0:3 with lines lw 2 lc rgb "red" title "Ground Truth"
