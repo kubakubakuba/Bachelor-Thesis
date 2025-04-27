@@ -75,5 +75,6 @@ in
 \end{figure}
 On the input, a filtered event stream is present, with filtering based on the known blinking frequencies of the \ac{LED} markers.
 On these events, an image is integrated and a blob detection is run on top of it. The resulting blobs are marked as the \ac{LED} positions and passed 
-on to the distance estimator, which uses a P3P (or PnP if all markers are visible) to estimate the pose of the \ac{UAV}. The distance estimator 
-publishes the estimated pose as a quaternion, but also an estimated distance as a floating-point number.
+on to the distance estimator, which uses a \ac{P3P} (or \ac{PnP} if all markers are visible) to estimate the pose of the \ac{UAV}. The distance estimator publishes the estimated pose as a quaternion, but also an estimated distance as a floating-point number.
+
+\section{Results}

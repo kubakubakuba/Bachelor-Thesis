@@ -55,6 +55,15 @@
 \usepackage{subfig}
 \usepackage[export]{adjustbox}
 
+
+% ADDED for word stats
+\usepackage{shellesc}
+\newcommand{\wordcount}{
+    \immediate\write18{texcount -char -nosub -sub=section -merge -sum main.tex > wordcount.txt}
+    \verbatiminput{wordcount.txt}
+}
+
+
 % print version has different margins to accommodate the spine of the book
 % do not move this around, or it stops working
 \ifdefined\printversion
