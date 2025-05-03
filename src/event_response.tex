@@ -28,51 +28,76 @@ The magnitude $c$ is the contrast threshold, a preset constant (similar to expos
 and energy efficiency.
 This makes them perfect for the application of agile robotics,
 where the fast response time is crucial (especially in UAV swarming situations). With their submillisecond response time,
-event cameras can provide a significant advantage over traditional cameras in these applications.
+event-based cameras can provide a significant advantage over traditional cameras in these applications.
 However, they also come with some drawbacks, such as the need for a different approach to
 data processing (images can be reconstructed from the event stream by simply integrating the events over time,
-making the usage of normal vision algorithms possible, but it also goes against the main advantage of event cameras)
+making the usage of normal vision algorithms possible, but it also goes against the main advantage of event-based cameras)
 and the higher cost of the camera units themselves. \cite{gallego22event}
 
 \section{Equipment used}
 
-The event-based camera used in this thesis is the Prophesee EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, featuring a resolution of $1280 \times 720$ pixels, with a maximum frame rate equivalent of $10.000 \text{FPS}$ and a 120 dB dynamic range.
-A fish eye lens with an integrated UV filter was used during the measurements to target the specific wavelength of the LEDs
-that are used on the \ac{UAV}s. The \ac{UAV} used for measurements was a unit from the \ac{MRS} UVDAR system, with \ac{UV} \ac{LED} light sources,
-mounted at each arm of the \ac{UAV}, which are used for localization and communication purposes.
+\subsection{Event-based camera}
+The event-based camera used in this thesis is the \texttt{Prophesee EVK4 HD}\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.},
+with a \texttt{IMX636} sensor. The camera features a resolution of $1280 \times 720$ pixels and is capable of generating $1.066\times10^9$ events per second (equivalent to $10.000$ \ac{FPS}) and offers dynamic range of $120$ dB.
+During recording, many settings of the camera can be set, such as the \ac{ROI} settings and the bias settings.
+
+\subsubsection{ROI}
+The \ac{ROI} setting during recording takes a rectangular region in pixel coordinates and ignores any generated events from the camera outside of
+these coordinates. This setting is especially useful in cases where only a small static area needs to be observed or where many unrelated events
+may be generated, that would interfere with the measurement process.
+
+\subsubsection{Bias settings}
+The bias settings are a global camera setting parameters such as an ISO value for analogue film or digital camera ISO sensitivity, or exposure time setting.
+The configurable biases available for the \texttt{EVK4} can be explained as\cite{dilmaghani2022controlevaluationeventcameras}
+\begin{itemize}
+    \item \texttt{bias\_diff\_on} adjusts the threshold on which events are generated, with higher setting, the more increasing change in pixel brightness needs to be present to trigger a generation of event with positive $p$
+    \item \texttt{bias\_diff\_off} adjusts the threshold on which events are generated, with higher setting, the more decreasing change in pixel brightness needs to be present to trigger a generation of event with negative $p$
+    \item \texttt{bias\_fo} adjusts the low-pass filter, which filters out the fast fluctuations in light intensity, effectively setting the maximum detectable oscillation frequency
+    \item \texttt{bias\_hpf} adjusts the high-pass filter, which filters out the slow fluctuations in light intensity, setting the minimum detectable oscillation frequency
+    \item \texttt{bias\_refr} adjusts the pixel refractory period, in which a pixel is inactive after generating an event
+\end{itemize}
+These settings are leveraged while measuring data to filter out a large part of generated noise, as well as unneeded events, such as in brightly illuminated scenes, that produce a lot of event, with most of them not needed for the pose estimation.
+
+\subsection{Lenses}
+During the measurements, a fish eye lens with an integrated \ac{UV} filter was used to target the specific wavelength of the \ac{LED}s
+that are used in the UVDAR localization system.
+
+\subsection{UAVs}
+The \ac{UAV} used for the measurements was an X500 unit from the \ac{MRS} UVDAR system, with \ac{UV} \ac{LED} light sources,
+mounted on each arm of the \ac{UAV}, which can be modulated at specified frequencies and are used for localization and communication purposes.
 Both can be seen in \reffig{fig:uavcam}.
 
 \begin{figure}[H]
 	\centering
-	\subfloat[The event-based camera EVK4 from Prophesee with a fish eye lens.] {
+	\subfloat[The event-based camera EVK4 from Prophesee with a 2.5mm fish eye lens.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/photos/evk4.jpg}
 	  \label{fig:evk4}
 	}
-	\subfloat[MRS UVDAR UAV unit] {
+	\subfloat[X500 UAV unit equipped with UVDAR] {
 	  \includegraphics[width=0.5\textwidth]{./fig/photos/uav1.jpeg}
 	  \label{fig:uav1}
 	}
 	\caption{
-  An event-based camera with a fish eye lens can be seen on \reffig{fig:evk4}, which was used to measure the UV LEDs mounted on the UAV unit from the MRS UVDAR system as seen on \reffig{fig:uav1}.
+  An event-based camera with a 2.5mm fish eye lens can be seen on \reffig{fig:evk4}, which was used to measure the UV LEDs mounted on the X500 UAV unit equipped with UVDAR as seen on \reffig{fig:uav1}.
   }
 	\label{fig:uavcam}
 \end{figure}
 
 \section{Data collection}
 
-The data have been collected on several occasions by measuring a stationary UAV at various distances and rotations from the camera.
-Each UAV is equipped with 8 UV LEDs, with 2 LEDs on each arm of the UAV. Each of the LEDs can be individually controlled
-and can be set to various sequences of blinking, and a common modulation frequency can be set for all LEDs.
+The data used in this chapter were collected on several occasions by measuring a stationary \ac{UAV} at various distances and rotations from the camera.
+Each \ac{UAV} is equipped with 8 \ac{UV} \ac{LED}s, with 2 \ac{LED}s on each arm of the \ac{UAV}. Each of the \ac{LED}s can be individually controlled
+and can be set to various blinking sequences, with a common modulation frequency set for all \ac{LED}s.
 
 \subsection{Initial measurements}
 
-The initial measurements were made by securing the event camera on a tripod and placing the UAV at distances ranging from
-$0.5$ to $2.5$ meters. The LEDs were set to blink at a frequency in the range of $1$ to $30$ kHz. No \ac{ROI} was set
-and the whole visible area was recorded during the testing.
+The initial measurements were made by securing the event-based camera on a tripod and placing the \ac{UAV} at distances ranging from
+$0.5$ to $2.5$ meters. The \ac{LED}s were set to blink at a frequency in the range of $1$ Hz to $30$ kHz. No \ac{ROI} was set at this time
+and the entire visible area was recorded during the testing.
 
-This first experiment proved to be rather inefficient as the LEDs need to be isolated from each other's influence, which
-was not done properly at this time. This problem is solvable in the post-processing, by filtering out the events
-by using an ROI filter (it is possible to filter the events by finding bounding boxes
+This first experiment proved to be rather inefficient as the \ac{LED}s need to be isolated from each other's influence, which
+was not done properly at this time. This problem is partially solvable in the post-processing, by filtering out the events
+with \ac{ROI} filter usage (it is possible to filter the events by finding bounding boxes
 that encapsulate light sources, but on a more complex scene this approach becomes relatively hard).
 The other issue turned out to be the reflections of surrounding objects (as seen in \reffig{fig:meas1}), which caused
 another source of unwanted events in the recording, which may in turn confuse some blob detection methods.
@@ -96,10 +121,11 @@ another source of unwanted events in the recording, which may in turn confuse so
 
 \subsection{Distance - frequency influence}
 
-In the following measurements, we consider only one source of light as the whole end of the arm of the UAV (with 2 UV LEDs). Other arm light sources were turned off during the measurements.
-Measurements were done on areas isolated by ROI filter directly in Metavision Studio, events were collected only on one select area around the light source, with the
-rest of the events being discarded.
-This time, the position of the UAV was fixed relative to the camera on a blank background. The camera was placed on a tripod
+In the following measurements, we use only one source of light, which is the whole end of the arm of the \ac{UAV} (with 2 \ac{UV} \ac{LED}s). Other arm light sources were turned off during the measurements.
+Measurements were made in areas isolated by \ac{ROI} filter directly in Metavision Studio during recording, events were collected only in a
+selected area around the light source, and the
+rest of the events were discarded.
+This time, the position of the \ac{UAV} was fixed relative to the camera on a blank background. The camera was placed on a tripod
 and moved in increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements made
 at $4$ and $5$ meters.
 The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ kHz, with the blinking sequence set to \texttt{0, 1}.
@@ -108,7 +134,7 @@ The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ 
 
 In addition to distance and frequency influence, the rotation angle influence also needs to be considered, to
 verify the emitting characteristics of the light sources - if they can or cannot be considered lambertian.
-The UAV was rotated by increments of $45$ degrees relative to the event camera, at distances of $0.5$, $1$ and $2$ meters,
+The \ac{UAV} was rotated at increments of $45$ degrees relative to the event-based camera, at distances of $0.5$, $1$ and $2$ meters,
 with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was set to \texttt{0, 1}.
 
 %\subsection{RSSR Data collection}
@@ -119,7 +145,7 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 %The data includes calibration data, which is necessary for the optical system parameter estimation. This calibration is done by
 %recording a video using a calibration lattice of LEDs with known spacing, and observing the pattern distortion in the
 %resulting video.
-%The UAV was placed at increasing distances and various angles relative to the event camera, with the LEDs blinking at frequencies different from
+%The UAV was placed at increasing distances and various angles relative to the event-based camera, with the LEDs blinking at frequencies different from
 %each other. 
 %The blinking sequences were set to the following values:
 %\begin{lstlisting}
@@ -138,18 +164,15 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 
 \section{Event response data processing}
 
-The event-based camera response data was analyzed using Python in a Jupyter notebook
-\footnote{Source code is available at: \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator/blob/main/main.ipynb}},
-with libraries from Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}.
-
-TODO: MAYBE REMOVE THIS
-
-The notebook is divided into sections that represent several datasets that were recorded during the measurements.
-The precomputed average number of events with standard deviation is stored in the \texttt{. npz} files in the \texttt{./data} directory to speed up the visualization process.
+The event-based camera response data was analyzed using the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}
+using its Python API. Each recording can be loaded as a raw file, producing a structured Numpy array of events, where each event is structured as
+$(t, x, y, p)$. Specifically, $t$ represents the timestamp, $x$ and $y$ the spatial location of the event
+on the camera sensor, and $p$ the polarity of the change in the detected brightness (compared to the previously recorded one).
+%We can use many methods to analyze this data, such as
 
 \subsection{Distance - frequency influence}
 
-The distance frequency dataset has recordings of the UAV placed in front of the camera at distances $\mathcal{D}$ and with one LED being modulated
+The distance frequency data set has recordings of the \ac{UAV} placed in front of the camera at distances $\mathcal{D}$ and with one \ac{LED} being modulated
 at frequencies $\mathcal{F}$ \footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
 are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{[0, 1]}).}. To minimize interference, only one LED was active during each recording, enabling isolated characterization of the diode’s response. The tested ranges were:
 \[
@@ -164,73 +187,89 @@ are half of the values in this list - UVDAR interprets the frequency with a refe
 %\end{lstlisting}
 We can load the dataset into a matrix representing the distances and frequencies, then load a select number of events from each recording.
 The data is then resampled into a 1D array by summing polarities over a selected bin width
-\footnote{The bin width should be adjusted appropriately, as the farther the event camera is from the source, the fewer events are generated.}.
+\footnote{The bin width should be adjusted appropriately, as the farther the event-based camera is from the source, the fewer events are generated.}.
 Peaks in this signal are then analyzed by SciPy's \texttt{findpeaks} function,
 and the average number of events with the standard deviation is calculated for each frequency and distance.
 
 We can see the influence of distance and frequency on the average number of events in \reffig{fig:dist} and \reffig{fig:freqs}, respectively. The data show a decreasing trend of the average number of events
 with the increase of distance or frequency. The drop related to the distance can be explained by the perceived decrease in the intensity of the light source with increasing distance. With an increasing frequency, the camera cannot capture
-all the changes that are generated by the light source. On very high frequencies and distances, the camera is not able
+all the changes that are generated by the light source, leading to a perceived drop in brightness.
+On very high frequencies and distances, the camera is not able
 to detect any real events at all, as there is more noise generated by the camera itself at this point. This can be observed
-at \reffig{fig:dist_2} with a frequency of $30$ kHz at $3$ meters.
+at \reffig{fig:dist} with a frequency of $30$ kHz at $3$ meters.
+
+%\begin{figure}[H]
+%	\centering
+%	\subfloat[Influence of distance on the average number of events.] {
+%	  \includegraphics[width=0.5\textwidth]{./fig/semestral/dist.pdf}
+%	  \label{fig:dist_1}
+%	}
+%	\subfloat[Influence of distance on the log of average number of events.] {
+%	  \includegraphics[width=0.5\textwidth]{./fig/semestral/distlog.pdf}
+%	  \label{fig:dist_2}
+%	}
+%	\caption{
+%  The influence of distance on the average number of events with the UAV rotated 0 degrees relative to the event-based camera on \reffig{fig:dist_1}, and with the log of the average number of events on \reffig{fig:dist_2}.
+% }
+%	\label{fig:dist}
+%\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\subfloat[Influence of frequency on the average number of events.] {
+%	  \includegraphics[width=0.5\textwidth]{./fig/semestral/freq.pdf}
+%	  \label{fig:freqs_1}
+%	}
+%	\subfloat[Influence of frequency on the log of average number of events.] {
+%	  \includegraphics[width=0.5\textwidth]{./fig/semestral/freqlog.pdf}
+%	  \label{fig:freqs_2}
+%	}
+%	\caption{
+%  The influence of frequency on the average number of events with the UAV rotated 0 degrees relative to the event-based camera on \reffig{fig:freqs_1}, and with the log of the average number of events on \reffig{fig:freqs_2}.
+%  }
+%	\label{fig:freqs}
+%\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./fig/semestral/distlog.pdf}
+    \caption{
+        Influence of distance on the log of the average number of events, with the UAV rotated 0 degrees relative to the event-based camera.
+    }
+    \label{fig:dist}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./fig/semestral/freqlog.pdf}
+    \caption{
+        Influence of frequency on the log of the average number of events, with the UAV rotated 0 degrees relative to the event-based camera.
+    }
+    \label{fig:freqs}
+\end{figure}
 If we now select one frequency and try to fit it with a curve,
-we can see that the data can be approximated with a rational or exponential function, as shown in \reffig{fig:fit1}.
+we can observe that the data can be approximated with a rational or an exponential function, as shown in \reffig{fig:fit1}.
 The best fit without being too complex is the inverse square law, which can be expressed as
 \begin{equation}
 	\text{intensity} \propto \frac{1}{\text{distance}^2}
 \end{equation}
-
+While more complex functions could be used to fit the data, they would likely lead to overfitting rather than capturing the underlying trend in a generalizable way, thus the inverse square law provides a good approximation of the data.
 \begin{figure}[H]
 	\centering
-	\subfloat[Influence of distance on the average number of events.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/semestral/dist.pdf}
-	  \label{fig:dist_1}
-	}
-	\subfloat[Influence of distance on the log of average number of events.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/semestral/distlog.pdf}
-	  \label{fig:dist_2}
-	}
-	\caption{
-  The influence of distance on the average number of events with the UAV rotated 0 degrees relative to the event camera on \reffig{fig:dist_1}, and with the log of the average number of events on \reffig{fig:dist_2}.
-  }
-	\label{fig:dist}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\subfloat[Influence of frequency on the average number of events.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/semestral/freq.pdf}
-	  \label{fig:freqs_1}
-	}
-	\subfloat[Influence of frequency on the log of average number of events.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/semestral/freqlog.pdf}
-	  \label{fig:freqs_2}
-	}
-	\caption{
-  The influence of frequency on the average number of events with the UAV rotated 0 degrees relative to the event camera on \reffig{fig:freqs_1}, and with the log of the average number of events on \reffig{fig:freqs_2}.
-  }
-	\label{fig:freqs}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.90\textwidth]{./fig/semestral/inverse_square/square.pdf}
+	\includegraphics[width=0.80\textwidth]{./fig/semestral/inverse_square/square.pdf}
 	\caption{Influence of distance data fitted with various curves.}
 	\label{fig:fit1}
 \end{figure}
-More complex functions could be used to fit the data, but they would likely lead to overfitting rather than capturing the underlying trend in a generalizable way.
-The inverse square law provides a relatively good approximation of the data.
 
 \subsection{Rotation angle influence}
-From the manufacturers datasheet for the UV LEDs\footnote{The datasheet of ProLight PM2B-1LLE 1W UV Power LED can be obtained from \url{https://www.tme.eu/Document/9dfb498784ffdd07892a42f4f17c6f37/PM2B-1LLE-DTE.pdf}}
-used in the UVDAR system, we can learn that the LEDs have a Lambertian radiation pattern,
+From the manufacturers datasheet of the used ProLight PM2B-1LLE 1W \ac{UV} Power \ac{LED} \footnote{The datasheet of ProLight PM2B-1LLE 1W UV Power LED can be obtained from \url{https://www.tme.eu/Document/9dfb498784ffdd07892a42f4f17c6f37/PM2B-1LLE-DTE.pdf}}
+used in the UVDAR system, we can learn that the \ac{LED}s have a Lambertian radiation pattern,
 which can be seen on \reffig{fig:lambertian}.
 \begin {figure}[H]
 	\centering
 	\includegraphics[width=0.75\textwidth]{./fig/semestral/lambertian/lambertian.pdf}
-	\caption{Lambertian radiation pattern of the UV LED.}
+	\caption{Lambertian radiation pattern of the PM2B-1LLE UV LED.}
 	\label{fig:lambertian}
 \end{figure}
-
 This means that the intensity of the light emitted from the LED decreases with the cosine
 of the angle between the normal of the LED and the direction of the light \refeq{eq:lambertian}.
 \begin{equation}

@@ -63,14 +63,14 @@ estimated distance is simply the distance from the camera to the geometrical cen
 
 \section{Stationary experiment}
 An experiment with a stationary \ac{UAV} and event-based camera was conducted prior to the experiment with flying \ac{UAV}s to ensure functionality.
-A \ac{UAV} was placed at the floor several meters from the camera and rotated around to obstruct one \ac{LED} in some measurements to test out \ac{P3P}. The LED blinking frequencies were set to $\mathcal{F} = \{125, 250, 500, 1000\}$ Hz, and a blob detector was used to detect the centers of the visible blobs. The individual \ac{LED}s were identified by their visible brightness that was influenced by their blinking frequency and by the known physical structure of the \ac{UAV}.
+A \ac{UAV} was placed at the floor several meters from the camera and rotated around to obstruct one \ac{LED} in some measurements to test out \ac{P3P}. The LED blinking frequencies were set to $\mathcal{F} = \{125, 250, 500, 1000\}$ Hz, and a blob detector was used to detect the centers of the visible blobs. The individual \ac{LED}s were identified by their visible brightness that was influenced by their blinking frequency and by the known physical structure of the \ac{UAV}. The view from the event-based camera can be seen on \reffig{fig:pnpuav}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.65\textwidth]{./fig/photos/pnpmeas.png}
-	\caption{PnP stationary experiment}
+	\caption{Data from the stationary experiment}
 	\label{fig:pnpuav}
 \end{figure}
-Then a \ac{PnP} (\ac{P3P}) estimation was performed with a calibrated camera. The results can be seen on \reffig{fig:pnpres}, with several recordings 
+Then a \ac{PnP} (\ac{P3P}) estimation was performed with a calibrated camera. The results can be seen on \reffig{fig:pnpres}, with several recordings
 present for each distance.
 \begin{figure}[H]
 	\centering
