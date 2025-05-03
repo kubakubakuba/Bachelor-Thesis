@@ -23,7 +23,7 @@ $e_i(\boldsymbol{p}, t)$ at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq} \cit
 e_i(\boldsymbol{p}, t) := \sigma_i^{\boldsymbol{p}} c \, \delta(t - t_i^{\boldsymbol{p}}), \ i \in 1, 2, 3 ...
 \label{eq:event_eq}
 \end{equation}
-where $\sigma_i^{\boldsymbol{p}}$ is the polarity and $t_i^{\boldsymbol{p}}$ is the time-stamp of the $i$-th event at a pixel.
+where $\sigma_i^{\boldsymbol{p}}$ is the polarity (sometimes referred simply as an ON or OFF event) and $t_i^{\boldsymbol{p}}$ is the time-stamp of the $i$-th event at a pixel.
 The magnitude $c$ is the contrast threshold, a preset constant (similar to exposure time in frame-based cameras), which defines a change in light intensity that is encoded by a singular event, at each pixel. Event-based cameras thus circumvent many common issues found in traditional frame-based cameras, such as the motion blur mentioned before. They offer significant advantages, including high dynamic range, low latency,
 and energy efficiency.
 This makes them perfect for the application of agile robotics,
@@ -36,36 +36,35 @@ and the higher cost of the camera units themselves. \cite{gallego22event}
 
 \section{Equipment used}
 
-\subsection{Event-based camera}
-The event-based camera used in this thesis is the \texttt{Prophesee EVK4 HD}\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.},
-with a \texttt{IMX636} sensor. The camera features a resolution of $1280 \times 720$ pixels and is capable of generating $1.066\times10^9$ events per second (equivalent to $10.000$ \ac{FPS}) and offers dynamic range of $120$ dB.
-During recording, many settings of the camera can be set, such as the \ac{ROI} settings and the bias settings.
-
-\subsubsection{ROI}
-The \ac{ROI} setting during recording takes a rectangular region in pixel coordinates and ignores any generated events from the camera outside of
-these coordinates. This setting is especially useful in cases where only a small static area needs to be observed or where many unrelated events
-may be generated, that would interfere with the measurement process.
-
-\subsubsection{Bias settings}
-The bias settings are a global camera setting parameters such as an ISO value for analogue film or digital camera ISO sensitivity, or exposure time setting.
-The configurable biases available for the \texttt{EVK4} can be explained as\cite{dilmaghani2022controlevaluationeventcameras}
-\begin{itemize}
-    \item \texttt{bias\_diff\_on} adjusts the threshold on which events are generated, with higher setting, the more increasing change in pixel brightness needs to be present to trigger a generation of event with positive $p$
-    \item \texttt{bias\_diff\_off} adjusts the threshold on which events are generated, with higher setting, the more decreasing change in pixel brightness needs to be present to trigger a generation of event with negative $p$
-    \item \texttt{bias\_fo} adjusts the low-pass filter, which filters out the fast fluctuations in light intensity, effectively setting the maximum detectable oscillation frequency
-    \item \texttt{bias\_hpf} adjusts the high-pass filter, which filters out the slow fluctuations in light intensity, setting the minimum detectable oscillation frequency
-    \item \texttt{bias\_refr} adjusts the pixel refractory period, in which a pixel is inactive after generating an event
-\end{itemize}
-These settings are leveraged while measuring data to filter out a large part of generated noise, as well as unneeded events, such as in brightly illuminated scenes, that produce a lot of event, with most of them not needed for the pose estimation.
-
-\subsection{Lenses}
-During the measurements, a fish eye lens with an integrated \ac{UV} filter was used to target the specific wavelength of the \ac{LED}s
-that are used in the UVDAR localization system.
-
 \subsection{UAVs}
-The \ac{UAV} used for the measurements was an X500 unit from the \ac{MRS} UVDAR system, with \ac{UV} \ac{LED} light sources,
-mounted on each arm of the \ac{UAV}, which can be modulated at specified frequencies and are used for localization and communication purposes.
-Both can be seen in \reffig{fig:uavcam}.
+The experimental platform for this work is the MRS X500\cite{hertmrs} quadrotor \ac{UAV} equipped with \ac{UV} \ac{LED}s
+integrated to the UVDAR\cite{walteruvdar} system.
+Each of the \ac{UAV}'s arms is equipped with 2 \ac{UV} \ac{LED}s at each end of the arm, placed at a right angle relative to each other.
+The \ac{LED}s on each arm can be modulated
+by using a binary sequence (for example, $[0, 1]$ for simple blinking or $[1]$ for a constant ON signal), with a common modulation frequency set for all the \ac{LED}s.
+In our approach, we use this functionality to differentiate between the arms by modulating each arm on a different frequency to be easily distinguishable.
+The \ac{UAV} can be seen in \reffig{fig:uav1}.
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.50\textwidth]{./fig/photos/uav1.jpeg}
+%    \caption{
+%        The MRSX500 UAV
+%    }
+%    \label{fig:x500uav}
+%\end{figure}
+
+\subsection{Event-based camera}
+The event-based camera used in this thesis is the \texttt{Prophesee EVK4 HD}\footnote{Prophesee EVK4 HD website: \url{https://www.prophesee.ai/event-camera-evk4/}.},
+with \texttt{IMX636} sensor. The camera features a resolution of $1280 \times 720$ pixels and is capable of generating $1.066\times10^9$ events per second (equivalent to $10.000$ \ac{FPS} in conventional frame-based terms) and offers a dynamic range of $120$ dB.
+During recording, many camera settings can be changed, such as the \ac{ROI} settings and the bias settings.
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.50\textwidth]{./fig/photos/evk4.jpg}
+%    \caption{
+%        Prophesee EVK4 HD event-based camera
+%    }
+%    \label{fig:evk4}
+%\end{figure}
 
 \begin{figure}[H]
 	\centering
@@ -78,29 +77,61 @@ Both can be seen in \reffig{fig:uavcam}.
 	  \label{fig:uav1}
 	}
 	\caption{
-  An event-based camera with a 2.5mm fish eye lens can be seen on \reffig{fig:evk4}, which was used to measure the UV LEDs mounted on the X500 UAV unit equipped with UVDAR as seen on \reffig{fig:uav1}.
+  An event-based camera with a 2.5mm fish eye lens can be seen on \reffig{fig:evk4}, which was used to measure the UV LEDs mounted on the X500 UAV unit modulated using UVDAR as seen on \reffig{fig:uav1}.
   }
 	\label{fig:uavcam}
 \end{figure}
 
-\section{Data collection}
+\subsubsection{ROI}
+The \ac{ROI} setting during recording takes a rectangular region in pixel coordinates and discards events outside the specified region at the hardware level, reducing computational load and noise from irrelevant areas. This setting is especially useful in cases where only a small static area needs to be observed or where many unrelated events
+may be generated, that would interfere with the measurement process.
 
-The data used in this chapter were collected on several occasions by measuring a stationary \ac{UAV} at various distances and rotations from the camera.
-Each \ac{UAV} is equipped with 8 \ac{UV} \ac{LED}s, with 2 \ac{LED}s on each arm of the \ac{UAV}. Each of the \ac{LED}s can be individually controlled
-and can be set to various blinking sequences, with a common modulation frequency set for all \ac{LED}s.
+\subsubsection{Bias settings}
+The bias settings are a global camera setting parameters analogous to ISO or exposure time in traditional cameras, though they operate on fundamentally
+different principles.
+The configurable biases for the \texttt{EVK4} which directly influence event generation and noise filtering, are as follows\cite{dilmaghani2022controlevaluationeventcameras}
+\begin{itemize}
+    \item \texttt{bias\_diff\_on} adjusts the threshold on which events are generated, with higher setting, the more increasing change in pixel brightness needs to be present to trigger a generation of an event with positive $\sigma$
+    \item \texttt{bias\_diff\_off} adjusts the threshold on which events are generated, with higher setting, the more decreasing change in pixel brightness needs to be present to trigger a generation of an event with negative $\sigma$
+    \item \texttt{bias\_fo} adjusts the low-pass filter, which filters out the fast fluctuations in light intensity, effectively setting the maximum detectable oscillation frequency
+    \item \texttt{bias\_hpf} adjusts the high-pass filter, which filters out the slow fluctuations in light intensity, setting the minimum detectable oscillation frequency
+    \item \texttt{bias\_refr} adjusts the pixel refractory period, in which a pixel is inactive after generating an event
+\end{itemize}
+These settings were optimized during data acquisition to suppress noise and extraneous events (such as from wall reflections or scene illumination changes), which
+ensures that only events related to the experiment are captured.
+
+\subsection{Lenses}
+During the measurements, a $2.5$mm f/$1.6$ fish eye lens with a \ac{FOV} of $93.5$ degrees was used. Subsequently, during the final experiment, an ultra-wide $1.07$mm f/$2.8$ fish eye lens from Entaniya with \ac{FOV} of $280$ degrees was used in combination with the first lens.
+Both lenses were equipped with narrowband \ac{UV} filters which target the specific wavelength of the \ac{LED}s that are used in the UVDAR localization system.
+This ensures, that the majority of generated events come from the \ac{LED} sources mounted at the \ac{UAV}s, and less events come from the surrounding area.
+All lenses were properly calibrated (see \refchap{chap:calib}), which is required to provide correct results in the final pose estimation.
+
+\section{Data collection}
 
 \subsection{Initial measurements}
 
-The initial measurements were made by securing the event-based camera on a tripod and placing the \ac{UAV} at distances ranging from
-$0.5$ to $2.5$ meters. The \ac{LED}s were set to blink at a frequency in the range of $1$ Hz to $30$ kHz. No \ac{ROI} was set at this time
-and the entire visible area was recorded during the testing.
+The baseline experiment involved a static event camera mounted on a tripod, observing a stationary \ac{UAV} positioned at distances ranging from
+$0.5$ m to $2.5$ m under controlled indoor lighting. The \ac{UAV}'s \ac{LED} markers were programmed to emit pulses of \ac{UV} light with modulation
+frequencies ranging from $1$ Hz to $30$ kHz. No \ac{ROI} constraints were applied during these recordings.
+This preliminary experiment revealed critical problems in the measuring technique:
+\begin{itemize}
+    \item Multiple visible \ac{LED}s: The camera captures the scene as a whole, with no isolation of individual light sources. This means that the results
+    would not have a correct representation of a single light source, but would be influenced by other light sources from the remaining \ac{UAV}
+    arms as well.
+    \item Reflection artifacts: Reflections from walls and objects present in the scene are working as event-generating light sources, bouncing the light around,
+    as seen on \reffig{fig:meas1}.
+    This may confuse some blob detection algorithms for automatic \ac{LED} source location detection, which would be used in the analysis.
+    \item Capturing of the whole scene: As the whole scene was captured, more post-processing would need to be done to analyze the recorded data and investigate
+    the relations of measured effects, for example a local \ac{ROI} filter could be applied to \ac{LED} centers detected by
+    a blob detection algorithm.
+\end{itemize}
 
-This first experiment proved to be rather inefficient as the \ac{LED}s need to be isolated from each other's influence, which
-was not done properly at this time. This problem is partially solvable in the post-processing, by filtering out the events
-with \ac{ROI} filter usage (it is possible to filter the events by finding bounding boxes
-that encapsulate light sources, but on a more complex scene this approach becomes relatively hard).
-The other issue turned out to be the reflections of surrounding objects (as seen in \reffig{fig:meas1}), which caused
-another source of unwanted events in the recording, which may in turn confuse some blob detection methods.
+%This first experiment proved to be rather inefficient as the \ac{LED}s need to be isolated from each other's influence, which
+%was not done properly at this time. This problem is partially solvable in the post-processing, by filtering out the events
+%with \ac{ROI} filter usage (it is possible to filter the events by finding bounding boxes
+%that encapsulate light sources, but on a more complex scene this approach becomes relatively hard).
+%The other issue turned out to be the reflections of surrounding objects (as seen in \reffig{fig:meas1}), which caused
+%another source of unwanted events in the recording, which may in turn confuse some blob detection methods.
 
 \begin{figure}[H]
 	\centering
@@ -121,11 +152,11 @@ another source of unwanted events in the recording, which may in turn confuse so
 
 \subsection{Distance - frequency influence}
 
-In the following measurements, we use only one source of light, which is the whole end of the arm of the \ac{UAV} (with 2 \ac{UV} \ac{LED}s). Other arm light sources were turned off during the measurements.
-Measurements were made in areas isolated by \ac{ROI} filter directly in Metavision Studio during recording, events were collected only in a
-selected area around the light source, and the
-rest of the events were discarded.
-This time, the position of the \ac{UAV} was fixed relative to the camera on a blank background. The camera was placed on a tripod
+With the critical problems revealed in the previous experiment, only one light source consisting of 2 \ac{UV} \ac{LED}s at the end of the \ac{UAV} arm was turned on and
+modulated at set frequencies.
+Measurements were made in areas isolated by \ac{ROI} filter directly during recording on the hardware level, events were collected only in the
+selected area around the and of the \ac{UAV} arm.
+This time, the position of the \ac{UAV} was fixed relative to the camera on a blank background, with no wall reflections. The camera was placed on a tripod
 and moved in increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements made
 at $4$ and $5$ meters.
 The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ kHz, with the blinking sequence set to \texttt{0, 1}.
@@ -133,7 +164,7 @@ The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ 
 \subsection{Rotation angle influence}
 
 In addition to distance and frequency influence, the rotation angle influence also needs to be considered, to
-verify the emitting characteristics of the light sources - if they can or cannot be considered lambertian.
+verify the emitting characteristics of the light sources - if they can or cannot be considered Lambertian.
 The \ac{UAV} was rotated at increments of $45$ degrees relative to the event-based camera, at distances of $0.5$, $1$ and $2$ meters,
 with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was set to \texttt{0, 1}.
 
@@ -165,16 +196,18 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 \section{Event response data processing}
 
 The event-based camera response data was analyzed using the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}
-using its Python API. Each recording can be loaded as a raw file, producing a structured Numpy array of events, where each event is structured as
-$(t, x, y, p)$. Specifically, $t$ represents the timestamp, $x$ and $y$ the spatial location of the event
+using its Python API. Each recording can be loaded as a raw file, producing a structured Numpy array of events, where each event is structured as an array of values
+$(t, x, y, p)$. Specifically, $t$ represents the time stamp from the start of the recording, $x$ and $y$ the spatial location of the event
 on the camera sensor, and $p$ the polarity of the change in the detected brightness (compared to the previously recorded one).
 %We can use many methods to analyze this data, such as
 
 \subsection{Distance - frequency influence}
 
-The distance frequency data set has recordings of the \ac{UAV} placed in front of the camera at distances $\mathcal{D}$ and with one \ac{LED} being modulated
+The distance frequency data set has recordings of the \ac{UAV} placed in front of the camera at distances $\mathcal{D}$ with one \ac{LED} being modulated
 at frequencies $\mathcal{F}$ \footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
-are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{[0, 1]}).}. To minimize interference, only one LED was active during each recording, enabling isolated characterization of the diode’s response. The tested ranges were:
+are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (here the sequence being \texttt{[0, 1]}).}.
+%To minimize interference, only one LED was active during each recording, enabling isolated characterization of the diode’s response.
+The tested ranges were:
 \[
 \mathcal{F} = \{10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000\} \, \text{Hz},
 \]
@@ -185,12 +218,15 @@ are half of the values in this list - UVDAR interprets the frequency with a refe
 %frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
 %distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
 %\end{lstlisting}
-We can load the dataset into a matrix representing the distances and frequencies, then load a select number of events from each recording.
-The data is then resampled into a 1D array by summing polarities over a selected bin width
-\footnote{The bin width should be adjusted appropriately, as the farther the event-based camera is from the source, the fewer events are generated.}.
+We can load the obtained data set into a matrix representing the distances and frequencies, then load a select number of events from each recording.
+The data is then resampled into a signal, represented by a 1D array obtained from summing polarities $p_i$ over a selected bin width $\Delta t$
+\footnote{The bin width should be adjusted appropriately, as the farther the event-based camera is from the source, the fewer events are generated.} \refeq{eq:signal}.
+\begin{equation}
+    S[k] = \sum_{i\in\mathcal{B}_k}p_i, \quad \mathcal{B}_k=\{i|t_k\leq t_i<t_k+\Delta t\}
+    \label{eq:signal}
+\end{equation}
 Peaks in this signal are then analyzed by SciPy's \texttt{findpeaks} function,
 and the average number of events with the standard deviation is calculated for each frequency and distance.
-
 We can see the influence of distance and frequency on the average number of events in \reffig{fig:dist} and \reffig{fig:freqs}, respectively. The data show a decreasing trend of the average number of events
 with the increase of distance or frequency. The drop related to the distance can be explained by the perceived decrease in the intensity of the light source with increasing distance. With an increasing frequency, the camera cannot capture
 all the changes that are generated by the light source, leading to a perceived drop in brightness.
@@ -276,16 +312,17 @@ of the angle between the normal of the LED and the direction of the light \refeq
 	I(\theta) = I_0\cos(\theta)
 	\label{eq:lambertian}
 \end{equation}
-If we shift those distributions by $\pm 45$ degrees and sum them together, we can see the
-theoretical distribution of the light emmited from the singular UAV arm \reffig{fig:lambert_combined}.
+To represent the whole end of the \ac{UAV} arm, we need to consider two \ac{LED} sources, orthogonal to each other.
+This can be represented by shifting the previous distributions by $\pm 45$ degrees and adding them together. The 
+theoretical distribution pattern of the light source is visible in \reffig{fig:lambert_combined}. 
+The results extracted from the dataset of the \ac{UAV} rotations relative to the camera are shown in \reffig{fig:angles}.
+%With the dataset of the rotation of the UAV relative to the camera we will get the following resultson \reffig{fig:angles}.
 \begin {figure}[H]
 	\centering
 	\includegraphics[width=0.50\textwidth]{./fig/semestral/lambertian/3lambertian.pdf}
 	\caption{Radiation pattern of two lambertian light sources shifted by $\pm 45$ degrees.}
 	\label{fig:lambert_combined}
 \end{figure}
-With the dataset of the rotation of the UAV relative to the camera we will get the following results
-on \reffig{fig:angles}.
 
 \begin{figure}[H]
 	\centering

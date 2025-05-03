@@ -4,19 +4,37 @@
 
 \section{Method used}
 
-For the correct representation of distances and angles in the received data from the camera, a camera calibration needs to be performed.
-The lens used to obtain the data is a 2.5mm f / 1.6 fisheye lens, with a \ac{FOV} of more than 90 degrees, which can be seen in \reffig{fig:fisheye_lens}.
+For the correct representation of distances and angles in the received data from the camera, a camera calibration with the used lenses needs to be performed.
+The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $93.5$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
+of $280$ degrees, both can be seen in \reffig{fig:lenses}.
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[width=0.5\textwidth]{./fig/photos/lens.jpeg}
+%  \caption{2.5mm f/1.6 fish eye lens.}
+%  \label{fig:fisheye_lens}
+%\end{figure}
+
 \begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{./fig/photos/lens.jpeg}
-  \caption{2.5mm f/1.6 fish eye lens.}
-  \label{fig:fisheye_lens}
+	\centering
+	\subfloat[2.5mm f/1.6 fish eye lens] {
+	  \includegraphics[width=0.4\textwidth]{./fig/photos/lens.jpeg}
+	  \label{fig:lens_1}
+	}
+	\subfloat[1.07mm f/2.8 Entaniya fish eye lens] {
+	  \includegraphics[width=0.4\textwidth]{./fig/photos/entaniya_280.jpg}
+	  \label{fig:lens_2}
+	}
+	\caption{
+		Lens used during the calibration, a 2.5mm lens with $93.5°$ FOV in \reffig{fig:lens_1} and Entaniya $280°$ lens in \reffig{fig:lens_2}.
+  }
+	\label{fig:lenses}
 \end{figure}
-In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used, which is based on the pinhole camera model, and is
-used to calibrate fish eye lenses. The implementation used for calibration is a Python library py-OCamCalib \footnote{py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
+
+
+In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library py-OCamCalib \footnote{py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
 For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
 a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
-In our calibration procedure, we use a 5x7 lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
+In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
 LEDs and can be detected by any kind of blob detector. The LED lattice is used, so the event camera can easily detect events from bright LEDs, as opposed to
 the light being reflected from the chessboard pattern (which does not produce any light on its own).
 The calibration lattice can be seen in \reffig{fig:lattice}.
@@ -32,7 +50,7 @@ The calibration lattice can be seen in \reffig{fig:lattice}.
 	  \label{fig:lattice_2}
 	}
 	\caption{
-		Calibration lattice of 5x7 UV LEDs on \reffig{fig:lattice_1} and the events being produced when placed in front of the camera at \reffig{fig:lattice_2},
+		Calibration lattice of $5\times7$ UV LEDs on \reffig{fig:lattice_1} and the events being produced when placed in front of the camera at \reffig{fig:lattice_2},
 		with typical fish-eye lens distortion.
   }
 	\label{fig:lattice}
@@ -42,7 +60,7 @@ reliable detection of the exact blob centers (or which events correspond to whic
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{./fig/photos/lattice_280.png}
-  \caption{Calibration pattern with 5x7 lattice of UV LEDs, taken with a lens with \ac{FOV} of 280 degrees.}
+  \caption{Calibration pattern with $5\times7$ lattice of UV LEDs, taken with a lens with Entaniya lens with \ac{FOV} of 280 degrees.}
   \label{fig:calibration_pattern_distorted}
 \end{figure}
 

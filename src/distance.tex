@@ -9,7 +9,7 @@ We could then assume that a simple distance predictor could be made by simply fi
 number of events per blinking period (thus training this predictor for average number of events w. r. t. to distance) and then making the prediction of distance by calculating the average in real time.
 
 This is possible to do in very specific cases where the camera settings and the scene lighting conditions do not change between training measurements
-and the deployment. For example, changing the \texttt{bias-on} or \texttt{bias-off} settings of the camera changes the brightness change threshold on
+and the deployment. For example, changing the \texttt{bias-diff-on} or \texttt{bias-diff-off} settings of the camera changes the brightness change threshold on
 which the camera generates events.
 This changes the number of events that are generated without any information on the distance from the camera, this is similar to changing the eposure
 time on a global shutter camera, which can then give an under- or over-exposed frame.
@@ -70,7 +70,9 @@ A \ac{UAV} was placed at the floor several meters from the camera and rotated ar
 	\caption{Data from the stationary experiment}
 	\label{fig:pnpuav}
 \end{figure}
-Then a \ac{PnP} (\ac{P3P}) estimation was performed with a calibrated camera. The results can be seen on \reffig{fig:pnpres}, with several recordings
+Then a \ac{PnP} (\ac{P3P}) estimation was performed with a calibrated camera, the ground truth data being the measured distance from the camera to the
+stationary \ac{UAV} placed on the ground.
+The results can be seen on \reffig{fig:pnpres}, with several recordings
 present for each distance.
 \begin{figure}[H]
 	\centering
