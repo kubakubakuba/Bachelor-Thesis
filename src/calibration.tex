@@ -256,10 +256,37 @@ at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid 
 \end{figure}
 
 For the calibration of the Entaniya $280$ degree lens a classical chessboard target was used, as the precise localization of the blob centers proved to be nearly impossible while using the \ac{LED} lattice calibration target. The corners of the chessboard pattern provide
-better contrast and allow for precise localization of the center; unfortunately, they need to be labeled manually in this case. The output can be seen in \reffig{fig:calib_ent}
+better contrast and allow for precise localization of the center; unfortunately, they need to be labeled manually in this case.
+The calibration results can be seen on \reffig{fig:calib_ent_res}, with the visualization on \reffig{fig:calib_ent_viz} and the perspective projection on
+\reffig{fig:calib_ent_proj}.
+
+%The output can be seen in \reffig{fig:calib_ent}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
+%	\caption{Chessboard calibration target in 280 degree lens}
+%	\label{fig:calib_ent}
+%\end{figure}
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
-	\caption{Chessboard calibration target in 280 degree lens}
-	\label{fig:calib_ent}
+	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/viz_ent.pdf}
+	\caption{Angle from optical axis visualization, with the maximum angle of 280 degrees.}
+	\label{fig:calib_ent_viz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\subfloat[Uncalibrated image.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/ent_before.pdf}
+	  \label{fig:calib_ent_proj_1}
+	}
+	\subfloat[Calibrated image.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/ent_after.pdf}
+	  \label{fig:calib_ent_proj_2}
+	}
+	\caption{
+		Two photos of the calibration chessboard from the Entaniya 280 degree lens, one uncalibrated on \reffig{fig:calib_ent_proj_1} and the one calibrated at \reffig{fig:calib_ent_proj_1}.
+  }
+	\label{fig:calib_ent_proj}
 \end{figure}
