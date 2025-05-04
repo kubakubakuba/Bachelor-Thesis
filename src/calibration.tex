@@ -257,24 +257,37 @@ at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid 
 
 For the calibration of the Entaniya $280$ degree lens a classical chessboard target was used, as the precise localization of the blob centers proved to be nearly impossible while using the \ac{LED} lattice calibration target. The corners of the chessboard pattern provide
 better contrast and allow for precise localization of the center; unfortunately, they need to be labeled manually in this case.
-The calibration results can be seen on \reffig{fig:calib_ent_res}, with the visualization on \reffig{fig:calib_ent_viz} and the perspective projection on
+The calibration results can be seen on \reffig{fig:calib_e}, with the visualization on \reffig{fig:calib_ent_viz} and the perspective projection on
 \reffig{fig:calib_ent_proj}.
-
-%The output can be seen in \reffig{fig:calib_ent}
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
-%	\caption{Chessboard calibration target in 280 degree lens}
-%	\label{fig:calib_ent}
-%\end{figure}
+\begin{figure}[htbp]
+	\centering
+	%\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
+        \includegraphics[width=0.8\textwidth]{./fig/pgfplot/chessboard_280.pdf}
+	\caption{Chessboard calibration target visible in 280 degree lens with marked chessboard edge points}
+	\label{fig:calib_ent}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
+	\subfloat[Calibrated lens model function] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/proj_280.pdf}
+	  \label{fig:calib_e_1}
+	}
+	\subfloat[Calibration images mean reprojection errors] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/err_280.pdf}
+	  \label{fig:calib_e_2}
+	}
+	\caption{
+		Calibration results for the Entaniya 280 degree lens with the calibrated lens model function highlighted in red in \reffig{fig:calib_e_1} and the calibration images mean reprojection errors on \reffig{fig:calib_e_2}.
+  }
+	\label{fig:calib_e}
+\end{figure}
+\begin{figure}[H]
+	\centering
 	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/viz_ent.pdf}
-	\caption{Angle from optical axis visualization, with the maximum angle of 280 degrees.}
+	\caption{Angle from optical axis visualization, with the maximum angle of 140 degrees, making its \ac{FOV} 280 degrees.}
 	\label{fig:calib_ent_viz}
 \end{figure}
-
 \begin{figure}[H]
 	\centering
 	\subfloat[Uncalibrated image.] {
