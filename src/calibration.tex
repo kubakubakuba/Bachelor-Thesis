@@ -69,7 +69,8 @@ For the purpose of this, a simple Python app has been written. An event raw reco
 The accumulated events are then saved to a grayscale image, where each pixel corresponds to the number of events that occurred in that
 pixel \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/generate_frames.py}}. The image is then normalized,
 and the LED centers are detected using the \texttt{findContours} function of OpenCV \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/detect_blob_centers.py}}.
-The detected centers can then be manually labeled (with optional corrections) row-wise, so the calibration script can then perform the calibration.
+The detected centers can then be manually labeled row-wise, in the same order in every image, so the calibration process can identify how the grid of points
+changes across the images, and thus calculate the lens distortion.
 After this, the regular calibration script from py-OCamCalib can be used. The labeling of the LED centers can be seen in \reffig{fig:calibration_pattern_labeled}.
 
 \begin{figure}[H]
@@ -111,14 +112,12 @@ that is, at the intersection of the optical axis from the center of the image wi
 The next step in the camera calibration is to fit an encompassing ellipse to the received data. The purpose of this is to see the center of distortion of the fish eye lens, as well
 as the stretching of the image on both the x and y axes. This process can be seen in \reffig{fig:ellipse}. This ellipse is then used to calculate the point-mapping functions, which allows for tranformation of points from
 the image plane to their respective 3D coordinates.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{./fig/tikz/ellipse.pdf}
 	\caption{}
 	\label{fig:ellipse}
   \end{figure}
-
 The intrinsic parameters of the camera specify the image format itself, which is influenced by the focal length, sensor size, and optical center. As there are many mapping
 functions that can be used while modeling the lens (their precision is limited by the manufacturing process), Scaramuzza et al. \cite{scaramuzzacalibration} proposed
 fitting a polynomial to find the optimal model for lens calibration. The mapping functions are shown in \reffig{fig:mapping_functions}.
@@ -209,13 +208,18 @@ The calibration results can be seen in \reffig{fig:calib_r}.
 	\label{fig:calib_r}
 \end{figure}
 
-We can now fit the encompassing ellipse to the data by minimizing the number of events that are outside the ellipse (minimizing the ellipse size while keeping the
-captured events inside). The ellipse can be seen in \reffig{fig:ellipse_fit}.
-TODO: formulate the optimization problem mathematically
+We can now fit the encompassing ellipse, which can be formulated as an optimization problem \refeq{eq:ellipse_opt} of minimizing the sum of point distances, that lie outside of the
+ellipse, while minimizing the ellipse parameters $a$, $b$.
+The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
+\begin{equation}
+    (a^*, b^*) = \underset{a, b > 0}{\text{argmin}} \sum_{i=1}^n \max\left( \frac{x_i^2}{a^2} + \frac{y_i^2}{b^2} - 1, 0 \right).
+    \label{eq:ellipse_opt}
+\end{equation}
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{./fig/svg/ellipse_fit.pdf}
-	\caption{Fitted ellipse to the calibration data, with major axis $a = 652$, and minor axis $b = 650$.}
+	\includegraphics[width=0.65\textwidth]{./fig/svg/ellipse_fit.pdf}
+	\caption{Fitted ellipse to the calibration data, with semi-major axis $a^* = 652$, and semi-minor axis $b^* = 650$.}
 	\label{fig:ellipse_fit}
 \end{figure}
 
@@ -249,4 +253,13 @@ at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid 
 		exhibit any distortion.
   }
 	\label{fig:calib_c}
+\end{figure}
+
+For the calibration of the Entaniya $280$ degree lens a classical chessboard target was used, as the precise localization of the blob centers proved to be nearly impossible while using the \ac{LED} lattice calibration target. The corners of the chessboard pattern provide
+better contrast and allow for precise localization of the center; unfortunately, they need to be labeled manually in this case. The output can be seen in \reffig{fig:calib_ent}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
+	\caption{Chessboard calibration target in 280 degree lens}
+	\label{fig:calib_ent}
 \end{figure}
