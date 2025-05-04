@@ -280,7 +280,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=4.781625in,y=0.648909in,,top]{\color{textcolor}{\sffamily\fontsize{15.000000}{18.000000}\selectfont\catcode`\^=\active\def^{\ifmmode\sp\else\^{}\fi}\catcode`\%=\active\def%{\%}Incident angle in degree}}%
+\pgftext[x=4.781625in,y=0.648909in,,top]{\color{textcolor}{\sffamily\fontsize{15.000000}{18.000000}\selectfont\catcode`\^=\active\def^{\ifmmode\sp\else\^{}\fi}\catcode`\%=\active\def%{\%}Incident angle in degrees}}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
