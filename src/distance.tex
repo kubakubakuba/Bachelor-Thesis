@@ -30,7 +30,7 @@ RSSR_{1,2} = \frac{P_{R1}}{P_{R2}} = \left( \frac{d_2}{d_1} \right)^{n+3}
 where $P_{R1}$ and $P_{R2}$ are the received powers of the \ac{LED}s, $d_1$ and $d_2$ are the distances to the \ac{LED}s, and $n$ is the mode number of the radiation lobe (for a Lambertian model $n = 1$).
 
 \section{Perspective-n-Point}
-The \ac{PnP} problem addresses the estimation of the position of an object relative to the camera, having six degrees of freedom
+The \ac{PnP} problem addresses the estimation of the position of an object relative to the camera, having six \ac{DOF}
 \begin{itemize}
 \item{Rotation - roll, pitch and yaw}
 \item{Translation - 3D vector representing the position of the object relative to the camera}
@@ -82,8 +82,8 @@ present for each distance.
 \end{figure}
 
 \section{ROS implementation}
-To facilitate the deployment on real hardware, a ROS distance estimator node was implemented
-\footnote{The source code of the distance estimator ROS node is available at \url{https://github.com/kubakubakuba/ros-event-distance}}.
+To facilitate the deployment on real hardware, a \ac{ROS} distance estimator node was implemented
+\footnote{The source code of the distance estimator \ac{ROS} node is available at \url{https://github.com/kubakubakuba/ros-event-distance}}.
 The functionality can be summarized with the flow chart 
 in
 \reffig{fig:rosflow}.

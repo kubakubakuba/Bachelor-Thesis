@@ -90,16 +90,16 @@ and intrinsic parameters of the camera, where the extrinsic parameters are the r
 		Y_{camera} \\
 		Z_{camera}
 	\end{bmatrix}
-	= R 
+	= \mathbf{R} 
   \begin{bmatrix}
 	X_{world} \\
 	Y_{world} \\
 	Z_{world}
   \end{bmatrix}
-  + T
+  + \mathbf{t}
   \label{eq:extrinsic}
 \end{equation}
-which is an affine transformation that uses a rotation matrix $R$ and a translation vector $T$. The origin of the camera's coordinate system is at the optical center,
+which is an affine transformation that uses a rotation matrix $R$ and a translation vector $t$. The origin of the camera's coordinate system is at the optical center,
 that is, at the intersection of the optical axis from the center of the image with the image plane. This can be represented by \reffig{fig:camera_extrinsic}.
 
 \begin{figure}[H]
@@ -208,13 +208,15 @@ The calibration results can be seen in \reffig{fig:calib_r}.
 	\label{fig:calib_r}
 \end{figure}
 
-We can now fit the encompassing ellipse, which can be formulated as an optimization problem \refeq{eq:ellipse_opt} of minimizing the sum of point distances, that lie outside of the
-ellipse, while minimizing the ellipse parameters $a$, $b$.
+The problem of fitting a minimal encompassing ellipse to event data can be formulated as an unconstrained optimization problem \ref{eq:ellipse_opt}, where we minimize the squared distances of convex hull points to the ellipse boundary.
+% of minimizing the sum of point distances, that lie outside of the
+%ellipse, while minimizing the ellipse parameters $a$, $b$.
 The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
 \begin{equation}
-    (a^*, b^*) = \underset{a, b > 0}{\text{argmin}} \sum_{i=1}^n \max\left( \frac{x_i^2}{a^2} + \frac{y_i^2}{b^2} - 1, 0 \right).
-    \label{eq:ellipse_opt}
+(a^*, b^*) = \underset{a, b > 0}{\text{argmin}} \quad \sum_{(x_i,y_i) \in \mathcal{H}} \left( \frac{x_i^2}{a^2} + \frac{y_i^2}{b^2} - 1 \right)^2
+\label{eq:ellipse_opt}
 \end{equation}
+\text{where} $\mathcal{H} = \text{Conv}\{(x_i,y_i)\}_{i=1}^n$ is the convex hull of generated event points.
 
 \begin{figure}[H]
 	\centering
