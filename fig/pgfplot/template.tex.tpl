@@ -3,5 +3,5 @@
 \usepackage{lmodern}
 
 \begin{document}
-	\input{viz_ent.pgf}
+	\input{__TEMPLATE__}
 \end{document}
