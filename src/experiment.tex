@@ -2,8 +2,10 @@
 
 \chapter{Experiment\label{chap:experiment}}
 
+\section{Setup}
+
 The experiment was performed with two X500 \ac{UAV}s, each of them equipped with a Prophesee EVK4 event-based camera, one with a 2.5mm f/1.6
-fish eye lens with an \ac{FOV} of 93.5 degrees and the second one with Entaniya 1.07mm f/2.8 fish eye lens with an \ac{FOV} of 280 degrees.
+fish eye lens with an \ac{FOV} of roughly 187 degrees and the second one with Entaniya 1.07mm f/2.8 fish eye lens with an \ac{FOV} of 280 degrees.
 Each UAV is also equipped with a Basler camera with a fish eye lens, to provide normal video signal that is recorded alongside the event stream
 from the event-based camera.
 Both cameras are connected to the onboard Intel NUC computer running the ROS system, on which all the processing is done during the flight. Both 
@@ -28,7 +30,8 @@ The measurements were collected during the \ac{MRS} Camp in Temešvár in August
 \end{figure}
 Two pilots manually controlled the \ac{UAV}s, systematically varying the distance and angles between them to generate diverse measurement data during the experiment. All in-flight data, including sensor measurements and camera streams, we recorden in a \ac{ROS} bag file for subsequent analysis
 in a simulated environment. In addition, raw event stream data from the event-based camera was also recorded and saved. The camera view from the UAV33
-can be seen on \reffig{fig:exp1}
+can be seen on \reffig{fig:exp1}. During the recording about $17$ million events were generated every second by each camera, which equates to a data
+throughput of about $45$ MB per second per drone. Each raw recording is about $14$ gigabytes in size.
 
 \begin{figure}[H]
 	\centering
@@ -46,8 +49,17 @@ can be seen on \reffig{fig:exp1}
 	\label{fig:exp1}
 \end{figure}
 
-\todo{SHOW MEASURED DATA FROM RQT}
+%\todo{SHOW MEASURED DATA FROM RQT}
 
-\todo{SHOW GNSS/ESTIMATION DIFFERENCES}
+%\todo{SHOW GNSS/ESTIMATION DIFFERENCES}
 
-\todo{SHOW THE RVIZ/RQTPLOT VISUALIZATION PIPELINE}
+%\todo{SHOW THE RVIZ/RQTPLOT VISUALIZATION PIPELINE}
+
+\section{Analysis}
+
+
+
+
+
+
+

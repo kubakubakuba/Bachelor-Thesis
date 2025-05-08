@@ -31,7 +31,7 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 \end{figure}
 
 
-In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library py-OCamCalib \footnote{py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
+In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library py-OCamCalib \footnote{\todo{(maybe cite this) py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}}.%TODO: maybe cite the github repo
 For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
 a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
 In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
@@ -99,7 +99,7 @@ and intrinsic parameters of the camera, where the extrinsic parameters are the r
   + \mathbf{t}
   \label{eq:extrinsic}
 \end{equation}
-which is an affine transformation that uses a rotation matrix $R$ and a translation vector $t$. The origin of the camera's coordinate system is at the optical center,
+which is an affine transformation that uses a rotation matrix $\mathbf{R}$ and a translation vector $\mathbf{t}$. The origin of the camera's coordinate system is at the optical center,
 that is, at the intersection of the optical axis from the center of the image with the image plane. This can be represented by \reffig{fig:camera_extrinsic}.
 
 \begin{figure}[H]
@@ -218,10 +218,26 @@ The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
 \end{equation}
 \text{where} $\mathcal{H} = \text{Conv}\{(x_i,y_i)\}_{i=1}^n$ is the convex hull of generated event points.
 
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.65\textwidth]{./fig/svg/ellipse_fit.pdf}
+%	\caption{Fitted ellipse to the calibration data, with semi-major axis $a^* = 652$, and semi-minor axis $b^* = 650$.}
+%	\label{fig:ellipse_fit}
+%\end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.65\textwidth]{./fig/svg/ellipse_fit.pdf}
-	\caption{Fitted ellipse to the calibration data, with semi-major axis $a^* = 652$, and semi-minor axis $b^* = 650$.}
+	\subfloat[Fitted ellipse.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/svg/ellipse_fit.pdf}
+	  \label{fig:ellipse_fit_1}
+	}
+	\subfloat[Events with convex hull points] {
+	  \includegraphics[width=0.45\textwidth]{./fig/pgfplot/ellipse_hull.pdf}
+	  \label{fig:ellipse_fit_2}
+	}
+	\caption{
+		Fitted ellipse to the calibration data, with semi-major axis $a^* = 663$, and semi-minor axis $b^* = 657$
+        on \reffig{fig:ellipse_fit_1} with separated convex hull points in green on \reffig{fig:ellipse_fit_2}.
+  }
 	\label{fig:ellipse_fit}
 \end{figure}
 
@@ -305,3 +321,5 @@ The calibration results can be seen on \reffig{fig:calib_e}, with the visualizat
   }
 	\label{fig:calib_ent_proj}
 \end{figure}
+
+\todo{change wording regarding lens FOV - inconsistent between 93.5 and 280 degrees (one is not the whole FOV but is mentioned as}
