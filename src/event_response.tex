@@ -108,7 +108,7 @@ All lenses were properly calibrated (see \refchap{chap:calib}), which is require
 
 \section{Data collection}
 
-\subsection{Initial measurements}
+\subsection{Baseline}
 
 The baseline experiment involved a static event camera mounted on a tripod, observing a stationary \ac{UAV} positioned at distances ranging from
 $0.5$ m to $2.5$ m under controlled indoor lighting. The \ac{UAV}'s \ac{LED} markers were programmed to emit pulses of \ac{UV} light with modulation
@@ -193,7 +193,7 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 %between the responses for each of the LEDs, which is necessary
 %for the estimation of the UAV position using RSSR.
 
-\section{Event response data processing}
+\section{Response analysis}
 
 The event-based camera response data was analyzed using the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}
 using its Python API. Each recording can be loaded as a raw file, producing a structured Numpy array of events, where each event is structured as an array of values
