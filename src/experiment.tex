@@ -57,9 +57,62 @@ throughput of about $45$ MB per second per drone. Each raw recording is about $1
 
 \section{Analysis}
 
+The data was analyzed after the recording, by generating image frames from the raw event recordings. This data,
+as seen on \reffig{fig:labeled}, has then been manually labeled and with the use of a blob detector the \ac{LED} sources
+were selected.
+\todo{maybe write more}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./fig/photos/labeled_2.png}
+	\caption{Labeled blob centers}
+	\label{fig:labeled}
+\end{figure}
+
+\section{Experiment results}
+
+For each labeled group of points a distance estimation was performed using the \texttt{DistanceEstimator} using the
+\ac{P3P} algorithm. For each estimated pose, a distance from the camera was calculated, which was then compared to the
+ground truth distance obtained from the \ac{GNSS}. The distance is calculated as a norm of the difference of the \ac{UAV} positions. \todo{maybe mention mean error and stddev}
+The estimation
+results can be seen on \reffig{fig:experiment_results}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./fig/tikz/experiment_analysis.pdf}
+	\caption{The distance estimation data from the experiment, compared with the recorded GNSS data used as ground truth}
+	\label{fig:experiment_results}
+\end{figure}
+
+\section{Real life deployment - estimation challenges}
+
+\subsection{Blob detection}
+The analysis presents several challenges, one of them being the identification of the moving \ac{UAV} in the recorded
+(or live) data. The ideal solution is to identify which pixels are generated with the specific frequeny, which the \ac{LED}
+markers are set to blink on the \ac{UAV}. Sadly, during the measurement of our experiment, the \ac{UAV} produced a lot
+of vibration in the data, which interfered with our measured data, and thus the detection of blobs has become a large obsacle.
+When we generate images from the recording, the error stays the same; how do we identify the correct blobs automatically, when
+the \ac{UAV} can be at an arbitrary distance and orientation?
+
+\subsection{Blob center detection}
+Manual labeling is not the definitive answer to our problem either, because even the blob centers itself can greatly influence the estimation precision. In \reffig{fig:blob_comb}, we select a single pixel from each blob and we run the distance estimation
+for every combination of pixels. As we can observe, even a change in range of 3 pixels can change the estimated distance by
+$1.5$ meters. The center of a blob may be calculated as a geometrical center of the blob's pixels, but this approach fails
+when the blob contains pixels which do not belong to it.
+%Secondly, the calculation of the exact center would most likely yield results with sub-pixel level precision, requiring the placement of the center between the pixels
+
+As we have shown in \reffig{fig:labeled}, there exist a challenge of \ac{UAV} identification 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.99\textwidth]{./fig/pgfplot/estimation_selection_1.pdf}
+	\caption{Blob centers with the resulting distance estimations for any combination of center selection}
+	\label{fig:blob_comb}
+\end{figure}
 
 
-
-
-
-
+\subsection{Resolution}
+Another problem we face in the \ac{VLP} systems is the camera resolution. On very high distances
+(in our case $20 +$ meters), the angular resolution becomes too small to capture.
+This is because the camera consists of pixels, which, at some point, cannot differentiate between the incoming sources of light.
+We may, as a result, run into a case when we cannot differentiate between the individual \ac{LED} light sources, or their
+pixel images collide and influence each other, which makes the analysis impossible.
