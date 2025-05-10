@@ -73,7 +73,9 @@ were selected.
 
 For each labeled group of points a distance estimation was performed using the \texttt{DistanceEstimator} using the
 \ac{P3P} algorithm. For each estimated pose, a distance from the camera was calculated, which was then compared to the
-ground truth distance obtained from the \ac{GNSS}. The distance is calculated as a norm of the difference of the \ac{UAV} positions. \todo{maybe mention mean error and stddev}
+ground truth distance obtained from the \ac{GNSS}. The distance is calculated as a norm of the difference of the \ac{UAV} positions.
+The results demostrate, that our approach achieves a mean absolute error of $2.47$ meters, with a standard deviation of $1.75$ meters,
+indicating moderate precision under the experiment conditions.
 The estimation
 results can be seen on \reffig{fig:experiment_results}
 
@@ -86,22 +88,20 @@ results can be seen on \reffig{fig:experiment_results}
 
 \section{Real life deployment - estimation challenges}
 
-\subsection{Blob detection}
 The analysis presents several challenges, one of them being the identification of the moving \ac{UAV} in the recorded
-(or live) data. The ideal solution is to identify which pixels are generated with the specific frequeny, which the \ac{LED}
-markers are set to blink on the \ac{UAV}. Sadly, during the measurement of our experiment, the \ac{UAV} produced a lot
-of vibration in the data, which interfered with our measured data, and thus the detection of blobs has become a large obsacle.
-When we generate images from the recording, the error stays the same; how do we identify the correct blobs automatically, when
+data. The ideal solution is to identify which pixels are being generated with their specific frequeny, which the \ac{LED}
+markers are set to blink on the. Sadly, during the measurement of our experiment, the \ac{UAV} produced a lot
+of vibration in the data, which interfered with our measurements, and thus the detection of blobs has become a large obsacle.
+When we generate images from the recording, the problem persists; How do we identify the correct blobs automatically, when
 the \ac{UAV} can be at an arbitrary distance and orientation?
-
-\subsection{Blob center detection}
-Manual labeling is not the definitive answer to our problem either, because even the blob centers itself can greatly influence the estimation precision. In \reffig{fig:blob_comb}, we select a single pixel from each blob and we run the distance estimation
-for every combination of pixels. As we can observe, even a change in range of 3 pixels can change the estimated distance by
+Manual labeling is not the definitive answer to our problem either because even the blob center selection itself can greatly
+influence the estimation precision. In \reffig{fig:blob_comb}, we select a single pixel from each blob and run the distance estimation
+for each combination of pixel. As we can observe, even a change in the range of 3 pixels can change the estimated distance by
 $1.5$ meters. The center of a blob may be calculated as a geometrical center of the blob's pixels, but this approach fails
-when the blob contains pixels which do not belong to it.
+when the blob contains pixels which do not belong to them.
 %Secondly, the calculation of the exact center would most likely yield results with sub-pixel level precision, requiring the placement of the center between the pixels
 
-As we have shown in \reffig{fig:labeled}, there exist a challenge of \ac{UAV} identification 
+%As we have shown in \reffig{fig:labeled}, there exist a challenge of \ac{UAV} identification 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.99\textwidth]{./fig/pgfplot/estimation_selection_1.pdf}
@@ -109,10 +109,4 @@ As we have shown in \reffig{fig:labeled}, there exist a challenge of \ac{UAV} id
 	\label{fig:blob_comb}
 \end{figure}
 
-
-\subsection{Resolution}
-Another problem we face in the \ac{VLP} systems is the camera resolution. On very high distances
-(in our case $20 +$ meters), the angular resolution becomes too small to capture.
-This is because the camera consists of pixels, which, at some point, cannot differentiate between the incoming sources of light.
-We may, as a result, run into a case when we cannot differentiate between the individual \ac{LED} light sources, or their
-pixel images collide and influence each other, which makes the analysis impossible.
+A fundamental limitation of any vision‐based positioning system is the finite spatial resolution of the camera sensor. As the distance to the \ac{LED}s increases, beyond roughly $20$ m in our setup, their angular size on the image plane decreases to just a few pixels. Once a marker spans only a few sensor pixels, adjacent light sources can begin to merge: individual \ac{LED} spots can no longer be differentiated and their point-spread functions overlap. This blending of pixel responses prevents the reliable separation of each \ac{LED} signal and ultimately makes accurate detection and decoding impossible.
