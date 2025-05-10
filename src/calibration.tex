@@ -5,7 +5,7 @@
 \section{Method used}
 
 For the correct representation of distances and angles in the received data from the camera, a camera calibration with the used lenses needs to be performed.
-The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $93.5$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
+The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $187$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
 of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 %\begin{figure}[H]
 %  \centering
@@ -25,13 +25,13 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 	  \label{fig:lens_2}
 	}
 	\caption{
-		Lenses used during the calibration, a $93.5$ degree lens in \reffig{fig:lens_1} and Entaniya $280$ degree lens in \reffig{fig:lens_2}.
+		Lenses used during the calibration, a $187$ degree lens in \reffig{fig:lens_1} and Entaniya $280$ degree lens in \reffig{fig:lens_2}.
   }
 	\label{fig:lenses}
 \end{figure}
 
 
-In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library py-OCamCalib \footnote{\todo{(maybe cite this) py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}}.%TODO: maybe cite the github repo
+In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
 For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
 a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
 In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
@@ -322,4 +322,4 @@ The calibration results can be seen on \reffig{fig:calib_e}, with the visualizat
 	\label{fig:calib_ent_proj}
 \end{figure}
 
-\todo{change wording regarding lens FOV - inconsistent between 93.5 and 280 degrees (one is not the whole FOV but is mentioned as}
+%\todo{change wording regarding lens FOV - inconsistent between 187 and 280 degrees (one is not the whole FOV but is mentioned as}

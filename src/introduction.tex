@@ -14,11 +14,7 @@ which may lead to localization failure. In contrast, event-based cameras overcom
 brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency. These attributes make them ideal for
 capturing high-frequency LED signals, even in challenging lighting conditions or during aggressive \ac{UAV} maneuvers in agile swarming applications.
 
-In this thesis, we present a method for estimating the pose of a \ac{UAV} equipped with \ac{UV} \ac{LED} light sources as in the UVDAR system. \cite{walteruvdar}
-These \ac{LED}s are modulated at select frequencies, which aids in their identification and also helps with their prevalence
-on the scene observed by the camera. After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
-algorithm is used to estimate the location of the \ac{UAV} in the 3D space. This estimation is then compared with the ground truth positions obtained
-from the \ac{GNSS}.
+\todo{maybe write more}
 
 \section{Related works}
 Recent advances in relative pose estimation for UAV swarming applications
@@ -33,16 +29,18 @@ Ebmer et al. \cite{ebmer2023} proposed an event-based camera pipeline for real-t
 Gou et al. \cite{GOU2025328} proposed a hybrid framework fusing depth-sensor data and event-based camera streams in a joint random-optimization scheme to achieve robust camera tracking and dense reconstruction under fast motion for agile robotics tasks.
 
 \section{Contributions}
-\todo{write this if necessary}
 
-This section should describe the author's contributions to the field of research.
+In this thesis, we present a method for estimating the pose of a \ac{UAV} equipped with \ac{UV} \ac{LED} light sources as in the UVDAR system. \cite{walteruvdar}
+These \ac{LED}s are modulated at select frequencies, which aids in their identification and also helps with their prevalence
+on the scene observed by the camera. After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
+algorithm is used to estimate the location of the \ac{UAV} in the 3D space. This estimation is then compared with the ground truth positions obtained
+from the \ac{GNSS}.
 
 \section{Mathematical notation}
 
-\todo{write this if necessary}
+\todo{reword this if necessary}
 
-It is a good practice to define basic mathematical notation in the introduction.
-See \reftab{tab:mathematical_notation} for an example.
+The following mathemathical notation in \reftab{tab:mathematical_notation} is used, unless specified otherwise.
 
 \begin{table*}[!h]
   \scriptsize
@@ -50,9 +48,9 @@ See \reftab{tab:mathematical_notation} for an example.
   \noindent\rule{\textwidth}{0.5pt}
   \begin{tabular}{lll}
     $\mathbf{x}$, $\bm{\alpha}$ & vector, pseudo-vector, or tuple\\
-    $\mathbf{\hat{x}}$, $\bm{\hat{\omega}}$& unit vector or unit pseudo-vector\\
+    %$\mathbf{\hat{x}}$, $\bm{\hat{\omega}}$& unit vector or unit pseudo-vector\\
     %$\mathbf{\hat{e}}_1, \mathbf{\hat{e}}_2, \mathbf{\hat{e}}_3$ & elements of the \emph{standard basis} \\
-    $\mathbf{X}, \bm{\Omega}$ & matrix \\
+    $\mathbf{X}$ & matrix \\
     $\mathbf{I}$ & identity matrix \\
     $\mathbf{R}$ & rotation matrix \\
     $\mathbf{t}$ & translation vector \\
