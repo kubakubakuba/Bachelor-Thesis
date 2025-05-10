@@ -1,23 +1,30 @@
-LATEX = pdflatex
-LATEX_FLAGS = -interaction=nonstopmode -halt-on-error
+BUILD_DIR := build
 
-PGF_FILES := $(wildcard *.pgf)
-TEX_FILES := $(PGF_FILES:.pgf=.tex)
-PDF_FILES := $(PGF_FILES:.pgf=.pdf)
+TEX_TPL   := template.tex.tpl
+PGF_SRCS  := $(wildcard *.pgf)
 
-all: $(PDF_FILES)
+PGF_BLD   := $(patsubst %.pgf,$(BUILD_DIR)/%.pgf,$(PGF_SRCS))
+TEX_BLD   := $(patsubst %.pgf,$(BUILD_DIR)/%.tex,$(PGF_SRCS))
+PDF_BLD   := $(patsubst %.pgf,$(BUILD_DIR)/%.pdf,$(PGF_SRCS))
 
-%.pdf: %.tex %.pgf
-	$(LATEX) $(LATEX_FLAGS) $<
+all: $(PDF_BLD)
 
-%.tex: %.pgf template.tex.tpl
-	cp template.tex.tpl $@
-	sed -i 's/__TEMPLATE__/$</g' $@
+$(BUILD_DIR)/%.pgf: %.pgf
+	mkdir -p $(BUILD_DIR)
+	sed -E 's/\\fontsize\{[0-9.]+\}\{[0-9.]+\}\\selectfont//g' \
+		$< > $@
+
+$(BUILD_DIR)/%.tex: $(BUILD_DIR)/%.pgf $(TEX_TPL)
+	sed 's#__TEMPLATE__#'"$(notdir $*)".pgf'#g' \
+		$(TEX_TPL) > $@
+
+$(BUILD_DIR)/%.pdf: $(BUILD_DIR)/%.tex
+	pdflatex -shell-escape \
+			  -output-directory=$(BUILD_DIR) \
+			  -interaction=nonstopmode -halt-on-error \
+			  $<
 
 clean:
-	rm -f *.aux *.log *.out *.tex *.pdf
-
-lclean:
-	rm -f *.aux *.log *.out
+	rm -rf $(BUILD_DIR)
 
 .PHONY: all clean
