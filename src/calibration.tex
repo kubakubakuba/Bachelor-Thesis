@@ -2,8 +2,6 @@
 
 \chapter{Camera calibration\label{chap:calib}}
 
-\section{Method used}
-
 For the correct representation of distances and angles in the received data from the camera, a camera calibration with the used lenses needs to be performed.
 The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $187$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
 of $280$ degrees, both can be seen in \reffig{fig:lenses}.
@@ -30,8 +28,9 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 	\label{fig:lenses}
 \end{figure}
 
+\section{Method used}
 
-In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used to calibrate all used equipment. The implementation used for calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
+In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} for omnidirectional camera calibration is used to calibrate all the equipment used. The implementation used for calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
 For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
 a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
 In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
@@ -56,7 +55,7 @@ The calibration lattice can be seen in \reffig{fig:lattice}.
 	\label{fig:lattice}
 \end{figure}
 The downside of using an LED lattice instead of a chessboard pattern is that at a very high \ac{FOV}, the distortion of the fish eye lens sometimes does not allow
-reliable detection of the exact blob centers (or which events correspond to which LED), as can be seen at \reffig{fig:calibration_pattern_distorted}.
+reliable detection of the exact center of the blobs (or which events correspond to which \ac{LED}), as can be seen at \reffig{fig:calibration_pattern_distorted}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{./fig/photos/lattice_280.png}
@@ -68,10 +67,10 @@ As we are not using a regular image of a chessboard pattern, rather a recording 
 For the purpose of this, a simple Python app has been written. An event raw recording is loaded, and events are accumulated over a select period of time.
 The accumulated events are then saved to a grayscale image, where each pixel corresponds to the number of events that occurred in that
 pixel \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/generate_frames.py}}. The image is then normalized,
-and the LED centers are detected using the \texttt{findContours} function of OpenCV \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/detect_blob_centers.py}}.
-The detected centers can then be manually labeled row-wise, in the same order in every image, so the calibration process can identify how the grid of points
-changes across the images, and thus calculate the lens distortion.
-After this, the regular calibration script from py-OCamCalib can be used. The labeling of the LED centers can be seen in \reffig{fig:calibration_pattern_labeled}.
+and the LED centers are detected using the \texttt{findContours} function of the OpenCV \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/detect_blob_centers.py}} library.
+The detected centers can then be manually labeled row-wise, in the same order in every image, so the calibration process can identify 
+how the grid of points changes across the images, and thus calculate the lens distortion.
+After this, the regular calibration script from \texttt{py-OCamCalib} can be used with the prelabeled grid points, the labeling of the LED centers can be seen in \reffig{fig:calibration_pattern_labeled}.
 
 \begin{figure}[H]
   \centering
@@ -195,11 +194,11 @@ The calibration results can be seen in \reffig{fig:calib_r}.
 \begin{figure}[H]
 	\centering
 	\subfloat[Calibrated lens model function] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/evk4_projection.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/evk4_projection.pdf}
 	  \label{fig:calib_r_1}
 	}
 	\subfloat[Calibration images mean reprojection errors] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/evk4_reprojection_error.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/evk4_reprojection_error.pdf}
 	  \label{fig:calib_r_2}
 	}
 	\caption{
@@ -231,7 +230,7 @@ The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
 	  \label{fig:ellipse_fit_1}
 	}
 	\subfloat[Events with convex hull points] {
-	  \includegraphics[width=0.45\textwidth]{./fig/pgfplot/ellipse_hull.pdf}
+	  \includegraphics[width=0.45\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
 	  \label{fig:ellipse_fit_2}
 	}
 	\caption{
@@ -248,7 +247,7 @@ and mask out the visible area with the ellipse fitted in \reffig{fig:ellipse_fit
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/evk4_viz.pdf}
+	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
 	\caption{Angle from optical axis visualization, with the maximum angle of 93.47 degrees.}
 	\label{fig:calibration_viz}
 \end{figure}
@@ -259,11 +258,11 @@ at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid 
 \begin{figure}[H]
 	\centering
 	\subfloat[Uncalibrated image.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/image_uncalib.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/image_uncalib.pdf}
 	  \label{fig:calib_c_1}
 	}
 	\subfloat[Calibrated image.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/image_calib.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/image_calib.pdf}
 	  \label{fig:calib_c_2}
 	}
 	\caption{
@@ -280,7 +279,7 @@ The calibration results can be seen on \reffig{fig:calib_e}, with the visualizat
 \begin{figure}[htbp]
 	\centering
 	%\includegraphics[width=0.6\textwidth]{./fig/photos/frame_58CEE7E0.png}
-        \includegraphics[width=0.8\textwidth]{./fig/pgfplot/chessboard_280.pdf}
+        \includegraphics[width=0.8\textwidth]{./fig/pgfplot/build/chessboard_280.pdf}
 	\caption{Chessboard calibration target visible in 280 degree lens with marked chessboard edge points}
 	\label{fig:calib_ent_label}
 \end{figure}
@@ -288,11 +287,11 @@ The calibration results can be seen on \reffig{fig:calib_e}, with the visualizat
 \begin{figure}[H]
 	\centering
 	\subfloat[Calibrated lens model function] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/proj_280.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/proj_280.pdf}
 	  \label{fig:calib_e_1}
 	}
 	\subfloat[Calibration images mean reprojection errors] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/err_280.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/err_280.pdf}
 	  \label{fig:calib_e_2}
 	}
 	\caption{
@@ -302,18 +301,18 @@ The calibration results can be seen on \reffig{fig:calib_e}, with the visualizat
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/viz_ent.pdf}
+	\includegraphics[width=1.0\textwidth]{./fig/pgfplot/build/viz_ent.pdf}
 	\caption{Angle from optical axis visualization, with the maximum angle of 140 degrees on each side, making its \ac{FOV} 280 degrees.}
 	\label{fig:calib_ent_viz}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\subfloat[Uncalibrated image.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/ent_before.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/ent_before.pdf}
 	  \label{fig:calib_ent_proj_1}
 	}
 	\subfloat[Calibrated image.] {
-	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/ent_after.pdf}
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/ent_after.pdf}
 	  \label{fig:calib_ent_proj_2}
 	}
 	\caption{

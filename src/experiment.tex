@@ -2,8 +2,6 @@
 
 \chapter{Experiment\label{chap:experiment}}
 
-\section{Setup}
-
 The experiment was performed with two X500 \ac{UAV}s, each of them equipped with a Prophesee EVK4 event-based camera, one with a 2.5mm f/1.6
 fish eye lens with an \ac{FOV} of roughly 187 degrees and the second one with Entaniya 1.07mm f/2.8 fish eye lens with an \ac{FOV} of 280 degrees.
 Each UAV is also equipped with a Basler camera with a fish eye lens, to provide normal video signal that is recorded alongside the event stream
@@ -57,10 +55,12 @@ throughput of about $45$ MB per second per drone. Each raw recording is about $1
 
 \section{Analysis}
 
-The data was analyzed after the recording, by generating image frames from the raw event recordings. This data,
-as seen on \reffig{fig:labeled}, has then been manually labeled and with the use of a blob detector the \ac{LED} sources
-were selected.
-\todo{maybe write more}
+The data were analyzed after the recording, by generating image frames from the raw event recordings, which
+were synchronized to the recorded data in the ROS bags.
+The generated images, as seen on \reffig{fig:labeled}, have then been manually labeled and with the use of a blob detector
+the \ac{LED} sources
+were selected. For each of the selected blobs, a center was then selected by calculating the closest pixel to the
+blob's centroid.
 
 \begin{figure}[H]
 	\centering
@@ -71,10 +71,10 @@ were selected.
 
 \section{Experiment results}
 
-For each labeled group of points a distance estimation was performed using the \texttt{DistanceEstimator} using the
+For each group of labeled points, a distance estimation was performed with the \texttt{DistanceEstimator} ROS node using the
 \ac{P3P} algorithm. For each estimated pose, a distance from the camera was calculated, which was then compared to the
 ground truth distance obtained from the \ac{GNSS}. The distance is calculated as a norm of the difference of the \ac{UAV} positions.
-The results demostrate, that our approach achieves a mean absolute error of $2.47$ meters, with a standard deviation of $1.75$ meters,
+The results demonstrate that our approach achieves a mean absolute error of $2.47$ meters, with a standard deviation of $1.75$ meters,
 indicating moderate precision under the experiment conditions.
 The estimation
 results can be seen on \reffig{fig:experiment_results}
@@ -96,17 +96,17 @@ When we generate images from the recording, the problem persists; How do we iden
 the \ac{UAV} can be at an arbitrary distance and orientation?
 Manual labeling is not the definitive answer to our problem either because even the blob center selection itself can greatly
 influence the estimation precision. In \reffig{fig:blob_comb}, we select a single pixel from each blob and run the distance estimation
-for each combination of pixel. As we can observe, even a change in the range of 3 pixels can change the estimated distance by
+for each combination of pixels. As we can observe, even a difference in the range of 3 pixels can change the estimated distance by
 $1.5$ meters. The center of a blob may be calculated as a geometrical center of the blob's pixels, but this approach fails
-when the blob contains pixels which do not belong to them.
-%Secondly, the calculation of the exact center would most likely yield results with sub-pixel level precision, requiring the placement of the center between the pixels
+when the blob contains pixels which do not belong to them. %Secondly, the calculation of the exact center would most likely yield results with sub-pixel level precision, requiring the placement of the center between the pixels
+
+A fundamental limitation of any vision‐based positioning system is the finite spatial resolution of the camera sensor. As the distance to the \ac{LED}s increases, beyond roughly $20$ m in our setup, their angular size on the image plane decreases to just a few pixels. Once a marker spans only a few sensor pixels, adjacent light sources can begin to merge: individual \ac{LED} spots can no longer be differentiated and their point-spread functions overlap. This blending of pixel responses prevents the reliable separation of each \ac{LED} signal and ultimately makes accurate detection and decoding impossible.
 
 %As we have shown in \reffig{fig:labeled}, there exist a challenge of \ac{UAV} identification 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.99\textwidth]{./fig/pgfplot/estimation_selection_1.pdf}
+	\includegraphics[width=0.99\textwidth]{./fig/pgfplot/build/estimation_selection_1.pdf}
 	\caption{Blob centers with the resulting distance estimations for any combination of center selection}
 	\label{fig:blob_comb}
 \end{figure}
 
-A fundamental limitation of any vision‐based positioning system is the finite spatial resolution of the camera sensor. As the distance to the \ac{LED}s increases, beyond roughly $20$ m in our setup, their angular size on the image plane decreases to just a few pixels. Once a marker spans only a few sensor pixels, adjacent light sources can begin to merge: individual \ac{LED} spots can no longer be differentiated and their point-spread functions overlap. This blending of pixel responses prevents the reliable separation of each \ac{LED} signal and ultimately makes accurate detection and decoding impossible.
