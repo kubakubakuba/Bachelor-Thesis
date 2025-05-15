@@ -2,7 +2,7 @@
 
 \chapter{Camera calibration\label{chap:calib}}
 
-For the correct representation of distances and angles in the received data from the camera, a camera calibration with the used lenses needs to be performed.
+To ensure accurate representation of distances and angles in the output data of the camera, a calibration needs be performed with the specific lenses being used.
 The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $187$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
 of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 %\begin{figure}[H]
@@ -15,7 +15,7 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 \begin{figure}[H]
 	\centering
 	\subfloat[2.5mm f/1.6 fish eye lens] {
-	  \includegraphics[width=0.4\textwidth]{./fig/photos/lens.jpeg}
+	  \includegraphics[width=0.391\textwidth]{./fig/photos/lens.jpeg}
 	  \label{fig:lens_1}
 	}
 	\subfloat[1.07mm f/2.8 Entaniya fish eye lens] {
@@ -30,11 +30,12 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 
 \section{Method used}
 
-In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} for omnidirectional camera calibration is used to calibrate all the equipment used. The implementation used for calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
-For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
-a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
+In this thesis a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} for omnidirectional camera calibration is used to calibrate all the equipment used. The implementation used for the calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.
+%TODO: maybe cite the github repo
+To facilitate calibration, a reference chessboard pattern with known square size is usually used, which offers high contrast between squares, making the square corners easily detectable.
+Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
 In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
-LEDs and can be detected by any kind of blob detector. The LED lattice is used, so the event camera can easily detect events from bright LEDs, as opposed to
+LEDs and can be detected by any kind of blob detector. The LED lattice is used, so the event-based camera can easily detect events from bright LEDs, as opposed to
 the light being reflected from the chessboard pattern (which does not produce any light on its own).
 The calibration lattice can be seen in \reffig{fig:lattice}.
 
@@ -98,7 +99,8 @@ and intrinsic parameters of the camera, where the extrinsic parameters are the r
   + \mathbf{t}
   \label{eq:extrinsic}
 \end{equation}
-which is an affine transformation that uses a rotation matrix $\mathbf{R}$ and a translation vector $\mathbf{t}$. The origin of the camera's coordinate system is at the optical center,
+which is an affine transformation that uses a rotation matrix $\mathbf{R} \in \text{SO}(3)$ and a translation vector
+$\mathbf{t} \in \mathbb{R}^3$. The origin of the camera's coordinate system is at the optical center,
 that is, at the intersection of the optical axis from the center of the image with the image plane. This can be represented by \reffig{fig:camera_extrinsic}.
 
 \begin{figure}[H]
@@ -109,7 +111,7 @@ that is, at the intersection of the optical axis from the center of the image wi
 \end{figure}
 
 The next step in the camera calibration is to fit an encompassing ellipse to the received data. The purpose of this is to see the center of distortion of the fish eye lens, as well
-as the stretching of the image on both the x and y axes. This process can be seen in \reffig{fig:ellipse}. This ellipse is then used to calculate the point-mapping functions, which allows for tranformation of points from
+as the stretching of the image on both the x and y axes. This process can be seen in \reffig{fig:ellipse}. This ellipse is then used to calculate the point-mapping functions, which allows for transformation of points from
 the image plane to their respective 3D coordinates.
 \begin{figure}[H]
 	\centering
@@ -182,7 +184,7 @@ This can be represented by an affine transformation $\textbf{m}' = \textbf{Am} +
 \label{eq:affine}
 \end{equation}
 
-where matrix A accounts for lens-sensor misalignment, and the vector $\textbf{O}_c$ captures the relation with the center of the distortion. 
+where matrix $\textbf{A}$ accounts for lens-sensor misalignment, and the vector $\textbf{O}_c$ captures the relation with the center of the distortion. 
 
 \section{Calibration results}
 
@@ -215,7 +217,7 @@ The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
 (a^*, b^*) = \underset{a, b > 0}{\text{argmin}} \quad \sum_{(x_i,y_i) \in \mathcal{H}} \left( \frac{x_i^2}{a^2} + \frac{y_i^2}{b^2} - 1 \right)^2
 \label{eq:ellipse_opt}
 \end{equation}
-\text{where} $\mathcal{H} = \text{Conv}\{(x_i,y_i)\}_{i=1}^n$ is the convex hull of generated event points.
+\text{where} $\mathcal{H} = \text{Conv}\{(x_i,y_i)\}_{i=1}^n$ is the set of points in the convex hull of generated events.
 
 %\begin{figure}[H]
 %	\centering
@@ -241,7 +243,7 @@ The optimized ellipse can be seen in \reffig{fig:ellipse_fit}.
 \end{figure}
 
 Finally, to visualize the calibration results, we map every point from the image plane using the \texttt{cam2world}\footnote{\url{https://github.com/jakarto3d/py-OCamCalib/blob/main/src/pyocamcalib/modelling/camera.py}}
-function from py-OCamCalib, which takes a 2D image point, and returns
+function from \texttt{py-OCamCalib}, which takes a 2D image point, and returns
 the corresponding 3D optical ray on the camera's unit sphere. For each point, we calculate its angle from the optical axis (a vector $\mathbf{v} = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}^{T}$),
 and mask out the visible area with the ellipse fitted in \reffig{fig:ellipse_fit}. We can see the results in \reffig{fig:calibration_viz}.
 
@@ -266,7 +268,7 @@ at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid 
 	  \label{fig:calib_c_2}
 	}
 	\caption{
-		Two photos of the calibration lattice, one uncalibrated on \reffig{fig:calib_c_1} and the one calibrated at \reffig{fig:calib_c_2}, which does not
+		Two photos of the calibration lattice, one uncalibrated on \reffig{fig:calib_c_1} and the other calibrated at \reffig{fig:calib_c_2}, which does not
 		exhibit any distortion.
   }
 	\label{fig:calib_c}

@@ -2,18 +2,18 @@
 
 \chapter{Conclusion\label{chap:conclusion}}
 
-In this thesis, we discussed the response of an event-based camera to a modulated source of light - a \ac{UV} \ac{LED}.
+In this thesis, we discuss the response of an event-based camera to a modulated source of light - a \ac{UV} \ac{LED}.
 We have shown how the changing frequency, distance, and incidence angle influence the average number of events generated
 by the camera. We then discussed the calibration method for fish eye lenses by Scaramuzza et al. \cite{scaramuzzacalibration},
-which in our cases uses an \ac{LED} lattice target, instead of a normally used checkerboard.
+which in our cases uses an \ac{LED} lattice target, instead of a normally used checkerboard image pattern.
 
 The distance estimation was done using the \ac{P3P} algorithm, that estimated the rotation and translation of a known
 arrangement of 3D locations using their image coordinates. We collected a stationary data set and analyzed it with this
 approach. We implemented a \texttt{DistanceEstimator} node in \ac{ROS}, that eases the distance estimation by subscribing
 to detected \ac{LED} locations and publishing the estimated pose and distance.
 
-We used this approach in our real-life experiment, where we collected data from two flying \ac{UAV}s, manually controlled by two pilots. We then analyzed the after measuring them, manually marking the \ac{LED} locations. The resulting estimate showed
-higher errors, when compared to the statically measured data set, due to increased distance during flying and physical
+We used this approach in our real-life experiment, where we collected data from two flying \ac{UAV}s, manually controlled by two pilots. We then analyzed the data after, by manually marking the \ac{LED} locations. The resulting estimate showed
+higher errors, compared to the statically measured data set, due to the increased distance during flight and physical
 limitations of the methods and equipment used.
 
 \section{Future work}
