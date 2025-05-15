@@ -84,18 +84,18 @@ During recording, many camera settings can be changed, such as the \ac{ROI} sett
 
 \subsubsection{ROI}
 The \ac{ROI} setting during recording takes a rectangular region in pixel coordinates and discards events outside the specified region at the hardware level, reducing computational load and noise from irrelevant areas. This setting is especially useful in cases where only a small static area needs to be observed or where many unrelated events
-may be generated, that would interfere with the measurement process.
+may be generated, which would interfere with the measurement process.
 
 \subsubsection{Bias settings}
 The bias settings are a global camera setting parameters analogous to ISO or exposure time in traditional cameras, though they operate on fundamentally
 different principles.
 The configurable biases for the \texttt{EVK4} which directly influence event generation and noise filtering, are as follows\cite{dilmaghani2022controlevaluationeventcameras}
 \begin{itemize}
-    \item \texttt{bias\_diff\_on} adjusts the threshold on which events are generated, with higher setting, the more increasing change in pixel brightness needs to be present to trigger a generation of an event with positive $\sigma$
-    \item \texttt{bias\_diff\_off} adjusts the threshold on which events are generated, with higher setting, the more decreasing change in pixel brightness needs to be present to trigger a generation of an event with negative $\sigma$
-    \item \texttt{bias\_fo} adjusts the low-pass filter, which filters out the fast fluctuations in light intensity, effectively setting the maximum detectable oscillation frequency
-    \item \texttt{bias\_hpf} adjusts the high-pass filter, which filters out the slow fluctuations in light intensity, setting the minimum detectable oscillation frequency
-    \item \texttt{bias\_refr} adjusts the pixel refractory period, in which a pixel is inactive after generating an event
+    \item \texttt{bias\_diff\_on} adjusts the threshold on which events are generated; with higher setting, the more increasing change in pixel brightness needs to be present to trigger a generation of an event with positive $\sigma$
+    \item \texttt{bias\_diff\_off} adjusts the threshold on which events are generated; with higher setting, the more decreasing change in pixel brightness needs to be present to trigger a generation of an event with negative $\sigma$
+    \item \texttt{bias\_fo} adjusts the low-pass filter which filters out the fast fluctuations in light intensity, effectively setting the maximum detectable oscillation frequency
+    \item \texttt{bias\_hpf} adjusts the high-pass filter which filters out the slow fluctuations in light intensity, setting the minimum detectable oscillation frequency
+    \item \texttt{bias\_refr} adjusts the pixel refractory period in which a pixel is inactive after generating an event
 \end{itemize}
 These settings were optimized during data acquisition to suppress noise and extraneous events (such as from wall reflections or scene illumination changes), which
 ensures that only events related to the experiment are captured.
@@ -116,7 +116,7 @@ frequencies ranging from $1$ Hz to $30$ kHz. No \ac{ROI} constraints were applie
 This preliminary experiment revealed critical problems in the measuring technique:
 \begin{itemize}
     \item Multiple visible \ac{LED}s: The camera captures the scene as a whole, with no isolation of individual light sources. This means that the results
-    would not have a correct representation of a single light source, but would be influenced by other light sources from the remaining \ac{UAV}
+    would not have a correct representation of a single light source, which would be influenced by other light sources from the remaining \ac{UAV}
     arms as well.
     \item Reflection artifacts: Reflections from walls and objects present in the scene are working as event-generating light sources, bouncing the light around,
     as seen on \reffig{fig:meas1}.
@@ -163,7 +163,7 @@ The frequency range of the LED modulation was set in a range of $10$ Hz to $30$ 
 
 \subsection{Rotation angle influence}
 
-In addition to distance and frequency influence, the rotation angle influence also needs to be considered, to
+In addition to distance and frequency influence, the rotation angle influence also needs to be explored, to
 verify the emitting characteristics of the light sources - if they can or cannot be considered Lambertian.
 The \ac{UAV} was rotated at increments of $45$ degrees relative to the event-based camera, at distances of $0.5$, $1$ and $2$ meters,
 with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was set to \texttt{0, 1}.
@@ -195,7 +195,7 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 
 \section{Response analysis}
 
-The event-based camera response data was analyzed using the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}
+The event-based camera response data was analyzed with the help of the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}
 using its Python API. Each recording can be loaded as a raw file, producing a structured Numpy array of events, where each event is structured as an array of values
 $(t, x, y, p)$. Specifically, $t$ represents the time stamp from the start of the recording, $x$ and $y$ the spatial location of the event
 on the camera sensor, and $p$ the polarity of the change in the detected brightness (compared to the previously recorded one).
@@ -222,7 +222,7 @@ We can load the obtained data set into a matrix representing the distances and f
 The data is then resampled into a signal, represented by a 1D array obtained from summing polarities $p_i$ over a selected bin width $\Delta t$
 \footnote{The bin width should be adjusted appropriately, as the farther the event-based camera is from the source, the fewer events are generated.} \refeq{eq:signal}.
 \begin{equation}
-    S[k] = \sum_{i\in\mathcal{B}_k}p_i, \quad \mathcal{B}_k=\{i|t_k\leq t_i<t_k+\Delta t\}
+    S[k] = \sum_{i\in\mathcal{B}_k}p_i, \quad \mathcal{B}_k=\{i|t_k\leq t_i<t_k+\Delta t\}, \quad k = 0, 1, 2, \ldots
     \label{eq:signal}
 \end{equation}
 Peaks in this signal are then analyzed by SciPy's \texttt{findpeaks} function,
@@ -306,8 +306,8 @@ which can be seen on \reffig{fig:lambertian}.
 	\caption{Lambertian radiation pattern of the PM2B-1LLE UV LED.}
 	\label{fig:lambertian}
 \end{figure}
-This means that the intensity of the light emitted from the LED decreases with the cosine
-of the angle between the normal of the LED and the direction of the light \refeq{eq:lambertian}.
+This means that the intensity of the light emitted from the \ac{LED} decreases with the cosine
+of the angle between the normal of the \ac{LED} and the direction of the light \refeq{eq:lambertian}.
 \begin{equation}
 	I(\theta) = I_0\cos(\theta)
 	\label{eq:lambertian}
@@ -345,7 +345,7 @@ The results extracted from the dataset of the \ac{UAV} rotations relative to the
 \end{figure}
 The data show a rough approximation of the theoretical distribution on \reffig{fig:lambert_combined},
 but with a drop of intensity at the middle of the distribution. This could be caused
-by the fact that LEDs, when close to the camera, can be perceived as multiple light sources,
+by the fact that \ac{LED}s, when close to the camera, can be perceived as multiple light sources,
 but when moved further away, they merge into one source as shown on \reffig{fig:leds}.
 
 \begin{figure}[H]

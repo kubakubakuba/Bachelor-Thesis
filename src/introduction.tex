@@ -11,12 +11,14 @@ frequency interference and high precision.
 However, conventional frame-based cameras used in \ac{VLP} systems struggle with motion blur, latency,
 and dynamic range constraints. For example, under bright illumination, \ac{LED}s may not produce a sufficiently detectable signal,
 which may lead to localization failure. In contrast, event-based cameras overcome these limitations by asynchronously detecting pixel-level
-brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency. These attributes make them ideal for
+brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency.\cite{gallego22event} These attributes make them ideal for
 capturing high-frequency LED signals, even in challenging lighting conditions or during aggressive \ac{UAV} maneuvers in agile swarming applications.
 
-In this thesis, we present a method for estimating the pose of a \ac{UAV} equipped with \ac{UV} \ac{LED} light sources as in the UVDAR system. \cite{walteruvdar}
-These \ac{LED}s are modulated at select frequencies, which aids in their identification and also helps with their prevalence
-on the scene observed by the camera. After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
+In this thesis, we present a method for estimating the pose of an \ac{UAV} equipped with \ac{UV} \ac{LED} light sources - as used
+in the UVDAR\cite{walteruvdar} system. These \ac{LED}s are observed by an event-based camera, with a fish eye lens. 
+First, we analyze how the event-based camera response is influenced by the \ac{LED} modulation frequency, distance, and rotation;
+this analysis informs our subsequent approach.
+After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
 algorithm is used to estimate the location of the \ac{UAV} in the 3D space. This estimation is then compared with the ground truth positions obtained
 from the \ac{GNSS}.
 
@@ -45,20 +47,22 @@ based on their distance to the detected lines.
 
 \todo{reword this if necessary}
 
-The following mathemathical notation in \reftab{tab:mathematical_notation} is used, unless specified otherwise.
+The following mathematical notation in \reftab{tab:mathematical_notation} is used, unless otherwise specified.
 
 \begin{table*}[!h]
   \scriptsize
   \centering
   \noindent\rule{\textwidth}{0.5pt}
   \begin{tabular}{lll}
-    $\mathbf{x}$, $\bm{\alpha}$ & vector, pseudo-vector, or tuple\\
+    %$\mathbf{x}$, $\bm{\alpha}$ & vector, pseudo-vector, or tuple\\
+    $\mathbf{x}$, $\vec{x}$ & vector, pseudo-vector, or tuple\\
     %$\mathbf{\hat{x}}$, $\bm{\hat{\omega}}$& unit vector or unit pseudo-vector\\
     %$\mathbf{\hat{e}}_1, \mathbf{\hat{e}}_2, \mathbf{\hat{e}}_3$ & elements of the \emph{standard basis} \\
     $\mathbf{X}$ & matrix \\
-    $\mathbf{I}$ & identity matrix \\
+    %$\mathbf{I}$ & identity matrix \\
     $\mathbf{R}$ & rotation matrix \\
     $\mathbf{t}$ & translation vector \\
+    $x^{*}$ & optimal solution for $x$ \\
     %$x = \mathbf{a}^\intercal\mathbf{b}$ & inner product of $\mathbf{a}$, $\mathbf{b}$ $\in \mathbb{R}^3$\\
     %$\mathbf{x} = \mathbf{a}\times\mathbf{b}$ & cross product of $\mathbf{a}$, $\mathbf{b}$ $\in \mathbb{R}^3$\\
     %$\mathbf{x} = \mathbf{a}\circ\mathbf{b}$ & element-wise product of $\mathbf{a}$, $\mathbf{b}$ $\in \mathbb{R}^3$ \\
