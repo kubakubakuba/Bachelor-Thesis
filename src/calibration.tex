@@ -64,7 +64,7 @@ reliable detection of the exact center of the blobs (or which events correspond 
   \label{fig:calibration_pattern_distorted}
 \end{figure}
 
-As we are not using a regular image of a chessboard pattern, rather a recording of accumulated events, some data preprocessing has to be done beforehand.
+As a regular image of a chessboard pattern is not used, rather a recording of accumulated events on \ac{LED} grid, some data preprocessing has to be done beforehand.
 For the purpose of this, a simple Python app has been written. An event raw recording is loaded, and events are accumulated over a select period of time.
 The accumulated events are then saved to a grayscale image, where each pixel corresponds to the number of events that occurred in that
 pixel (positive and negative) as in \ref{lst:accumulate}. The image is then normalized,
