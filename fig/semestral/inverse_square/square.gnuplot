@@ -37,6 +37,6 @@ set xrange [1:5]
 set yrange [0:1200]
 plot 'data.csv' using 1:2 with points linestyle 5 title 'Data Points', \
      f1(x) with lines linestyle 1 title sprintf("Fit: $y = %.2f \\times 10^{%d} / x^2 + %.2f \\times 10^{%d}$", a1/10**int(log10(a1)), int(log10(a1)), c1/10**int(log10(c1)), int(log10(c1))), \
-     f2(x) with lines linestyle 2 title sprintf("Fit: $y = %.2f \\times 10^{%d} / x^3 + %.2f \\times 10^{%d}$", a2/10**int(log10(a2)), int(log10(a2)), c2/10**int(log10(c2)), int(log10(c2))), \
-     f3(x) with lines linestyle 3 title sprintf("Fit: $y = %.2f \\times 10^{%d} / x^4 + %.2f \\times 10^{%d}$", a3/10**int(log10(a3)), int(log10(a3)), c3/10**int(log10(c3)), int(log10(c3))), \
-     f4(x) with lines linestyle 4 title sprintf("Fit: $y = %.2f \\times 10^{%d} \\cdot e^{%.2f \\cdot x}$", a4/10**int(log10(a4)), int(log10(a4)), b4)
+     #f2(x) with lines linestyle 2 title sprintf("Fit: $y = %.2f \\times 10^{%d} / x^3 + %.2f \\times 10^{%d}$", a2/10**int(log10(a2)), int(log10(a2)), c2/10**int(log10(c2)), int(log10(c2))), \
+     #f3(x) with lines linestyle 3 title sprintf("Fit: $y = %.2f \\times 10^{%d} / x^4 + %.2f \\times 10^{%d}$", a3/10**int(log10(a3)), int(log10(a3)), c3/10**int(log10(c3)), int(log10(c3))), \
+     #f4(x) with lines linestyle 4 title sprintf("Fit: $y = %.2f \\times 10^{%d} \\cdot e^{%.2f \\cdot x}$", a4/10**int(log10(a4)), int(log10(a4)), b4)
