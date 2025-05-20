@@ -6,23 +6,24 @@
 \renewcommand{\thechapter}{A}
 \renewcommand\chaptername{Appendix A}
 
-\chapter{Used Software}
+\chapter{Attachments}
+\noindent
+Below is a list of attachments to this thesis.
 
-\noindent In accordance with the \texttt{Methodological guideline No. 5/2023}
-\footnote{https://www.cvut.cz/sites/default/files/content/d1dc93cd-5894-4521-b799-c7e715d3c59e/en/20231003-methodological-guideline-no-52023.pdf}
-the following software was used during the writing of this thesis:
-\begin{itemize}
-    \item {Writefull\footnote{https://www.writefull.com/} for rewording in the online Overleaf\footnote{https://www.overleaf.com/} editor}
-    \item {GitHub Copilot\footnote{https://github.com/features/copilot} for code completion}
-    \item {ChatGPT\footnote{https://chat.openai.com/} for wording suggestions and feedback, for plotting help}
-\end{itemize}
+\vspace{1em}
 
-\renewcommand{\thechapter}{B}
-\renewcommand\chaptername{Appendix B}
+\renewcommand{\arraystretch}{2.2} % optional for row height
 
-\chapter{Source Code}
+\noindent
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{7cm} X}
+\texttt{mrs-uvdar-distance-estimator.zip} & code used in the event-based camera response section of this thesis \\
+\texttt{metavision-pyocamcalib.zip} &  code used for the calibration of lenses, and the generation of calibration frames \\
+\texttt{ros-event-distance.zip} &  ROS implementation of a pose estimator \\
+\end{tabularx}
 
-\noindent All source code related to this thesis is publicly available in the repositories listed below:
+\vspace{2em}
+
+\noindent All source code related to this thesis is also publicly available in the repositories listed below.
 
 \vspace{1em}
 
@@ -37,3 +38,17 @@ the following software was used during the writing of this thesis:
 \textbf{ROS DistanceEstimator} & \href{https://github.com/kubakubakuba/ros-event-distance}{github.com/kubakubakuba/ros-event-distance} \\
 \hline
 \end{tabularx}
+
+\renewcommand{\thechapter}{B}
+\renewcommand\chaptername{Appendix B}
+
+\chapter{Used AI Software}
+
+\noindent In accordance with the \texttt{Methodological guideline No. 5/2023}
+\footnote{https://www.cvut.cz/sites/default/files/content/d1dc93cd-5894-4521-b799-c7e715d3c59e/en/20231003-methodological-guideline-no-52023.pdf}
+the following software was used during the writing of this thesis:
+\begin{itemize}
+    \item {Writefull\footnote{https://www.writefull.com/} for rewording in the online Overleaf\footnote{https://www.overleaf.com/} editor}
+    \item {GitHub Copilot\footnote{https://github.com/features/copilot} for code completion}
+    \item {ChatGPT\footnote{https://chat.openai.com/} for wording suggestions and feedback, for plotting help}
+\end{itemize}
