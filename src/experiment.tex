@@ -76,14 +76,34 @@ For each group of labeled points, a distance estimation was performed with the \
 ground truth distance obtained from the \ac{GNSS}. The distance is calculated as a norm of the difference of the \ac{UAV} positions.
 The results demonstrate that our approach achieves a mean absolute error of $2.47$ meters, with a standard deviation of $1.75$ meters,
 indicating moderate precision under the experiment conditions.
-The estimation
-results can be seen on \reffig{fig:experiment_results}
+The distance estimation
+results can be seen on \reffig{fig:experiment_results} with the estimated pose results visible on \reffig{fig:3dp}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{./fig/tikz/experiment_analysis.pdf}
 	\caption{The distance estimation data from the experiment, compared with the recorded GNSS data used as ground truth}
 	\label{fig:experiment_results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    %\subfloat[$10$ Hz blinking frequency] {
+    %    \includegraphics[width=0.33\textwidth]{./fig/pgfplot/build/3dplot1.pdf}
+    %    \label{fig:freqsi_1}
+    %}
+    \subfloat[Fist pose estimation] {
+        \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/3dplot2.pdf}
+        \label{fig:3dp_1}
+    }
+    \subfloat[Second pose estimation] {
+        \includegraphics[width=0.5\textwidth]{./fig/pgfplot/build/3dplot1.pdf}
+        \label{fig:3dp_2}
+    }
+    \caption{
+        The estimated poses of UAV37 at two different timestamps at \reffig{fig:3dp_1} and \reffig{fig:3dp_2}, with the \ac{UAV} trajectories for UAV33 highlighted in red and for UAV37 highlighted in blue.
+    }
+\label{fig:3dp}
 \end{figure}
 
 \section{Real life deployment - estimation challenges}
