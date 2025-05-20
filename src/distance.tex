@@ -20,7 +20,7 @@ settings. For a more robust way of estimating the pose of the \ac{UAV} from the 
 
 The \ac{RSSR} method provides an approach to estimate the position of an object by measuring the relative ratio of received optical powers from \ac{LED}
 markers. This is done by making each of the \ac{LED} markers radiate in their assigned time slot, measuring their optical powers at the time of the
-radiation. Jung et al. (2014) \cite{sooyongrssr} demonstrated the \ac{RSSR} method using a configuration where four LED lamps were mounted on the ceiling
+radiation. Jung et al. (2014)~\cite{sooyongrssr} demonstrated the \ac{RSSR} method using a configuration where four LED lamps were mounted on the ceiling
 with a detector mounted on top of a moving object, parallel to the ceiling.
 They have arrived at the equation \refeq{eq:rssr} which could be used to describe the power ratio $RSSR_{1,2}$
 \begin{equation}
@@ -40,7 +40,7 @@ In our application, the UAV has four \ac{LED}-marked arms, where each of them is
 However, due to physical limitations, only three \ac{LED}s may be visible at a single point in time, the fourth obstructed by the physical structure of the \ac{UAV} when viewed from the front.
 For a case of only 3 image points, the problem becomes the minimal solvable case, called \ac{P3P}, which 
 can be formulated as a set of 3D points $\textbf{P}_i \in \mathbb{R}^{3}, i \in \{1, 2, 3\}$ in the world coordinate system, with their corresponding normalized image points
-$\textbf{p}_i \in \mathbb{R}^{2}$, $|\textbf{p}_i|=1, i \in \{1, 2, 3\}$. These sets of points are related by a rigid transformation \cite{Ding_2023_CVPR}
+$\textbf{p}_i \in \mathbb{R}^{2}$, $|\textbf{p}_i|=1, i \in \{1, 2, 3\}$. These sets of points are related by a rigid transformation~\cite{Ding_2023_CVPR}
 \begin{equation}
 d_i \textbf{p}_i = \textbf{R} \textbf{P}_i + \textbf{t}
 \label{eq:p3p}
@@ -49,7 +49,7 @@ where $d_i \in \mathbb{R}^+$.
 Given the rigid transformation relationship shown in \refeq{eq:p3p}, the \ac{P3P} problem reduces to solving for the rotation matrix 
 $\mathbf{R} \in \text{SO}(3)$, translation vector $\mathbf{t} \in \mathbb{R}^3$, and depths $d_i > 0$. 
 By exploiting geometric constraints between the 3D points and their 2D projections, the problem can be
-reformulated algebraically and solved using various techniques. In our approach, we use the method proposed by Kneip et al. \cite{kneip}, which
+reformulated algebraically and solved using various techniques. In our approach, we use the method proposed by Kneip et al.~\cite{kneip}, which
 directly finds the rotation and translation with a novel parameterization of the model.
 The visualization of the \ac{P3P} problem is shown on \reffig{fig:p3p}.
 \begin{figure}[H]

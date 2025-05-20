@@ -3,22 +3,22 @@
 \chapter{Camera calibration\label{chap:calib}}
 
 To ensure accurate representation of distances and angles in the output data of the camera, a calibration needs be performed with the specific lenses being used.
-The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $187$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fish eye lens with a FOV 
+The lenses used to obtain the data were a 2.5mm f/1.6 fisheye lens, with a $187$ degrees \ac{FOV} and Entaniya 1.07mm f/2.8 fisheye lens with a FOV 
 of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 %\begin{figure}[H]
 %  \centering
 %  \includegraphics[width=0.5\textwidth]{./fig/photos/lens.jpeg}
-%  \caption{2.5mm f/1.6 fish eye lens.}
+%  \caption{2.5mm f/1.6 fisheye lens.}
 %  \label{fig:fisheye_lens}
 %\end{figure}
 
 \begin{figure}[H]
 	\centering
-	\subfloat[2.5mm f/1.6 fish eye lens] {
+	\subfloat[2.5mm f/1.6 fisheye lens] {
 	  \includegraphics[width=0.391\textwidth]{./fig/photos/lens.jpeg}
 	  \label{fig:lens_1}
 	}
-	\subfloat[1.07mm f/2.8 Entaniya fish eye lens] {
+	\subfloat[1.07mm f/2.8 Entaniya fisheye lens] {
 	  \includegraphics[width=0.4\textwidth]{./fig/photos/entaniya_280.jpg}
 	  \label{fig:lens_2}
 	}
@@ -28,9 +28,9 @@ of $280$ degrees, both can be seen in \reffig{fig:lenses}.
 	\label{fig:lenses}
 \end{figure}
 
-\section{Method used}
+\section{Calibration data collection}
 
-In this thesis a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} for omnidirectional camera calibration is used to calibrate all the equipment used. The implementation used for the calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.
+In this thesis a calibration method proposed by Scaramuzza et al.~\cite{scaramuzzacalibration} for omnidirectional camera calibration is used to calibrate all the equipment used. The implementation used for the calibration is a Python library \texttt{py-OCamCalib} \footnote{\texttt{py-OCamCalib} is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.
 %TODO: maybe cite the github repo
 To facilitate calibration, a reference chessboard pattern with known square size is usually used, which offers high contrast between squares, making the square corners easily detectable.
 Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
@@ -55,7 +55,7 @@ The calibration lattice can be seen in \reffig{fig:lattice}.
   }
 	\label{fig:lattice}
 \end{figure}
-The downside of using an LED lattice instead of a chessboard pattern is that at a very high \ac{FOV}, the distortion of the fish eye lens sometimes does not allow
+The downside of using an LED lattice instead of a chessboard pattern is that at a very high \ac{FOV}, the distortion of the fisheye lens sometimes does not allow
 reliable detection of the exact center of the blobs (or which events correspond to which \ac{LED}), as can be seen at \reffig{fig:calibration_pattern_distorted}.
 \begin{figure}[H]
   \centering
@@ -67,8 +67,16 @@ reliable detection of the exact center of the blobs (or which events correspond 
 As we are not using a regular image of a chessboard pattern, rather a recording of accumulated events, some data preprocessing has to be done beforehand.
 For the purpose of this, a simple Python app has been written. An event raw recording is loaded, and events are accumulated over a select period of time.
 The accumulated events are then saved to a grayscale image, where each pixel corresponds to the number of events that occurred in that
-pixel \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/generate_frames.py}}. The image is then normalized,
-and the LED centers are detected using the \texttt{findContours} function of the OpenCV \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/detect_blob_centers.py}} library.
+pixel (positive and negative) as in \ref{lst:accumulate}. The image is then normalized,
+and the LED centers are detected using the \texttt{findContours} function of the OpenCV library, by finding the brightest points in the detected
+contour area on the original grayscale image as shown in \ref{lst:blob_centers}.
+
+\newpage
+\lstinputlisting[language=Python, caption={Accumulating events into a grayscale image}, label={lst:accumulate}]{./fig/code/accumulate.py}
+
+\lstinputlisting[language=Python, caption={Blob center detection in the grayscale image}, label={lst:blob_centers}]{./fig/code/blob_centers.py}
+\newpage
+
 The detected centers can then be manually labeled row-wise, in the same order in every image, so the calibration process can identify 
 how the grid of points changes across the images, and thus calculate the lens distortion.
 After this, the regular calibration script from \texttt{py-OCamCalib} can be used with the prelabeled grid points, the labeling of the LED centers can be seen in \reffig{fig:calibration_pattern_labeled}.
@@ -80,7 +88,7 @@ After this, the regular calibration script from \texttt{py-OCamCalib} can be use
   \label{fig:calibration_pattern_labeled}
 \end{figure}
 
-\section{Principles of the calibration}
+\section{Fisheye calibration model}
 
 After the calibration is performed, we are able to map the 3D world coordinates to the 2D image plane. For this, the calibration method needs to obtain the extrinsic
 and intrinsic parameters of the camera, where the extrinsic parameters are the rotation and translation of the camera with respect to the world frame and can be expressed by equation \ref{eq:extrinsic},
@@ -110,7 +118,7 @@ that is, at the intersection of the optical axis from the center of the image wi
   \label{fig:camera_extrinsic}
 \end{figure}
 
-The next step in the camera calibration is to fit an encompassing ellipse to the received data. The purpose of this is to see the center of distortion of the fish eye lens, as well
+The next step in the camera calibration is to fit an encompassing ellipse to the received data. The purpose of this is to see the center of distortion of the fisheye lens, as well
 as the stretching of the image on both the x and y axes. This process can be seen in \reffig{fig:ellipse}. This ellipse is then used to calculate the point-mapping functions, which allows for transformation of points from
 the image plane to their respective 3D coordinates.
 \begin{figure}[H]
@@ -120,7 +128,7 @@ the image plane to their respective 3D coordinates.
 	\label{fig:ellipse}
   \end{figure}
 The intrinsic parameters of the camera specify the image format itself, which is influenced by the focal length, sensor size, and optical center. As there are many mapping
-functions that can be used while modeling the lens (their precision is limited by the manufacturing process), Scaramuzza et al. \cite{scaramuzzacalibration} proposed
+functions that can be used while modeling the lens (their precision is limited by the manufacturing process), Scaramuzza et al.~\cite{scaramuzzacalibration} proposed
 fitting a polynomial to find the optimal model for lens calibration. The mapping functions are shown in \reffig{fig:mapping_functions}.
 \begin{figure}[H]
   \centering
@@ -146,21 +154,19 @@ After we fit a polynomial, we can map the image points to their corresponding 3D
 	\label{eq:intrinsic}
 \end{equation}
 where:
-
-$\lambda$ is a scalar factor
-
-$\alpha$ is a scaling factor that we obtain from \reffig{fig:ellipse} by stretching the ellipse back to a circle and performing
-the affine transformation; $\alpha, \lambda > 0$
-
-$\rho$ is the Euclidean distance of a point from the center; $\rho = \sqrt{u^2 + v^2}$
-
-$a_0, \dots a_N$ are the polynomial coefficients and $\mathbf{P}$ is 
-the perspective projection matrix.
+\begin{itemize}
+\item{$\lambda$ is a scalar factor}
+\item{$\alpha$ is a scaling factor that we obtain from \reffig{fig:ellipse} by stretching the ellipse back to a circle and performing
+the affine transformation; $\alpha, \lambda > 0$}
+\item{$\rho$ is the Euclidean distance of a point from the center; $\rho = \sqrt{u^2 + v^2}$}
+\item{$a_0, \dots a_N$ are the polynomial coefficients and $\mathbf{P}$ is 
+the perspective projection matrix.}
+\end{itemize}
 
 We can also write another relation between a point $\textbf{m}' = \begin{bmatrix} u' & v' \end{bmatrix}^{T}$ in the image plane
 and its corresponding point on the sensor plane $\textbf{m} = \begin{bmatrix} u & v \end{bmatrix}^{T}$. The coordinates of
 $\textbf{m}'$ have the origin at the top left corner of the image, whereas the coordinates of $\textbf{m}$ have the origin in the center of the image.
-This can be represented by an affine transformation $\textbf{m}' = \textbf{Am} + \textbf{O}_c$, on \ref{eq:affine} \cite{URBAN201572}.
+This can be represented by an affine transformation $\textbf{m}' = \textbf{Am} + \textbf{O}_c$, on \ref{eq:affine}~\cite{URBAN201572}.
 
 \begin{equation}
 	\begin{bmatrix}
@@ -189,7 +195,7 @@ where matrix $\textbf{A}$ accounts for lens-sensor misalignment, and the vector 
 \section{Calibration results}
 
 The camera calibration was performed on a series of images, where the calibration lattice was placed as various angles and distances from the camera.
-For ideal calibration results, the lattice should be placed in all visible parts of the image, as the distortion of the fish eye is more pronounced at the edges
+For ideal calibration results, the lattice should be placed in all visible parts of the image, as the distortion of the fisheye is more pronounced at the edges
 of the visible area. The calibration was performed on a polynomial of degree 4, more would lead to overfitting and is also not necessary.
 The calibration results can be seen in \reffig{fig:calib_r}.
 

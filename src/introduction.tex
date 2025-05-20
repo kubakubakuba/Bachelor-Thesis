@@ -11,41 +11,39 @@ frequency interference and high precision.
 However, conventional frame-based cameras used in \ac{VLP} systems struggle with motion blur, latency,
 and dynamic range constraints. For example, under bright illumination, \ac{LED}s may not produce a sufficiently detectable signal,
 which may lead to localization failure. In contrast, event-based cameras overcome these limitations by asynchronously detecting pixel-level
-brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency.\cite{gallego22event} These attributes make them ideal for
+brightness changes, providing microsecond temporal resolution, high dynamic range, and minimal latency~\cite{gallego22event}. These attributes make them ideal for
 capturing high-frequency LED signals, even in challenging lighting conditions or during aggressive \ac{UAV} maneuvers in agile swarming applications.
 
-In this thesis, we present a method for estimating the pose of an \ac{UAV} equipped with \ac{UV} \ac{LED} light sources - as used
-in the UVDAR\cite{walteruvdar} system. These \ac{LED}s are observed by an event-based camera, with a fish eye lens. 
-First, we analyze how the event-based camera response is influenced by the \ac{LED} modulation frequency, distance, and rotation;
-this analysis informs our subsequent approach.
+In this thesis a method for estimating the pose of an \ac{UAV} equipped with \ac{UV} \ac{LED} light sources - as used
+in the UVDAR system~\cite{walteruvdar} is presented. These \ac{LED}s are observed by an event-based camera, with a fisheye lens. 
+First, the \ac{LED} modulation frequency, distance, and rotation influence on the event-based camera response is analyzed;
+this analysis informs the subsequent approach used.
 After the camera is properly calibrated and the LED source locations are identified, a Perspective-n-Point 
 algorithm is used to estimate the location of the \ac{UAV} in the 3D space. This estimation is then compared with the ground truth positions obtained
 from the \ac{GNSS}.
 
 %\todo{maybe write more}
 
-\section{Related works}
+\section{Related work}
 %Recent advances in relative pose estimation for UAV swarming applications
 %have focused on GNSS-denied environments and the overcoming of limitations
 %the navigation faces in these environments.
 %In GNSS-denied environments various techniques, including visual odometry, radio communication
 
-Shiba et al. \cite{Shiba25cvprw} released E-VLC dataset for visible light communication, a dataset combining an event camera, a frame camera, and synchronized ground-truth poses in various recording conditions for modulated visible-\ac{LED} communication and localization tasks.
+Shiba et al.~\cite{Shiba25cvprw} released E-VLC dataset for visible light communication, a dataset combining an event camera, a frame camera, and synchronized ground-truth poses in various recording conditions for modulated visible-\ac{LED} communication and localization tasks.
 
-Ebmer et al. \cite{ebmer2023} proposed an event-based camera pipeline for real-time 6-\ac{DOF} pose estimation using visible active LED markers. Their system achieved a latency below \SI{0.5}{\milli\second}, with a mean tracking accuracy of \SI{34.5}{\milli\meter} (translation) and \SI{0.738}{\degree} (rotation). The detection mode showed higher errors, with mean values of \SI{64.9}{\milli\meter} and \SI{1.55}{\degree} for translation and rotation, respectively. The standard deviations were \SI{16.2}{\milli\meter} and \SI{0.146}{\degree} for tracking, but increased significantly to \SI{121}{\milli\meter} and \SI{5.12}{\degree} for detection. The maximum observed errors reached \SI{87.8}{\milli\meter} (tracking) and \SI{1.233}{\meter} (detection) in translation, and up to \SI{71.9}{\degree} in rotation during detection.
+Ebmer et al.~\cite{ebmer2023} proposed an event-based camera pipeline for real-time 6-\ac{DOF} pose estimation using visible active LED markers. Their system achieved a latency below \SI{0.5}{\milli\second}, with a mean tracking accuracy of \SI{34.5}{\milli\meter} (translation) and \SI{0.738}{\degree} (rotation). The detection mode showed higher errors, with mean values of \SI{64.9}{\milli\meter} and \SI{1.55}{\degree} for translation and rotation, respectively. The standard deviations were \SI{16.2}{\milli\meter} and \SI{0.146}{\degree} for tracking, but increased significantly to \SI{121}{\milli\meter} and \SI{5.12}{\degree} for detection. The maximum observed errors reached \SI{87.8}{\milli\meter} (tracking) and \SI{1.233}{\meter} (detection) in translation, and up to \SI{71.9}{\degree} in rotation during detection.
 
-Gou et al. \cite{GOU2025328} proposed a hybrid framework combining depth sensor data and event-based camera streams in a joint random optimization scheme. They achieved robust camera tracking and dense reconstruction under fast motion for agile robotics tasks.
+Gou et al.~\cite{GOU2025328} proposed a hybrid framework combining depth sensor data and event-based camera streams in a joint random optimization scheme. They achieved robust camera tracking and dense reconstruction under fast motion for agile robotics tasks.
 They introduce an innovative 3D-2D edge alignment method tailored for event-based camera usage. Their approach achieves
 robust performance even with high-speed camera motion exceeding 1 m/s.
 
-Liu et al.\cite{liu2024linebased6dofobjectpose} proposed a line-based object pose estimation method utilizing event-based cameras, 
+Liu et al.~\cite{liu2024linebased6dofobjectpose} proposed a line-based object pose estimation method utilizing event-based cameras, 
 by directly detecting object lines from event streams and performing pose optimization using robust estimation techniques.
 This approach overcomes the challenge of noise interference inherent in event-based sensors by assigning different weights to events
 based on their distance to the detected lines.
 %\section{Contributions}
 \section{Mathematical notation}
-
-\todo{reword this if necessary}
 
 The following mathematical notation in \reftab{tab:mathematical_notation} is used, unless otherwise specified.
 
