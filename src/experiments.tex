@@ -200,7 +200,39 @@ and the LED centers were detected using the \texttt{findContours} function of th
 contour area on the original grayscale image as shown in \ref{lst:blob_centers}.
 
 \newpage
-\lstinputlisting[language=Python, caption={Accumulating events into a grayscale image}, label={lst:accumulate}]{./fig/code/accumulate.py}
+%\lstinputlisting[language=Python, caption={Accumulating events into a grayscale image}, label={lst:accumulate}]{./fig/code/accumulate.py}
+\begin{algorithm}
+\caption{Accumulating events into a grayscale image}
+\label{alg:accumulate_events}
+\begin{algorithmic}[1]
+\Procedure{AccumulateEvents}{$raw\_file, start\_time\_us, acc\_time\_us, threshold$}
+    \State $reader \gets \text{RawReader}(raw\_file)$
+    \State $reader.\text{seek\_time}(start\_time\_us)$
+    \State $height, width \gets reader.\text{get\_size}()$
+    \State $pos\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
+    \State $neg\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
+    \State $end\_time\_us \gets start\_time\_us + acc\_time\_us$
+    \While{$reader.\text{current\_time} < end\_time\_us$}
+        \State $events \gets reader.\text{load\_delta\_t}(1000)$
+        \If{$events$ is $\text{None}$}
+            \State \textbf{break}
+        \EndIf
+        \For{each $event$ in $events$}
+            \State $x, y, p, \_ \gets event$
+            \If{$p > 0$}
+                \State $pos\_accumulator[y, x] \gets pos\_accumulator[y, x] + 1$
+            \Else
+                \State $neg\_accumulator[y, x] \gets neg\_accumulator[y, x] + 1$
+            \EndIf
+        \EndFor
+    \EndWhile
+    \State $pos\_acc\_n \gets \text{normalize}(pos\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
+    \State $neg\_acc\_n \gets \text{normalize}(neg\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
+    \State $combined\_accumulator \gets \text{addWeighted}(pos\_acc\_n, 0.5, neg\_acc\_n, 0.5, 0)$
+    \State \Return $combined\_accumulator$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \lstinputlisting[language=Python, caption={Blob center detection in the grayscale image}, label={lst:blob_centers}]{./fig/code/blob_centers.py}
 \newpage
