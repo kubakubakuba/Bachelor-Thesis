@@ -8,12 +8,12 @@ utilized an LED lattice target instead of the normally used checkerboard image p
 
 Distance estimation was performed using the \ac{P3P} algorithm, which estimated the rotation and translation of a known
 arrangement of 3D locations using their image coordinates. A stationary data set was collected and analyzed with this
-approach, which showed a median distance estimation error of $0.34$ meters with a standard deviation of $0.16$ meters.
+approach, which has shown a median distance estimation error of $0.34$ meters with a standard deviation of $0.16$ meters.
 A \texttt{DistanceEstimator} node was implemented in \ac{ROS}, which eased the distance estimation by subscribing
 to detected \ac{LED} locations and publishing the estimated pose and distance.
 
 This approach was used in our real-life experiment, where data was collected from two flying \ac{UAV}s, which were manually controlled by two pilots.
-The data was then analyzed afterward, by manually marking the \ac{LED} locations. The resulting estimate showed
+The data was then analyzed afterward, by manually marking the \ac{LED} locations. The resulting estimate has shown
 higher errors (a mean absolute error of 2.47 meters with a standard deviation of 1.75 meters), compared to the statically measured data set,
 due to the increased distance during flight and physical limitations of the methods and equipment used.
 

@@ -161,8 +161,9 @@ with frequencies ranging from $10$ Hz to $10$ kHz and the blinking sequence was 
 
 To facilitate calibration, a reference chessboard pattern with known square size is usually used, which offers high contrast between squares, making the square corners easily detectable.
 Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
-In our calibration procedure, we use a $5\times7$ lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
-LEDs and can be detected by any kind of blob detector. The LED lattice is used, so the event-based camera can easily detect events from bright LEDs, as opposed to
+In our calibration procedure, a $5\times7$ lattice of \ac{UV} \ac{LED}s is used, with the \ac{LED}s spaced $50$ mm apart from each other. With this pattern, events are generated at the center of the
+\ac{LED}s and can be detected by any kind of blob detector. The \ac{LED} lattice is used, so the event-based camera can easily detect
+events from bright \ac{LED}s, as opposed to
 the light being reflected from the chessboard pattern (which does not produce any light on its own).
 The calibration lattice can be seen in \reffig{fig:lattice}.
 
@@ -195,51 +196,113 @@ The implementation used for the calibration was a Python library \texttt{py-OCam
 As a regular image of a chessboard pattern was not used (required by the library), rather a recording of accumulated events on \ac{LED} grid, some data preprocessing had to be done beforehand.
 For the purpose of this, a simple Python app had been written. An event raw recording was loaded, and events were accumulated over a select period of time.
 The accumulated events were then saved to a grayscale image, where each pixel corresponded to the number of events that occurred in that
-pixel (positive and negative) as in \ref{lst:accumulate}. The image was then normalized,
-and the LED centers were detected using the \texttt{findContours} function of the OpenCV library, by finding the brightest points in the detected
-contour area on the original grayscale image as shown in \ref{lst:blob_centers}.
+pixel (positive and negative) with the image being normalized, as shown in Algorithm~\ref{alg:even_accumulation}.
+The LED centers were detected by finding the contours on the binarized image obtained by thresholding, the center of the blobs was selected by finding the
+brightest spot in the detected blobs as shown in Algorithm~\ref{alg:blob_detection}.
 
 \newpage
 %\lstinputlisting[language=Python, caption={Accumulating events into a grayscale image}, label={lst:accumulate}]{./fig/code/accumulate.py}
-\begin{algorithm}
-\caption{Accumulating events into a grayscale image}
-\label{alg:accumulate_events}
+% \begin{algorithm}
+% \caption{Accumulating events into a grayscale image}
+% \label{alg:accumulate_events}
+% \begin{algorithmic}[1]
+% \Procedure{AccumulateEvents}{$raw\_file, start\_time\_us, acc\_time\_us, threshold$}
+%     \State $reader \gets \text{RawReader}(raw\_file)$
+%     \State $reader.\text{seek\_time}(start\_time\_us)$
+%     \State $height, width \gets reader.\text{get\_size}()$
+%     \State $pos\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
+%     \State $neg\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
+%     \State $end\_time\_us \gets start\_time\_us + acc\_time\_us$
+%     \While{$reader.\text{current\_time} < end\_time\_us$}
+%         \State $events \gets reader.\text{load\_delta\_t}(1000)$
+%         \If{$events$ is $\text{None}$}
+%             \State \textbf{break}
+%         \EndIf
+%         \For{each $event$ in $events$}
+%             \State $x, y, p, \_ \gets event$
+%             \If{$p > 0$}
+%                 \State $pos\_accumulator[y, x] \gets pos\_accumulator[y, x] + 1$
+%             \Else
+%                 \State $neg\_accumulator[y, x] \gets neg\_accumulator[y, x] + 1$
+%             \EndIf
+%         \EndFor
+%     \EndWhile
+%     \State $pos\_acc\_n \gets \text{normalize}(pos\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
+%     \State $neg\_acc\_n \gets \text{normalize}(neg\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
+%     \State $combined\_accumulator \gets \text{addWeighted}(pos\_acc\_n, 0.5, neg\_acc\_n, 0.5, 0)$
+%     \State \Return $combined\_accumulator$
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+\begin{algorithm}[H]
+\caption{Event Accumulation and Blending}
+\label{alg:even_accumulation}
 \begin{algorithmic}[1]
-\Procedure{AccumulateEvents}{$raw\_file, start\_time\_us, acc\_time\_us, threshold$}
-    \State $reader \gets \text{RawReader}(raw\_file)$
-    \State $reader.\text{seek\_time}(start\_time\_us)$
-    \State $height, width \gets reader.\text{get\_size}()$
-    \State $pos\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
-    \State $neg\_accumulator \gets \text{zeros}((height, width), \text{dtype}=\text{uint16})$
-    \State $end\_time\_us \gets start\_time\_us + acc\_time\_us$
-    \While{$reader.\text{current\_time} < end\_time\_us$}
-        \State $events \gets reader.\text{load\_delta\_t}(1000)$
-        \If{$events$ is $\text{None}$}
-            \State \textbf{break}
-        \EndIf
-        \For{each $event$ in $events$}
-            \State $x, y, p, \_ \gets event$
-            \If{$p > 0$}
-                \State $pos\_accumulator[y, x] \gets pos\_accumulator[y, x] + 1$
-            \Else
-                \State $neg\_accumulator[y, x] \gets neg\_accumulator[y, x] + 1$
-            \EndIf
-        \EndFor
-    \EndWhile
-    \State $pos\_acc\_n \gets \text{normalize}(pos\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
-    \State $neg\_acc\_n \gets \text{normalize}(neg\_accumulator, \text{min}=0, \text{max}=255, \text{type}=\text{uint8})$
-    \State $combined\_accumulator \gets \text{addWeighted}(pos\_acc\_n, 0.5, neg\_acc\_n, 0.5, 0)$
-    \State \Return $combined\_accumulator$
-\EndProcedure
+\State \textbf{Input:} Event stream $E$, accumulation duration $T$
+\State \textbf{Output:} Normalized blended accumulation image $I_{\text{out}}$
+
+\State \textbf{Initialize accumulators:}
+\State $A_{\text{pos}} \gets \text{zeros}(\text{Height}, \text{Width})$ \Comment{Positive event accumulator}
+\State $A_{\text{neg}} \gets \text{zeros}(\text{Height}, \text{Width})$ \Comment{Negative event accumulator}
+
+\State \textbf{Accumulate events for time $T$:}
+\For{each event $(x,y,p,\_)$ in $E$ within $T$}
+    \If{$p > 0$}
+        \State $A_{\text{pos}}[y,x] \gets A_{\text{pos}}[y,x] + 1$
+    \Else
+        \State $A_{\text{neg}}[y,x] \gets A_{\text{neg}}[y,x] + 1$
+    \EndIf
+\EndFor
+
+\State \textbf{Normalize and blend:}
+\State $N_{\text{pos}} \gets \text{normalize}(A_{\text{pos}}, \text{min}=0, \text{max}=255)$
+\State $N_{\text{neg}} \gets \text{normalize}(A_{\text{neg}}, \text{min}=0, \text{max}=255)$
+\State $I_{\text{out}} \gets 0.5 \times N_{\text{pos}} + 0.5 \times N_{\text{neg}}$
+
+\State \textbf{return} $I_{\text{out}}$
 \end{algorithmic}
 \end{algorithm}
 
-\lstinputlisting[language=Python, caption={Blob center detection in the grayscale image}, label={lst:blob_centers}]{./fig/code/blob_centers.py}
+%\lstinputlisting[language=Python, caption={Blob center detection in the grayscale image}, label={lst:blob_centers}]{./fig/code/blob_centers.py}
+
+\begin{algorithm}[H]
+\caption{Blob Detection in Grayscale Image}
+\label{alg:blob_detection}
+\begin{algorithmic}[1]
+\Require Grayscale image $I$ of size $m \times n$
+\Ensure List of blob centers $C = \{(x_1,y_1), ..., (x_k,y_k)\}$
+
+\State \textbf{Step 1: Image Smoothing}
+\State $I_{\text{blurred}} \gets \text{GaussianBlur}(I, \text{kernel}=5\times5, \sigma=2)$
+
+\State \textbf{Step 2: Image Binarization}
+\State $I_{\text{binary}} \gets \text{Threshold}(I_{\text{blurred}}, \text{threshold}=50, \text{max}=255)$
+
+\State \textbf{Step 3: Contour Detection}
+\State $\text{contours} \gets \text{findContours}(I_{\text{binary}})$
+
+\State \textbf{Step 4: Blob Center Detection}
+\State Initialize empty list $C \gets \emptyset$
+\For{each contour $c$ in contours}
+    \State Create mask $M$ filled with zeros of size $m \times n$
+    \State Draw filled contour $c$ on mask $M$ with value 255
+    \State $I_{\text{masked}} \gets I \text{ AND } M$ \Comment{Apply mask to original image}
+    \State $(minVal, maxVal, minLoc, maxLoc) \gets \text{minMaxLoc}(I_{\text{masked}})$
+    \If{$maxVal > 0$}
+        \State $C.\text{append}(maxLoc)$ \Comment{Add coordinates of brightest pixel in blob to the centers}
+    \EndIf
+\EndFor
+
+\State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
 \newpage
 
-The detected centers can then be manually labeled row-wise, in the same order in every image, so the calibration process can identify 
-how the grid of points changes across the images, and thus calculate the lens distortion.
-After this, the regular calibration script from \texttt{py-OCamCalib} can be used with the prelabeled grid points, the labeling of the LED centers can be seen in \reffig{fig:calibration_pattern_labeled}.
+The detected centers were then manually labeled row-wise, in the same order in every image, so the calibration process could identify
+how the grid of points changed across the images and thus calculate the lens distortion.
+After this, the regular calibration script from \texttt{py-OCamCalib} was used with the prelabeled grid points, the labeling of the LED
+centers can be seen in \reffig{fig:calibration_pattern_labeled}.
 
 \begin{figure}[H]
   \centering
@@ -266,7 +329,7 @@ on to the distance estimator, which uses a \ac{P3P} (or \ac{PnP} if all markers 
 
 \section{Stationary experiment\label{sec:stationary_experiment}}
 An experiment with a stationary \ac{UAV} and event-based camera was conducted prior to the experiment with flying \ac{UAV}s to ensure functionality.
-A \ac{UAV} was placed at the floor several meters from the camera and rotated around to obstruct one \ac{LED} in some measurements to test out \ac{P3P}. The \ac{LED} blinking frequencies were set to $\mathcal{F} = \{125, 250, 500, 1000\}$ Hz, and a blob detector was used to detect the centers of the visible blobs. The individual \ac{LED}s were identified by their visible
+A \ac{UAV} was placed on the floor several meters from the camera and rotated around to obstruct one \ac{LED} in some measurements to test out \ac{P3P}. The \ac{LED} blinking frequencies were set to $\mathcal{F} = \{125, 250, 500, 1000\}$ Hz, and a blob detector was used to detect the centers of the visible blobs. The individual \ac{LED}s were identified by their visible
 brightness differences (which were influenced by the event-based camera response to the blinking frequencies) and by the known physical structure of the \ac{UAV}. The view from the event-based camera can be seen on \reffig{fig:pnpuav}.
 \begin{figure}[H]
 	\centering
