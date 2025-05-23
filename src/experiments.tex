@@ -51,7 +51,7 @@ although limited by the USB3 interface to $\sim 150\ \text{Mev}/\text{s}$, and o
 \end{figure}
 
 \subsection{Lenses}
-During the measurements, fisheye lens with a focal length of $2.5$mm and the maximum aperture of f/$1.6$ with \ac{FOV} of $187$ degrees was used. Subsequently, during the real life experiment, an ultra-wide $1.07$mm f/$2.8$ fisheye lens from Entaniya with \ac{FOV} of $280$ degrees was used in combination with the first lens. Both lenses can be seen on \reffig{fig:lenses}.
+During the measurements, a fisheye lens with a focal length of $2.5$mm and the maximum aperture of f/$1.6$ with \ac{FOV} of $187$ degrees was used. Subsequently, during the real life experiment, an ultra-wide $1.07$mm f/$2.8$ fisheye lens from Entaniya with \ac{FOV} of $280$ degrees was used in combination with the first lens. Both lenses can be seen on \reffig{fig:lenses}.
 The lenses were equipped with narrowband \ac{UV} filters which target the specific wavelength of the \ac{LED}s that are used in the UVDAR localization system.
 This ensured that the majority of generated events came from the \ac{LED} sources mounted at the \ac{UAV}s, and less events came from the surrounding area.
 Both lenses were also properly calibrated, which was required to provide correct results in the final pose estimation.
@@ -98,7 +98,7 @@ This preliminary experiment revealed critical problems in the measuring techniqu
 
 \begin{figure}[H]
 	\centering
-	\subfloat[An event-camera view of the UAV with UV LEDs.] {
+	\subfloat[An event-based view of the UAV with UV LEDs.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/photos/meas1.png}
 	  \label{fig:meas1_e}
 	}
@@ -107,7 +107,7 @@ This preliminary experiment revealed critical problems in the measuring techniqu
 	  \label{fig:meas1_c}
 	}
 	\caption{
-  The setup for measuring the event-camera response with a EVK4 camera. Visible reflections from a wall can be seen on \reffig{fig:meas1}. The setup is shown on \reffig{fig:meas1_c}.
+  The setup for measuring the event-camera response with a EVK4 camera. Visible reflections from a wall can be seen on \reffig{fig:meas1_e}. The setup is shown on \reffig{fig:meas1_c}.
   }
 	\label{fig:meas1}
 \end{figure}
@@ -118,7 +118,7 @@ This preliminary experiment revealed critical problems in the measuring techniqu
 With the critical problems revealed in the previous experiment, only one light source consisting of 2 \ac{UV} \ac{LED}s at the end of the \ac{UAV} arm was turned on and
 modulated at set frequencies.
 Measurements were made in areas isolated by \ac{ROI} filter directly during recording on the hardware level, events were collected only in the
-selected area around the and of the \ac{UAV} arm.
+selected area around the end of the \ac{UAV} arm.
 This time, the position of the \ac{UAV} was fixed relative to the camera on a blank background, with no wall reflections. The camera was placed on a tripod
 and moved in increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements made
 at $4$ and $5$ meters.
@@ -342,10 +342,10 @@ brightness differences (which were influenced by the event-based camera response
 
 The real-world experiment was performed with two X500 \ac{UAV}s, each of them equipped with a Prophesee EVK4 event-based camera, one with a 2.5mm f/1.6
 fisheye lens with an \ac{FOV} of roughly 187 degrees and the second one with Entaniya 1.07mm f/2.8 fisheye lens with an \ac{FOV} of 280 degrees.
-Each UAV is also equipped with a Basler camera with a fisheye lens, to provide normal video signal that is recorded alongside the event stream
+Each UAV was also equipped with a Basler camera with a fisheye lens, to provide normal video signal that was recorded alongside the event stream
 from the event-based camera.
-Both cameras are connected to the onboard Intel NUC computer running the \ac{ROS} system, on which all the processing is done during the flight. Both 
-\ac{UAV}s are also equipped with a \ac{RTK} module, which is used to localize the \ac{UAV}, and is used as ground truth data for the pose estimation.
+Both cameras were connected to the onboard Intel NUC computer running the \ac{ROS} system, on which all the processing was done during the flight. Both 
+\ac{UAV}s were also equipped with a \ac{RTK} module, which was used to localize the \ac{UAV}, and was used as ground truth data for the pose estimation.
 The UVDAR blinking frequencies $\mathcal{F} = \{4.0, 2.0, 1.\overline{3}, 1.0\}$ (in kHz) were defined, where each of the arms were blinking at its assigned
 frequency.
 The measurements were collected during the \ac{MRS} Camp in Temešvár in August 2025, the \ac{UAV}s can be seen on \reffig{fig:uav33_37}.

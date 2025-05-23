@@ -17,8 +17,9 @@ As can be seen, each frame is represented by a temporal average of irradiance ov
 \ac{DVS} (or event-based cameras), are vision sensors that draw their inspiration from biological receptors in the retina of the eye, where each pixel reacts
 to change of the illumination in the scene. Each pixel individually recognizes a logarithm of the intensity and compares it to the previously
 recorded value. When a predefined threshold is crossed, this value is reset to the current one and a new event is generated. This event can be expressed as $e = \begin{bmatrix} x & y & \sigma & t \end{bmatrix}$, where $\begin{bmatrix} x & y \end{bmatrix}$
-is the camera pixel coordinate, $\sigma$ is the polarity of change (where $\sigma = \pm 1$ for increasing or decreasing change, respectively) and $t$ is the timestamp of the event~\cite{gallego22event}~\cite{scheerlinck2018event}. The single event can be modeled as a Dirac delta function $\delta(t)$ and can define an event stream
-$e_i(\boldsymbol{p}, t)$ at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq}~\cite{scheerlinck2018event},
+is the camera pixel coordinate, $\sigma$ is the polarity of change (where $\sigma = \pm 1$ for increasing or decreasing change, respectively) and $t$ is the timestamp of the event~\cite{gallego22event}~\cite{scheerlinck2018event}. The single event can be modeled as a Dirac delta function $\delta(t)$
+and an event stream
+$e_i(\boldsymbol{p}, t)$ can be defined at a pixel $\boldsymbol{p}$ by \refeq{eq:event_eq}~\cite{scheerlinck2018event},
 with the threshold for generating an event described by the equation \refeq{eq:bias_eq}.
 \begin{equation}
 e_i(\boldsymbol{p}, t) := \sigma_i^{\boldsymbol{p}} c \, \delta(t - t_i^{\boldsymbol{p}}), \ i \in 1, 2, 3 ...
@@ -88,7 +89,7 @@ that is, at the intersection of the optical axis from the center of the image wi
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{./fig/tikz/extrinsic.pdf}
-  \caption{Extrinsic parameters of the camera. \cite{scaramuzzacalibration}}
+  \caption{Extrinsic parameters of the camera~\cite{scaramuzzacalibration}.}
   \label{fig:camera_extrinsic}
 \end{figure}
 
@@ -98,7 +99,7 @@ the image plane to their respective 3D coordinates.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{./fig/tikz/ellipse.pdf}
-	\caption{Encompassing ellipse fitting \cite{scaramuzzacalibration}}
+	\caption{Encompassing ellipse fitting~\cite{scaramuzzacalibration}.}
 	\label{fig:ellipse}
   \end{figure}
 The intrinsic parameters of the camera specify the image format itself, which is influenced by the focal length, sensor size, and optical center. As there are many mapping
@@ -204,11 +205,11 @@ RSSR_{1,2} = \frac{P_{R1}}{P_{R2}} = \left( \frac{d_2}{d_1} \right)^{n+3}
 \end{equation}
 where $P_{R1}$ and $P_{R2}$ are the received powers of the \ac{LED}s, $d_1$ and $d_2$ are the distances to the \ac{LED}s, and $n$ is the mode number of the radiation lobe (for a Lambertian model $n = 1$).
 The \ac{RSSR} pose estimation approach typically consists of a combination of a photo diode, which records the intensity of visible light used for the ratio
-calculation, and a camera used for the information of the vision~\cite{bai2020highcoveragecameraassisted}.
+calculation, and a camera used to capture visual data~\cite{bai2020highcoveragecameraassisted}.
 The method also requires properly calibrated \ac{LED} transmitters, with precisely known emission parameters at a known spatial configuration relative
 to the receiver. This then allows for a reliable estimation of the pose.
 The method is not used for pose estimation in this thesis due to the lack of time required and the inconclusive results during the analysis of
-the measured data(no special calibration of the \ac{LED} transmitters was performed).
+the measured data (no special calibration of the \ac{LED} transmitters was performed).
 It will be explored in future work, where it could be used to improve localization precision, if the method is found to be feasible for the application
 of localizing fast moving \ac{UAV}s.
 
@@ -237,9 +238,11 @@ directly finds the rotation and translation with a novel parameterization of the
 The visualization of the \ac{P3P} problem is shown on \reffig{fig:p3p}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.60\textwidth]{./fig/tikz/p3p.pdf}
+	\includegraphics[width=0.75\textwidth]{./fig/tikz/p3p.pdf}
 	\caption{P3P problem visualization}
 	\label{fig:p3p}
 \end{figure}
-In our implementation, the average of the estimated pose and distance is computed, thus simplifying the problem of identifying the correct solution. If all four \ac{LED}s on the \ac{UAV} are detected, a general \ac{PnP} solution is calculated using the \ac{RANSAC} method. This yields only one solution, so the
-estimated distance is simply the distance from the camera to the geometric center of the \ac{UAV}.
+In our implementation, the average of the estimated pose and distance is computed, thus simplifying the problem of identifying the correct solution from
+up to four provided candidates.
+If all four \ac{LED}s on the \ac{UAV} are detected, a general \ac{PnP} solution is calculated using the \ac{RANSAC} method.
+This yields only one solution, so the estimated distance is simply the distance from the camera to the geometric center of the \ac{UAV}.
