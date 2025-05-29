@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage[style=numeric]{biblatex}
 \usepackage{subfig}
+\usepackage{changepage}
 %\addbibresource{main.bib}
 \usepackage{xcolor}
 \usetheme{metropolis}
@@ -41,6 +42,7 @@
 
 
 \title{Relative Pose Estimation Using Event-Based Measurements of LED Signals}
+\subtitle{Thesis Defense}
 
 \date{31.4.2222}
 \author{Jakub Pelc}
@@ -90,6 +92,21 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 
 \end{frame}
 
+\begin{frame}{Experimental validation of the inverse square law}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.70\textwidth]{../fig/pgfplot/build/inv_square.pdf}
+        \label{fig:fit1}
+    \end{figure}
+
+    \vspace{-0.5cm}
+    \begin{equation*}
+        \text{intensity} \propto \frac{1}{\text{distance}^2}
+    \end{equation*}
+
+\end{frame}
+
 \begin{frame}{Frequency influence}
 
 \begin{figure}[H]
@@ -110,20 +127,9 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \caption{Rotation angle influence}
 \end{figure}
 
-\end{frame}
-
-\begin{frame}{Experimental validation of the inverse square law}
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.70\textwidth]{../fig/pgfplot/build/inv_square.pdf}
-        \label{fig:fit1}
-    \end{figure}
-
-    \vspace{-0.5cm}
-    \begin{equation*}
-        \text{intensity} \propto \frac{1}{\text{distance}^2}
-    \end{equation*}
+\small{
+    Experimental validation of the Lambert's cosine law: $I(\theta) = I_0\cos(\theta)$.
+}
 
 \end{frame}
 
@@ -142,28 +148,49 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 
 \begin{frame}{Camera calibration}
    
-   \begin{figure}[H]
-	\centering
-	  \includegraphics[width=0.35\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
-	  \includegraphics[width=0.6\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
-
-	\caption{Fitting an ellipse to the visible area.}
-	\label{fig:calib2}
-    \end{figure}
+   \begin{adjustwidth}{-4cm}{-4cm} % Reduce left and right margins by 1cm
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.40\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+            \includegraphics[width=0.58\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
+            \caption{Fitting an ellipse to the visible area.}
+            \label{fig:calib2}
+        \end{figure}
+    \end{adjustwidth}
     
 \end{frame}
 
-\begin{frame}{Calibration results}
+% \begin{frame}{Calibration results}
    
-   \begin{figure}[H]
-	\centering
-	  \includegraphics[width=0.35\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
-	  \includegraphics[width=0.6\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
-
-	\caption{Fitting an ellipse to the visible area.}
-	\label{fig:calib2}
-    \end{figure}
+%    \begin{columns}[T] % align columns
+%     \begin{column}{.48\textwidth}
+%         \begin{figure}
+%             \centering
+%             \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+%             \label{fig:calib2}
+%         \end{figure}
+%     \end{column}%
+%     \hfill%
+%     \begin{column}{.48\textwidth}
+%         \begin{figure}
+%             \centering
+%             \includegraphics[width=0.99\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
+%             \label{fig:calib2}
+%         \end{figure}
+%     \end{column}%
+%     %\caption{Fitting an ellipse to the visible area.}
+%     \end{columns}
     
+% \end{frame}
+
+\begin{frame}{Calibration results}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_before.pdf}
+        \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_after.pdf}
+        \caption{Lens after calibration.}
+        \label{fig:calib_after}
+    \end{figure}
 \end{frame}
 
 \begin{frame}{Perspective-n-Point}
@@ -176,6 +203,8 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \label{fig:pnp}
     \caption{Perspective-n-Point visualisation.}
 \end{figure}
+
+
 
 \end{frame}
 
