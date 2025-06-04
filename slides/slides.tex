@@ -1,11 +1,12 @@
+%\documentclass[aspectratio=169]{beamer}
 \documentclass{beamer}
 \usepackage{minted}
-\usepackage{hyperref}
 \usepackage[style=numeric]{biblatex}
 \usepackage{subfig}
 \usepackage{changepage}
 %\addbibresource{main.bib}
 \usepackage{xcolor}
+\usepackage{hyperref}
 \usetheme{metropolis}
 
 \definecolor{cvutblue}{RGB}{1,44,86}
@@ -21,20 +22,31 @@
 
 \setbeamercolor{palette primary}{bg=cvutblue,fg=white}
 \setbeamercolor{background canvas}{bg=white}
+%\setbeamercolor{title separator}{fg=cvutblue}
 
 \setbeamertemplate{footline}[frame number]
 
+\setbeamersize{text margin left=6mm, text margin right=6mm} 
+
+\setbeamertemplate{itemize item}{%
+  \raisebox{.2ex}{\usebeamercolor[fg]{itemize item}\rule{1ex}{1ex}}%
+}
+\setbeamercolor{itemize item}{fg=cvutblue}
+
+\metroset{block=fill}
+
 \newcounter{questionnumber}
-\newcommand{\questionframe}[2]{
+\newcommand{\questionframe}[3]{
     \stepcounter{questionnumber}
     {
     \setbeamertemplate{footline}{}
-    \begin{frame}{Question \arabic{questionnumber}}
+    \begin{frame}[plain]%{Question \arabic{questionnumber}}
         \addtocounter{framenumber}{-1}
         \begin{block}{#1}
-        \vspace{0.5cm}
+        \vspace{0.1cm}
             #2
         \end{block}
+            #3
     \setbeamertemplate{footline}[frame number]
     \end{frame}
     }
@@ -44,10 +56,10 @@
 \title{Relative Pose Estimation Using Event-Based Measurements of LED Signals}
 \subtitle{Thesis Defense}
 
-\date{31.4.2222}
+\date{10.6.2025}
 \author{Jakub Pelc}
 
-\institute{Faculty of Electrical Engineering, Czech Technical University in Prague}
+\institute{Faculty of Electrical Engineering, Czech Technical University in Prague \\ Multi-robot Systems Group}
 \begin{document}
 \maketitle
 
@@ -67,8 +79,10 @@ the response analysis and discuss the results.
 
 \end{frame}
 
+% ------------- INTRO -------------
+
 \begin{frame}{Event-based cameras}
-The event-based cameras capture the logarithmic brightness changes on each camera pixel, if a certain threshold is crossed, an event is generated.
+The event-based cameras capture the logarithmic brightness changes on each camera pixel. If a certain threshold is crossed, an event is generated.
 
 \begin{figure}[H]
     \centering
@@ -81,16 +95,53 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 
 \end{frame}
 
-\begin{frame}{Distance influence}
+% ------------- Event-based camera influence -------------
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../fig/semestral/distlog.pdf}
-    \label{fig:dist_influence}
-    \caption{Distance influence}
-\end{figure}
+\begin{frame}{Influence Factors}
+
+\begin{columns}[T]
+    % Left column for distance and frequency plots
+    \begin{column}{0.48\textwidth}
+        \vspace{-0.5cm}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{../fig/semestral/distlog.pdf}
+            \label{fig:dist_influence}
+            %\caption{Distance influence}
+        \end{figure}
+        
+        \vspace{-1.5cm}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{../fig/semestral/freqlog.pdf}
+            \label{fig:freq_influence}
+            %\caption{Frequency influence}
+        \end{figure}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+        \vspace{-0.3cm}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{../fig/semestral/angle2.pdf}
+            \label{fig:rotation_influence}
+            \caption{Distance, frequency and rotation angle influence}
+        \end{figure}
+        
+        \tiny{
+            This is an experimental validation of the
+            \begin{itemize}
+                \item Inverse square law: $\text{intensity} \propto \frac{1}{\text{distance}^2}$
+                \item Lambert's cosine law: $I(\theta) = I_0\cos(\theta)$
+            \end{itemize}
+        }
+    \end{column}
+\end{columns}
 
 \end{frame}
+
+% ------------- Inverse square law -------------
 
 \begin{frame}{Experimental validation of the inverse square law}
 
@@ -98,100 +149,133 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
         \centering
         \includegraphics[width=0.70\textwidth]{../fig/pgfplot/build/inv_square.pdf}
         \label{fig:fit1}
+        \caption{Experimental validation of the inverse square law: \scriptsize{$\text{intensity} \propto \frac{1}{\text{distance}^2}$}.}
     \end{figure}
 
-    \vspace{-0.5cm}
-    \begin{equation*}
-        \text{intensity} \propto \frac{1}{\text{distance}^2}
-    \end{equation*}
+    % \vspace{-0.5cm}
+    % \begin{equation*}
+    %     \text{intensity} \propto \frac{1}{\text{distance}^2}
+    % \end{equation*}
 
 \end{frame}
 
-\begin{frame}{Frequency influence}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../fig/semestral/freqlog.pdf}
-    \label{fig:freq_influence}
-    \caption{Frequency influence}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Rotation influence}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../fig/semestral/angle2.pdf}
-    \label{fig:rotation_influence}
-    \caption{Rotation angle influence}
-\end{figure}
-
-\small{
-    Experimental validation of the Lambert's cosine law: $I(\theta) = I_0\cos(\theta)$.
-}
-
-\end{frame}
+% ------------- Camera calibration -------------
 
 \begin{frame}{Camera calibration}
    
-   \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{../fig/tikz/extrinsic.pdf}
-        %\hspace{1em}%
-        %\raisebox{0.3\height}{\includegraphics[width=0.3\textwidth]{../fig/photos/lattice_evs.png}}
-        \label{fig:calib1}
-        \caption{Camera calibration grid}
-    \end{figure}
-    
-\end{frame}
+   % \begin{figure}[H]
+   %      \centering
+   %      \includegraphics[width=0.8\textwidth]{../fig/tikz/extrinsic.pdf}
+   %      %\hspace{1em}%
+   %      %\raisebox{0.3\height}{\includegraphics[width=0.3\textwidth]{../fig/photos/lattice_evs.png}}
+   %      \label{fig:calib1}
+   %      \caption{Camera calibration grid}
+   %  \end{figure}
 
-\begin{frame}{Camera calibration}
-   
-   \begin{adjustwidth}{-4cm}{-4cm} % Reduce left and right margins by 1cm
-        \begin{figure}
+\begin{columns}[T]
+    % Left column for distance and frequency plots
+    \begin{column}{0.48\textwidth}
+        \vspace{-0.1cm}
+        \begin{figure}[H]
             \centering
-            \includegraphics[width=0.40\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
-            \includegraphics[width=0.58\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
-            \caption{Fitting an ellipse to the visible area.}
-            \label{fig:calib2}
+            \includegraphics[width=0.8\textwidth]{../fig/photos/lattice.jpeg}
+            \label{fig:lattice_img}
+            %\caption{Distance influence}
         \end{figure}
-    \end{adjustwidth}
+        
+        \vspace{0.1cm}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{../fig/photos/lattice_blobs1.png}
+            \label{fig:lattice_evs}
+            %\caption{Frequency influence}
+        \end{figure}
+    \end{column}
     
+    \begin{column}{0.48\textwidth}
+        \vspace{-0.3cm}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{../fig/tikz/extrinsic.pdf}
+            \label{fig:extrinsic_img}
+            \caption{Camera calibration grid of $5\times7$ UV LEDs}
+        \end{figure}
+        
+        \tiny{
+            The point labeling order needs to be consistent across calibration frames to facilitate correct results.
+        }
+    \end{column}
+\end{columns}
+    
+    %lattice_blobs.png
+    %lattice.jpeg
 \end{frame}
 
-% \begin{frame}{Calibration results}
+% \begin{frame}{Camera calibration}
    
-%    \begin{columns}[T] % align columns
-%     \begin{column}{.48\textwidth}
+%    \begin{adjustwidth}{-4cm}{-4cm} % Reduce left and right margins by 1cm
 %         \begin{figure}
 %             \centering
-%             \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+%             \includegraphics[width=0.40\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+%             \includegraphics[width=0.58\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
+%             \caption{Fitting an ellipse to the visible area.}
 %             \label{fig:calib2}
 %         \end{figure}
-%     \end{column}%
-%     \hfill%
-%     \begin{column}{.48\textwidth}
-%         \begin{figure}
-%             \centering
-%             \includegraphics[width=0.99\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
-%             \label{fig:calib2}
-%         \end{figure}
-%     \end{column}%
-%     %\caption{Fitting an ellipse to the visible area.}
-%     \end{columns}
+%     \end{adjustwidth}
     
 % \end{frame}
 
-\begin{frame}{Calibration results}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_before.pdf}
-        \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_after.pdf}
-        \caption{Lens after calibration.}
-        \label{fig:calib_after}
-    \end{figure}
+
+% \begin{frame}{Calibration results}
+%     \begin{figure}
+%         \centering
+%         \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_before.pdf}
+%         \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_after.pdf}
+%         \caption{Lens after calibration.}
+%         \label{fig:calib_after}
+%     \end{figure}
+% \end{frame}
+
+\begin{frame}{Camera calibration results}
+\framesubtitle{Ellipse fitting and calibration outcomes}
+
+\begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+        \vspace{-0.3cm}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.70\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+            
+            \vspace{-0.2cm} % Adjust spacing between images
+            
+            \includegraphics[width=0.92\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
+            
+            \caption{Fitting an ellipse to the visible area}
+            \label{fig:ellipse}
+        \end{figure}
+    \end{column}
+    
+    % Right column - Results images
+    \begin{column}{0.49\textwidth}
+        \vspace{-0.5cm}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ent_before.pdf}
+            
+            \vspace{-0.8cm}
+            
+            \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ent_after.pdf}
+            
+            \caption{Lens before and after calibration}
+            \label{fig:calib_after}
+        \end{figure}
+    \end{column}
+\end{columns}
+
 \end{frame}
+
+% ------------- PnP -------------
 
 \begin{frame}{Perspective-n-Point}
 
@@ -204,9 +288,9 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \caption{Perspective-n-Point visualisation.}
 \end{figure}
 
-
-
 \end{frame}
+
+% ------------- ROS -------------
 
 \begin{frame}{ROS implementation}
 
@@ -214,10 +298,12 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
         \centering
         \includegraphics[width=1.0\textwidth]{../fig/tikz/rosflow.pdf}
         \label{fig:ros}
-        \caption{ROS distance/position estimation pipeline.}
+        \caption{ROS position and distance estimation pipeline.}
     \end{figure}
 
 \end{frame}
+
+% ------------- Experiments, results -------------
 
 \begin{frame}{Experiments}
 
@@ -225,18 +311,18 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 	\centering
 	\subfloat[Static experiment] {
 	  \includegraphics[width=0.45\textwidth]{../fig/tikz/pnp_results.pdf}
-	  \label{fig:uav33}
+	  \label{fig:static_experiment}
 	}
 	\subfloat[Flying experiment] {
 	  \includegraphics[width=0.49\textwidth]{../fig/tikz/experiment_analysis.pdf}
-	  \label{fig:experiments}
+	  \label{fig:flying_experiment}
 	}
 	\caption{
             The distance estimation results with a mean error of
             $0.34 \pm 0.16$ meters for the static experiment, and
             $2.47 \pm 1.75$ meters for the flying experiment.
         }
-	\label{fig:uav33_37}
+	\label{fig:experiment_results}
 \end{figure}
 
 \end{frame}
@@ -255,6 +341,44 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 
 \end{frame}
 
+% -------------------- CONCLUSION ---------------------
+
+\begin{frame}{Conclusion}
+
+\begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+        \vspace{0.5cm}
+        \scriptsize{
+            \begin{itemize}
+                \item The response of the event-based camera to the UV LEDs was measured and analyzed with varying distances, frequencies, and angles.
+                \item Calibration of the camera with fisheye lenses was performed.
+                \item A ROS node was implemented to facilitate automatic pose and distance estimation from detected LED centers.
+                \item A flying experiment was performed with two flying UAVs, each equipped with an event-based camera and a fisheye lens.
+                \item The results have shown an estimation accuracy of tens of centimeters in static cases, and in meters range during active motion and large distances.
+            \end{itemize}
+        }
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+        \vspace{-0.1cm}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.60\textwidth]{./fig/photos/uav33.jpg}
+            
+            \vspace{0.1cm}
+            
+            \includegraphics[width=0.60\textwidth]{./fig/photos/uav37.jpg}
+            
+            \caption{UAV33 and UAV37}
+            \label{fig:calib2}
+        \end{figure}
+    \end{column}
+\end{columns}
+
+\end{frame}
+
+% -------------------- QUESTIONS ----------------------
+
 % \begin{frame}[shrink=20]
 %     \frametitle{References}
 %     %\nocite{*}
@@ -268,7 +392,7 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 %     %\url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator}.
 % \end{frame}
 
-\section{Questions}
+\section{Otázky}
 
 \questionframe
     {Jaké jsou další metody, které by bylo možné využít k lokalizaci namísto PnP a proč bylo PnP použito namísto jich?}
@@ -276,51 +400,71 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \footnotesize{
     Metody pro lokalizaci založené na viditelném světle můžeme rozdělit do následujících kategorií:
         \begin{itemize}
-            \item Fingerprinting - odhad polohy na základě předem naměřených referenčních vzdáleností
+            \item Fingerprinting - odhad polohy na základě předem naměřených referenčních vzdáleností (nutnost nasbírat velký dataset referenčních dat)
             \item Time/Angle of Arrival - je využit rozdíl času/úhlů doražených signálů
-            \item Received Signal Strength - metoda často využívá fotodiody k poměru síly signálů
+            \item Received Signal Strength - metoda často využívá fotodiody k získání poměru síly signálů
             \item Image Sensing - například PnP
         \end{itemize}
     }
-    Metoda PnP bylo použita pro její možnost odhadu polohy pomocí výsledného obrázku z eventové kamery, poskytuje silný základ
+    Metoda PnP bylo použita pro její možnost odhadu polohy pomocí výsledného obrazu z eventové kamery, poskytuje silný základ
     pro odhad polohy z relativně malého množství obdržených dat.
-    \todo{double check, maybe rewrite}
+    %todo{double check, maybe rewrite}
     }
 
 \questionframe
     {Proč se používá ”fisheye” čočka jako senzor?}
     {
     Kvůli jejímu velkému zornému poli (FOV).
-    Čím větší její FOV, tím spíše jsme schopni detekovat prolétající dronu v našem zorném poli.
+    Čím větší je její FOV, tím spíše jsme schopni detekovat prolétající dronu v našem zorném poli.
     }
 
 \questionframe
     {Z jakého důvodu ve Figure 4.4 dochází k výraznému zvýšení počtu eventů pro 20kHz?}
-    {
-    Jedná se o šum kamery, jelikož jsou data pro každou frekvenci normalizována vzhledem k počtu eventů naměrených na jednomu metru.
+    {Jedná se o šum kamery, jelikož jsou data pro každou frekvenci normalizována vzhledem k počtu eventů naměrených na jednom metru.
     Při modulační frekvenci 20kHz byly při nastavených parametrech detekovány spíše eventy způsobené šumem,
-    než reálné pixely vzniklé jako reakce na změnu jasu LED diod.
+    než reálné eventy vygenerované jako reakce na změnu jasu LED diod. Velikost obrazu LED diody je porovnatelná s velikostí šumových eventů.
+    }
+    {
+    \vspace{-0.4cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.45\textwidth]{../fig/pgfplot/build/inv_square.pdf}
+        \includegraphics[width=0.40\textwidth]{../fig/photos/event_noise.png}
+        \label{fig:fit2}
+    \end{figure}
     }
 
 \questionframe
     {Jak si vysvětlujete velkou varianci chyb při kalibraci ”fisheye” čočky? (Kapitola 4.2)}
     {
-    Velká variance chyby byla nejspíše způsobena relativní nepřesností výběru středů detekovaných shluků pixelů.
+    Velká variance chyby byla nejspíše způsobena relativní nepřesností při výběru středů detekovaných shluků pixelů napříč kalibračními snímky.
     Nutno podotknout, že chyba se pohybuje pouze v řádu nižších jednotek pixelů ($\sim 1$px).
     
-    \todo{? double check ?}
+    %\todo{? double check ?}
     }
+    {
+    \begin{figure}[H]
+	\centering
+	  \includegraphics[width=0.42\textwidth]{../fig/pgfplot/build/evk4_reprojection_error_new.pdf}
+	  \includegraphics[width=0.42\textwidth]{../fig/pgfplot/build/err_280_new.pdf}
+	% \caption{
+ %           Pose estimation results, with the estimated pose highlighted in green, and the real pose of the UAVs highlighted in red and blue.
+ %        }
+	\label{fig:lenserrors}
+\end{figure}
+
+	}
 
 \questionframe
     {Je průměrná chyba lokalizace (2.45 metru) vzhledem k měřeným vzdálenostem přijatelná pro praktické použití?}
     {
-    Na vzdálenostech testovaných při experimentu s létajícími dronami (10 - 20 metrů) je chyba přijatelná, jelikož má samotná drona dost času reagovat na
-    možné přiblížení.
+    Na vzdálenostech testovaných při experimentu s létajícími UAV (10 - 20 metrů) je chyba přijatelná, jelikož má samotná drona dost času reagovat na
+    možné přiblížení. Navržený algoritmus navíc odhaduje vzdálenost spíše nižší, než je její reálná hodnota.
     
-    Námi navržený algoritmus odhaduje vzdálenost spíše nižší, než je reálná vzdálenost. Ke srážkám by tedy mělo docházet méně často.
-    Na nižších vzdálenostech by chyba odhadu měla být řádově nižší, díky přesnější detekci lokace středů LED identifikátorů.
+    Na~nižších vzdálenostech by chyba odhadu měla být řádově nižší, díky přesnější detekci lokace středů LED identifikátorů
+    (ověřeno ve statickém experimentu).
     
-    \todo{? double check ?}
+    %\todo{? double check ?}
     }
 
 \end{document}
