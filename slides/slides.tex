@@ -79,19 +79,64 @@ the response analysis and discuss the results.
 
 \end{frame}
 
-% ------------- INTRO -------------
+% ------------- EVENT CAMERAS -------------
 
 \begin{frame}{Event-based cameras}
-The event-based cameras capture the logarithmic brightness changes on each camera pixel. If a certain threshold is crossed, an event is generated.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.374\textwidth]{../fig/photos/evk4.jpg}
-    \includegraphics[width=0.50\textwidth]{../fig/photos/meas1.png}
-    \label{fig:evk4}
-\end{figure}
+\begin{columns}[T]
 
-We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and allows for their modulation.
+\begin{column}{0.48\textwidth}
+\vspace{0.3cm}
+\begin{itemize}
+    \item The event-cameras function by asynchronously generating events (positive or negative), based on pixel-level illumination changes.
+    \item They offer a higher dynamic range than traditional cameras but generally require a different approach to data processing.
+\end{itemize}
+
+\end{column}
+
+\begin{column}{0.48\textwidth}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.85\textwidth]{../fig/photos/evk4.jpg}
+        \label{fig:eventcameras1}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.85\textwidth]{../fig/photos/meas1.png}
+        \label{fig:eventcameras2}
+    \end{figure}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+% ---------------- UVDAR ------------------
+
+
+\begin{frame}{UVDAR}
+
+\begin{columns}[T]
+
+\begin{column}{0.48\textwidth}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item We use a UAV equipped with the UVDAR system, which controls the UV LEDs and allows their modulation.
+        \item The camera is equipped with a narrowband UV filter to help with the light filtering.
+    \end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.99\textwidth]{../fig/photos/uvdar.jpg}
+        \label{fig:uvdar}
+    \end{figure}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
@@ -133,7 +178,7 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
             This is an experimental validation of the
             \begin{itemize}
                 \item Inverse square law: $\text{intensity} \propto \frac{1}{\text{distance}^2}$
-                \item Lambert's cosine law: $I(\theta) = I_0\cos(\theta)$
+                \item Emission characteristics of the LEDs used: $I(\theta) = I_0\cos(\theta)$
             \end{itemize}
         }
     \end{column}
@@ -162,15 +207,6 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 % ------------- Camera calibration -------------
 
 \begin{frame}{Camera calibration}
-   
-   % \begin{figure}[H]
-   %      \centering
-   %      \includegraphics[width=0.8\textwidth]{../fig/tikz/extrinsic.pdf}
-   %      %\hspace{1em}%
-   %      %\raisebox{0.3\height}{\includegraphics[width=0.3\textwidth]{../fig/photos/lattice_evs.png}}
-   %      \label{fig:calib1}
-   %      \caption{Camera calibration grid}
-   %  \end{figure}
 
 \begin{columns}[T]
     % Left column for distance and frequency plots
@@ -208,50 +244,24 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \end{column}
 \end{columns}
     
-    %lattice_blobs.png
-    %lattice.jpeg
 \end{frame}
-
-% \begin{frame}{Camera calibration}
-   
-%    \begin{adjustwidth}{-4cm}{-4cm} % Reduce left and right margins by 1cm
-%         \begin{figure}
-%             \centering
-%             \includegraphics[width=0.40\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
-%             \includegraphics[width=0.58\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
-%             \caption{Fitting an ellipse to the visible area.}
-%             \label{fig:calib2}
-%         \end{figure}
-%     \end{adjustwidth}
-    
-% \end{frame}
-
-
-% \begin{frame}{Calibration results}
-%     \begin{figure}
-%         \centering
-%         \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_before.pdf}
-%         \includegraphics[width=0.48\textwidth]{./fig/pgfplot/build/ent_after.pdf}
-%         \caption{Lens after calibration.}
-%         \label{fig:calib_after}
-%     \end{figure}
-% \end{frame}
 
 \begin{frame}{Camera calibration results}
 \framesubtitle{Ellipse fitting and calibration outcomes}
 
 \begin{columns}[T]
     \begin{column}{0.49\textwidth}
-        \vspace{-0.3cm}
+        \vspace{-0.2cm}
         \begin{figure}
             \centering
-            \includegraphics[width=0.70\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+            %\includegraphics[width=0.70\textwidth]{./fig/pgfplot/build/ellipse_hull.pdf}
+            \includegraphics[width=\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
             
-            \vspace{-0.2cm} % Adjust spacing between images
+            %\vspace{0.2cm} % Adjust spacing between images
             
-            \includegraphics[width=0.92\textwidth]{./fig/pgfplot/build/evk4_viz.pdf}
+            \includegraphics[width=\textwidth]{./fig/pgfplot/build/viz_ent.pdf}
             
-            \caption{Fitting an ellipse to the visible area}
+            \caption{Lens visible area reconstruction}
             \label{fig:ellipse}
         \end{figure}
     \end{column}
@@ -261,11 +271,11 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
         \vspace{-0.5cm}
         \begin{figure}
             \centering
-            \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ent_before.pdf}
+            \includegraphics[width=0.88\textwidth]{./fig/pgfplot/build/ent_before.pdf}
             
-            \vspace{-0.8cm}
+            \vspace{-0.6cm}
             
-            \includegraphics[width=0.9\textwidth]{./fig/pgfplot/build/ent_after.pdf}
+            \includegraphics[width=0.88\textwidth]{./fig/pgfplot/build/ent_after.pdf}
             
             \caption{Lens before and after calibration}
             \label{fig:calib_after}
@@ -287,6 +297,8 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
     \label{fig:pnp}
     \caption{Perspective-n-Point visualisation.}
 \end{figure}
+
+A minimum of 3 points is required for a pose estimation using PnP.
 
 \end{frame}
 
@@ -331,7 +343,7 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 
 \begin{figure}[H]
 	\centering
-	  \includegraphics[width=0.45\textwidth]{../fig/pgfplot/build/3dplot3.pdf}
+	  \includegraphics[width=0.45\textwidth]{../fig/pgfplot/build/3dplot2.pdf}
 	  \includegraphics[width=0.45\textwidth]{../fig/pgfplot/build/3dplot1.pdf}
 	\caption{
            Pose estimation results, with the estimated pose highlighted in green, and the real pose of the UAVs highlighted in red and blue.
@@ -458,7 +470,7 @@ We observe a UAV equipped with the UVDAR system, which controls the UV LEDs, and
 \questionframe
     {Je průměrná chyba lokalizace (2.45 metru) vzhledem k měřeným vzdálenostem přijatelná pro praktické použití?}
     {
-    Na vzdálenostech testovaných při experimentu s létajícími UAV (10 - 20 metrů) je chyba přijatelná, jelikož má samotná drona dost času reagovat na
+    Na vzdálenostech testovaných při experimentu s létajícími UAV (15 - 20 metrů) je chyba přijatelná, jelikož má samotná drona dost času reagovat na
     možné přiblížení. Navržený algoritmus navíc odhaduje vzdálenost spíše nižší, než je její reálná hodnota.
     
     Na~nižších vzdálenostech by chyba odhadu měla být řádově nižší, díky přesnější detekci lokace středů LED identifikátorů
