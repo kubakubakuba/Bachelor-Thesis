@@ -123,7 +123,7 @@ the response analysis and discuss the results.
 \begin{column}{0.48\textwidth}
     \vspace{0.5cm}
     \begin{itemize}
-        \item We use a UAV equipped with the UVDAR system, which controls the UV LEDs and allows their modulation.
+        \item We use a UAV equipped with the UVDAR system, which controls a set of UV LEDs and allows their modulation.
         \item The camera is equipped with a narrowband UV filter to help with the light filtering.
     \end{itemize}
 \end{column}
@@ -131,8 +131,14 @@ the response analysis and discuss the results.
 \begin{column}{0.48\textwidth}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.99\textwidth]{../fig/photos/uvdar.jpg}
+        \includegraphics[width=0.75\textwidth]{../fig/photos/uvdar.jpg}
         \label{fig:uvdar}
+    \end{figure}
+    \vspace{-0.5cm}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{../fig/photos/uvdar1.jpg}
+        \label{fig:uvdar1}
     \end{figure}
 \end{column}
 
@@ -239,7 +245,7 @@ the response analysis and discuss the results.
         \end{figure}
         
         \tiny{
-            The point labeling order needs to be consistent across calibration frames to facilitate correct results.
+            The centers of the LEDs are found as the centers of the detected pixel blobs.
         }
     \end{column}
 \end{columns}
